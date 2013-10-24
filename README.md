@@ -22,4 +22,16 @@ Android platform was installed with this command which installs the platform con
 
  phonegap local build android
 
+Unit Testing and Build Tools
+============================
+
+I also will be installing grunt for automated task execution:
+
+ sudo npm install grunt
+ sudo npm install grunt-jasmine-runner
+
+PhantomJS is required for headless (without a browser) JavaScript execution. Download it from http://www.phantomjs.org and install the executable in your path. I put mine in ~/bin.
+
+To run the specs in a browser instead of using PhantomJS for headless, just load the www/spec.html page in Chrome.
+
 
