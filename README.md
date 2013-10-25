@@ -34,4 +34,23 @@ I also will be installing [grunt](http://gruntjs.com/) for automated task execut
 
 To run the specs in a browser instead of using [PhantomJS](http://www.phantomjs.org) for headless, just load the www/spec.html page in Chrome.
 
+Todo
+====
 
+- Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
+  - See www/spec.html
+- Proposed test list:
+  - View
+    - Should update description div when receiving a description changed event
+    - Should update exits div when receiving an exits changed event
+    - Should update items div when receiving an items changed event
+    - Should update actions div when receiving an actions changed event
+  - Presenter
+    - Should send a changed event for description, exits, items and actions to view when told to render
+    - Should return description for current location when sending a description changed event
+    - Should append action results to description when sending a description changed event
+    - Should return exits for current location when sending an exits changed event
+    - Should return items for current location when sending an items changed event
+    - Should return actions for current location when sending an actions changed event
+  - Model
+    - ... perhaps we should just let this evolve from the presenter tests...
