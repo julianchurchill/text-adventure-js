@@ -3,7 +3,10 @@ var view = {
     onDescriptionChanged: function(newDescription) {
         var el = document.getElementById('description');
         el.text = newDescription;
-        console.log('New description: ' + newDescription);
+    },
+    onExitsChanged: function(newExits) {
+        var el = document.getElementById('exits');
+        el.text = "There are no exits visible.";
     }
 };
 
@@ -16,6 +19,28 @@ describe('text adventure view', function() {
         view.onDescriptionChanged( "new description" );
         var d = document.getElementById('description');
         expect(d.text).toEqual('new description');
+    });
+
+    describe('exits changed event', function() {
+        it('should cause have special exits text when no exits available ', function() {
+            var el = document.getElementById('stage');
+            el.innerHTML = ['<div id="exits">',
+                            '</div>'].join('\n');
+
+            view.onExitsChanged();
+            var d = document.getElementById('exits');
+            expect(d.text).toEqual('There are no exits visible.');
+        });
+
+        //it('should cause exits labels to update', function() {
+            //var el = document.getElementById('stage');
+            //el.innerHTML = ['<div id="exits">',
+                            //'</div>'].join('\n');
+
+            //view.onExitsChanged( "exit1label"  );
+            //var d = document.getElementById('exits');
+            //expect(d.text).toEqual('The following exits are available: exit1label');
+        //});
     });
 });
 

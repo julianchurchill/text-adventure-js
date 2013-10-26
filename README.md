@@ -41,7 +41,7 @@ Todo
   - See www/spec.html
 - Proposed test list:
   - View
-    - Should update description div when receiving a description changed event
+    - DONE Should update description div when receiving a description changed event
     - Should update exits div when receiving an exits changed event
     - Should update items div when receiving an items changed event
     - Should update actions div when receiving an actions changed event
