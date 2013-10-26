@@ -42,8 +42,11 @@ Todo
 - Proposed test list:
   - View
     - DONE Should update description div when receiving a description changed event
-    - Should update exits div when receiving an exits changed event
+    - DONE Should update exits div when receiving an exits changed event
     - Should update items div when receiving an items changed event
+        - Pluralisation of items (is, are)
+        - Countable noun prefix (a, an, some)
+        - Proper nouns (no pronoun - e.g. no 'a', 'an', 'some')
     - Should update actions div when receiving an actions changed event
   - Presenter
     - Should send a changed event for description, exits, items and actions to view when told to render
