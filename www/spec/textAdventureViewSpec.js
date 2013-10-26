@@ -20,11 +20,26 @@ var view = {
     onItemsChanged: function(newItems) {
         var el = document.getElementById('items');
         if ( newItems.length > 0 ) {
-            el.text = "There is";
-            for( var i in newItems ) {
-                el.text += " a " + newItems[i].label;
-                if( i != (newItems.length-1) )
-                    el.text += " and";
+            el.text = "There";
+            if( newItems[0].plural != undefined && newItems[0].plural === true )
+                el.text += " are";
+            else
+                el.text += " is";
+            for( var i = 0 ; i < newItems.length; i++ ) {
+                indefinite_article = " a";
+                if( newItems[i].indefinite_article !== undefined )
+                    indefinite_article = " " + newItems[i].indefinite_article;
+                if( newItems[i].plural !== undefined && newItems[i].plural === true )
+                    indefinite_article = " some";
+                if( newItems[i].proper_noun !== undefined && newItems[i].proper_noun  === true )
+                    indefinite_article = "";
+                el.text += indefinite_article + " " + newItems[i].label;
+                if( newItems.length > 1 ) {
+                    if( i == (newItems.length-2) )
+                        el.text += " and";
+                    else if( i != (newItems.length-1) )
+                        el.text += ",";
+                }
             }
             el.text += " here.";
         } else {
@@ -44,13 +59,13 @@ describe('TextAdventureView', function() {
         expect(d.text).toEqual('new description');
     });
 
-    describe('exits changed event', function() {
+    describe('when receiving an exits changed event', function() {
         beforeEach(function() {
             var el = document.getElementById('stage');
             el.innerHTML = '<div id="exits"></div>';
         });
 
-        it('should cause have special exits text when no exits available ', function() {
+        it('should use special exits text when no exits available ', function() {
             view.onExitsChanged( [] );
 
             var d = document.getElementById('exits');
@@ -65,25 +80,85 @@ describe('TextAdventureView', function() {
         });
     });
 
-    describe('items changed event', function() {
+    describe('when receiving an items changed event', function() {
         beforeEach(function() {
             var el = document.getElementById('stage');
             el.innerHTML = '<div id="items"></div>';
         });
 
-        it('should cause special items text when no items available ', function() {
+        it('should use blank items text when no items available ', function() {
             view.onItemsChanged( [] );
 
             var d = document.getElementById('items');
             expect(d.text).toEqual('');
         });
 
-        it('should cause item labels to update', function() {
-            view.onItemsChanged( [ { label: "label1" }, { label: "label2" } ] );
+        it('should end item text with here.', function() {
+            view.onItemsChanged( [ { label: "label" } ] );
 
             var d = document.getElementById('items');
-            expect(d.text).toEqual('There is a label1 and a label2 here.');
+            expect(d.text).toMatch(/.* here./);
         });
+
+        it('should use "There is" if first item plurality is not specified', function() {
+            view.onItemsChanged( [ { label: "apples" } ] );
+
+            var d = document.getElementById('items');
+            expect(d.text).toMatch(/There is .*/);
+        });
+
+        it('should use "There is" if first item is not plural', function() {
+            view.onItemsChanged( [ { label: "apples", plural: false } ] );
+
+            var d = document.getElementById('items');
+            expect(d.text).toMatch(/There is .*/);
+        });
+
+        it('should use "There are" if first item is plural', function() {
+            view.onItemsChanged( [ { label: "apples", plural: true } ] );
+
+            var d = document.getElementById('items');
+            expect(d.text).toMatch(/There are .*/);
+        });
+
+        it('should cause item labels to appear in the order they are supplied', function() {
+            view.onItemsChanged( [ { label: "label1" },
+                                   { label: "label2" },
+                                   { label: "label3" } ] );
+
+            var d = document.getElementById('items');
+            expect(d.text).toMatch(/.* label1.* label2.* label3 .*/);
+        });
+
+        it('should use "a" as the item indefinite article when no other is supplied', function() {
+            view.onItemsChanged( [ { label: "apple" } ] );
+
+            var d = document.getElementById('items');
+            expect(d.text).toMatch(/.* a apple .*/);
+        });
+
+        it('should cause item indefinite article to be used when supplied', function() {
+            view.onItemsChanged( [ { label: "apple", indefinite_article: "an" } ] );
+
+            var d = document.getElementById('items');
+            expect(d.text).toMatch(/.* an apple .*/);
+        });
+
+        it('should override indefinite article with "some" if item is plural', function() {
+            view.onItemsChanged( [ { label: "apples", indefinite_article: "an", plural: true } ] );
+
+            var d = document.getElementById('items');
+            expect(d.text).toMatch(/.* some apples .*/);
+        });
+
+        it('should cause no item indefinite article to be used if item is a proper noun', function() {
+            view.onItemsChanged( [ { label: "Apple", indefinite_article: "an", proper_noun: true } ] );
+
+            var d = document.getElementById('items');
+            expect(d.text).toMatch(/.* Apple .*/);
+            expect(d.text).toNotMatch(/.* an Apple .*/);
+        });
+
     });
 });
 

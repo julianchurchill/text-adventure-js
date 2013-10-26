@@ -43,7 +43,7 @@ Todo
   - View
     - DONE Should update description div when receiving a description changed event
     - DONE Should update exits div when receiving an exits changed event
-    - Should update items div when receiving an items changed event
+    - DONE Should update items div when receiving an items changed event
         - Pluralisation of items (is, are)
         - Countable noun prefix (a, an, some)
         - Proper nouns (no pronoun - e.g. no 'a', 'an', 'some')
