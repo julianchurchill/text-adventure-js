@@ -13,31 +13,30 @@ var view = {
 describe('text adventure view', function() {
     it('should update description div when description changed', function() {
         var el = document.getElementById('stage');
-        el.innerHTML = ['<div id="description">',
-                        '</div>'].join('\n');
+        el.innerHTML = '<div id="description"></div>';
 
         view.onDescriptionChanged( "new description" );
+
         var d = document.getElementById('description');
         expect(d.text).toEqual('new description');
     });
 
     describe('exits changed event', function() {
-        it('should cause have special exits text when no exits available ', function() {
+        beforeEach(function() {
             var el = document.getElementById('stage');
-            el.innerHTML = ['<div id="exits">',
-                            '</div>'].join('\n');
+            el.innerHTML = '<div id="exits"></div>';
+        });
 
+        it('should cause have special exits text when no exits available ', function() {
             view.onExitsChanged();
+
             var d = document.getElementById('exits');
             expect(d.text).toEqual('There are no exits visible.');
         });
 
         //it('should cause exits labels to update', function() {
-            //var el = document.getElementById('stage');
-            //el.innerHTML = ['<div id="exits">',
-                            //'</div>'].join('\n');
-
             //view.onExitsChanged( "exit1label"  );
+
             //var d = document.getElementById('exits');
             //expect(d.text).toEqual('The following exits are available: exit1label');
         //});
