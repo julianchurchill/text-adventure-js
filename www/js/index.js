@@ -45,11 +45,5 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-    },
-
-    onDescriptionChanged: function(newDescription) {
-        var el = document.getElementById('description');
-        el.text = newDescription;
-        console.log('New description: ' + newDescription);
     }
 };
