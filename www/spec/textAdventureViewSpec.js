@@ -6,7 +6,7 @@ var view = {
     },
     onExitsChanged: function(newExits) {
         var el = document.getElementById('exits');
-        if ( newExits != undefined and newExits.length != 0 ) {
+        if ( newExits.length > 0 ) {
             el.text = "The following exits are available:";
             for( var i in newExits ) {
                 el.text += " " + newExits[i].label
@@ -37,7 +37,7 @@ describe('text adventure view', function() {
         });
 
         it('should cause have special exits text when no exits available ', function() {
-            view.onExitsChanged();
+            view.onExitsChanged( [] );
 
             var d = document.getElementById('exits');
             expect(d.text).toEqual('There are no exits visible.');
