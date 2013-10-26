@@ -6,7 +6,16 @@ var view = {
     },
     onExitsChanged: function(newExits) {
         var el = document.getElementById('exits');
-        el.text = "There are no exits visible.";
+        if ( newExits != undefined and newExits.length != 0 ) {
+            el.text = "The following exits are available:";
+            for( var i in newExits ) {
+                el.text += " " + newExits[i].label
+                if( i != (newExits.length-1) )
+                    el.text += ","
+            }
+        } else {
+            el.text = "There are no exits visible.";
+        }
     }
 };
 
@@ -34,12 +43,12 @@ describe('text adventure view', function() {
             expect(d.text).toEqual('There are no exits visible.');
         });
 
-        //it('should cause exits labels to update', function() {
-            //view.onExitsChanged( "exit1label"  );
+        it('should cause exits labels to update', function() {
+            view.onExitsChanged( [ { label: "label1" }, { label: "label2" } ] );
 
-            //var d = document.getElementById('exits');
-            //expect(d.text).toEqual('The following exits are available: exit1label');
-        //});
+            var d = document.getElementById('exits');
+            expect(d.text).toEqual('The following exits are available: label1, label2');
+        });
     });
 });
 
