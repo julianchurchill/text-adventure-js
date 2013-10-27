@@ -55,11 +55,13 @@ Todo
         - Update labels
         - Create user selectable links to trigger call back into presenter when selected
   - Presenter
+    - on exit action tells the model to use the exit
+    - on action tells model to enact the action
     - Should send a changed event for description, exits, items and actions to view when told to render
     - Should return description for current location when sending a description changed event
-    - Should append action results to description when sending a description changed event
     - Should return exits for current location when sending an exits changed event
     - Should return items for current location when sending an items changed event
-    - Should return actions for current location when sending an actions changed event
+    - Should return available actions when sending an actions changed event
+    - Should append action results to description when sending a description changed event
   - Model
     - ... perhaps we should just let this evolve from the presenter tests...
