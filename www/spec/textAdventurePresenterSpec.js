@@ -95,17 +95,6 @@ describe('TextAdventurePresenter', function() {
     });
 
     //describe('on event from model', function() {
-        //describe('current location changed', function() {
-            //it('should tell the view what the current location description is', function() {
-            //});
-            //it('should tell the view what the current location exits are', function() {
-            //});
-            //it('should tell the view what the current location items are', function() {
-            //});
-            //it('should tell the view what the current available actions are', function() {
-            //});
-        //});
-
         //describe('current location description changed', function() {
             //it('should tell the view what the current location description is', function() {
             //});
