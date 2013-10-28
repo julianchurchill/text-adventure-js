@@ -1,54 +1,61 @@
 
-var view = {
-    onDescriptionChanged: function(newDescription) {
-        var el = document.getElementById('description');
-        el.text = newDescription;
-    },
-    onExitsChanged: function(newExits) {
-        var el = document.getElementById('exits');
-        if ( newExits.length > 0 ) {
-            el.text = "The following exits are available:";
-            for( var i in newExits ) {
-                el.text += " " + newExits[i].label;
-                if( i != (newExits.length-1) )
+function View() {
+}
+
+View.prototype.onDescriptionChanged = function(newDescription) {
+    var el = document.getElementById('description');
+    el.text = newDescription;
+};
+
+View.prototype.onExitsChanged = function(newExits) {
+    var el = document.getElementById('exits');
+    if ( newExits.length > 0 ) {
+        el.text = "The following exits are available:";
+        for( var i in newExits ) {
+            el.text += " " + newExits[i].label;
+            if( i != (newExits.length-1) )
+                el.text += ",";
+        }
+    } else {
+        el.text = "There are no exits visible.";
+    }
+};
+
+View.prototype.onItemsChanged = function(newItems) {
+    var el = document.getElementById('items');
+    if ( newItems.length > 0 ) {
+        el.text = "There";
+        if( newItems[0].plural != undefined && newItems[0].plural === true )
+            el.text += " are";
+        else
+            el.text += " is";
+        for( var i = 0 ; i < newItems.length; i++ ) {
+            indefinite_article = " a";
+            if( newItems[i].indefinite_article !== undefined )
+                indefinite_article = " " + newItems[i].indefinite_article;
+            if( newItems[i].plural !== undefined && newItems[i].plural === true )
+                indefinite_article = " some";
+            if( newItems[i].proper_noun !== undefined && newItems[i].proper_noun  === true )
+                indefinite_article = "";
+            el.text += indefinite_article + " " + newItems[i].label;
+            if( newItems.length > 1 ) {
+                if( i == (newItems.length-2) )
+                    el.text += " and";
+                else if( i != (newItems.length-1) )
                     el.text += ",";
             }
-        } else {
-            el.text = "There are no exits visible.";
         }
-    },
-    onItemsChanged: function(newItems) {
-        var el = document.getElementById('items');
-        if ( newItems.length > 0 ) {
-            el.text = "There";
-            if( newItems[0].plural != undefined && newItems[0].plural === true )
-                el.text += " are";
-            else
-                el.text += " is";
-            for( var i = 0 ; i < newItems.length; i++ ) {
-                indefinite_article = " a";
-                if( newItems[i].indefinite_article !== undefined )
-                    indefinite_article = " " + newItems[i].indefinite_article;
-                if( newItems[i].plural !== undefined && newItems[i].plural === true )
-                    indefinite_article = " some";
-                if( newItems[i].proper_noun !== undefined && newItems[i].proper_noun  === true )
-                    indefinite_article = "";
-                el.text += indefinite_article + " " + newItems[i].label;
-                if( newItems.length > 1 ) {
-                    if( i == (newItems.length-2) )
-                        el.text += " and";
-                    else if( i != (newItems.length-1) )
-                        el.text += ",";
-                }
-            }
-            el.text += " here.";
-        } else {
-            el.text = "";
-        }
+        el.text += " here.";
+    } else {
+        el.text = "";
     }
 };
 
 describe('TextAdventureView', function() {
+    beforeEach(function() {
+        view = new View();
+    });
+
     it('should update description div when description changed', function() {
         var el = document.getElementById('stage');
         el.innerHTML = '<div id="description"></div>';
