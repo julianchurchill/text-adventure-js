@@ -41,6 +41,7 @@ Todo
 
 - Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
   - See www/spec.html
+- Use requirejs to manage inclusion of different js source files in each other?
 - Proposed test list:
   - View
     - DONE Should update description div when receiving a description changed event
@@ -55,9 +56,9 @@ Todo
         - Update labels
         - Create user selectable links to trigger call back into presenter when selected
   - Presenter
-    - on exit action tells the model to use the exit
+    - DONE on exit action tells the model to use the exit
     - on action tells model to enact the action
-    - Should send a changed event for description, exits, items and actions to view when told to render
+    -DONE Should send a changed event for description, exits, items and actions to view when told to render
     - Should return description for current location when sending a description changed event
     - Should return exits for current location when sending an exits changed event
     - Should return items for current location when sending an items changed event
