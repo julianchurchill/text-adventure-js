@@ -12,7 +12,8 @@ This project was created with [phonegap](http://www.phonegap.com). [phonegap](ht
     cd ~/bin && ln -s /usr/bin/nodejs node
     sudo apt-get install npm
     sudo npm install -g phonegap
-    sudo npm install jasmine-node -g
+    sudo npm install jasmine-node
+    sudo npm install require
 
 To create a [phonegap](http://www.phonegap.com) project I did this
 
@@ -25,20 +26,26 @@ Android platform was installed with this command which installs the platform con
 Unit Testing and Build Tools
 ============================
 
-I also will be installing [grunt](http://gruntjs.com/) for automated task execution:
+I installed [jake](https://github.com/mde/jake) for automated task execution:
 
-    sudo npm install grunt
-    sudo npm install grunt-jasmine-runner
+    sudo npm install jake
+
+To see all available Jake tasks run 'jake -T'. The default task should lint, build and run the unit tests - just run 'jake'.
+
+I installed [jshint]() for linting:
+
+    sudo npm install jshint
 
 [PhantomJS](http://www.phantomjs.org) is required for headless (without a browser) JavaScript execution. Download it from the website and install the executable in your path. I put mine in ~/bin. Use this line to run the specs from the code root directory:
 
-    phantomjs run-jasmine.js www/spec.html
+    phantomjs build/jasmine/run-jasmine.js www/spec.html
 
 To run the specs in a browser instead of using [PhantomJS](http://www.phantomjs.org) for headless, just load the www/spec.html page in Chrome.
 
 Todo
 ====
 
+- 'jake' will run lint but it fails due to not using 'use strict' in a function scope in helper.js and index.js. Making the function scope hides the global variables 'app' and 'helper' causing the tests to fail when run with phantomJS. How do I resolve both these issues?
 - Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
   - See www/spec.html
 - Use requirejs to manage inclusion of different js source files in each other?
