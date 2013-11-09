@@ -45,7 +45,7 @@ Android platform was installed with this command which installs the platform con
 Unit Testing and Build Tools
 ============================
 
-I installed [jasmine](http://pivotal.github.io/jasmine) for automated task execution. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
+I installed [jasmine](http://pivotal.github.io/jasmine) for BDD style unit testing. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
 
     sudo npm install jasmine-node
 
