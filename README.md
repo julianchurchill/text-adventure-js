@@ -82,7 +82,6 @@ To run the specs in a browser instead of using [PhantomJS](http://www.phantomjs.
 Todo
 ====
 
-- Use jasmine-node to run tests instead of PhantomJS. This runs them under node, giving 'require'.
 - Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
   - See www/spec.html
   - Can this be done with jasmine-node?
