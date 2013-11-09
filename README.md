@@ -61,6 +61,8 @@ For unit testing the DOM manipulation through jasmine and JQuery I used jasmine-
 
     sudo npm install jasmine-jquery
 
+Then I manually patched it to work for Node version numbers with more than one digit - https://github.com/dkastner/node-jasmine-jquery/commit/29d1ce9e2e7bf5abd105de00271ae4f1f4099269. This is needed until the npm package is updated beyond v1.3.3.
+
 I installed [jake](https://github.com/mde/jake) for automated task execution. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
 
     sudo npm install jake
