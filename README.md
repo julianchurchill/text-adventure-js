@@ -22,7 +22,7 @@ Clone this repository. Then:
 # Run the unit tests from the code root directory:
 
     With jasmine-node    ./node_modules/.bin/jasmine-node www/spec
-    With PhantomJS       phantomjs build/jasmine/run-jasmine.js www/spec.html
+    With PhantomJS       phantomjs build/jasmine/run-jasmine-under-phantomjs.js www/spec.html
 
 Project Creation and Setup
 ==========================
@@ -65,7 +65,7 @@ I installed [jshint]() for linting. This is installed in the git repository in n
 
 [PhantomJS](http://www.phantomjs.org) is required for headless (without a browser) JavaScript execution. Download it from the website and install the executable in your path. I put mine in ~/bin. Use this line to run the specs from the code root directory:
 
-    phantomjs build/jasmine/run-jasmine.js www/spec.html
+    phantomjs build/jasmine/run-jasmine-under-phantomjs.js www/spec.html
 
 To run the specs in a browser instead of using [PhantomJS](http://www.phantomjs.org) for headless, just load the www/spec.html page in Chrome.
 
