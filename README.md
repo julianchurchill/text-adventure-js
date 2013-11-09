@@ -57,6 +57,10 @@ To run the jasmine-node tests do this:
 
     ./node_modules/.bin/jasmine-node www/spec
 
+For unit testing the DOM manipulation through jasmine and JQuery I used jasmine-jquery. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
+
+    sudo npm install jasmine-jquery
+
 I installed [jake](https://github.com/mde/jake) for automated task execution. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
 
     sudo npm install jake
