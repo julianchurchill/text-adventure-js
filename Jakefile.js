@@ -5,11 +5,12 @@
 
     desc("Lint, build and run the tests");
     task("default", ["lint"], function () {
-        console.log("This is the default task.");
+        console.log("Running default task...");
     });
 
     desc("Lint the code");
     task("lint", [], function () {
+        console.log("Running lint task...");
         var lint = require("./build/lint/lint_runner.js");
 
         var files = new jake.FileList();
@@ -18,6 +19,11 @@
         files.exclude("node_modules");
         files.exclude("platforms");
         files.exclude("www/spec/lib");
+        // Exclude example PhoneGap app
+        files.exclude("www/js/index.js");
+        // Exclude example PhoneGap app tests
+        files.exclude("www/spec/helper.js");
+        files.exclude("www/spec/index.js");
 
         var options = {
             bitwise: true,
@@ -54,8 +60,6 @@
 
         var passed = lint.validateFileList(files.toArray(), options, globals);
         if (!passed) fail("Lint failed");
-
-        console.log("This is the lint task.");
     });
 
 }());

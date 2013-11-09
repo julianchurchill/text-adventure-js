@@ -74,7 +74,6 @@ Todo
 
 - Use jasmine-node to run tests instead of PhantomJS. This runs them under node, giving 'require'.
 - 'jake' will run lint but it fails due to not using 'use strict' in a function scope in helper.js and index.js. Making the function scope hides the global variables 'app' and 'helper' causing the tests to fail when run with phantomJS. How do I resolve both these issues?
-    - Exclude these 'example tests and app' from the linting, use files.exclude() in Jakefile.js
 - Use requirejs to manage inclusion of different js source files in each other or run the tests/jasmine under nodejs to get require built in.
 - Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
   - See www/spec.html
