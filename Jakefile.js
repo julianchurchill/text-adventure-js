@@ -1,11 +1,30 @@
 /*global desc, task, jake, fail, console, require*/
 
+var jasmine = require('jasmine-node');
+
 (function () {
     "use strict";
 
     desc("Lint, build and run the tests");
-    task("default", ["lint"], function () {
+    task("default", ["lint", "unit tests"], function () {
         console.log("Running default task...");
+    });
+
+    desc('Run Jasmine specs');
+    task('unit tests', function() {
+        var specDir = './www/spec';
+        console.log('Running unit test task, including jasmine tests from', specDir);
+        jasmine.executeSpecsInFolder({
+            specFolders: [specDir],
+            onComplete: function(runner, log) {
+                var failed = runner.results().failedCount;
+                if (failed > 0) {
+                    fail();
+                }
+            },
+            isVerbose: true,
+            showColors: true
+        });
     });
 
     desc("Lint the code");

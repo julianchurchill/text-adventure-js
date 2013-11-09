@@ -19,6 +19,8 @@
 
 /*global app, helper*/
 
+var app = require('index');
+
 (function () {
     "use strict";
 
