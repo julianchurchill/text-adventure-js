@@ -3,6 +3,27 @@ text-adventure-js
 
 A JavaScript implementation of the Tiny Text Adventure engine
 
+Quick Start (TLDR)
+==================
+
+Clone this repository. Then:
+
+# Install nodejs, npm and phonegap to your development machine:
+
+    sudo apt-get install node-js
+    cd ~/bin && ln -s /usr/bin/nodejs node
+    sudo apt-get install npm
+    sudo npm install -g phonegap
+
+# Download and install PhantomJS for headless Javascript unit test running:
+
+    Download [PhantomJS](http://www.phantomjs.org) and install the executable in your path. I put mine in ~/bin.
+
+# Run the unit tests from the code root directory:
+
+    With jasmine-node    ./node_modules/.bin/jasmine-node www/spec
+    With PhantomJS       phantomjs build/jasmine/run-jasmine.js www/spec.html
+
 Project Creation and Setup
 ==========================
 
@@ -12,8 +33,6 @@ This project was created with [phonegap](http://www.phonegap.com). [phonegap](ht
     cd ~/bin && ln -s /usr/bin/nodejs node
     sudo apt-get install npm
     sudo npm install -g phonegap
-    sudo npm install jasmine-node
-    sudo npm install require
 
 To create a [phonegap](http://www.phonegap.com) project I did this
 
@@ -26,13 +45,21 @@ Android platform was installed with this command which installs the platform con
 Unit Testing and Build Tools
 ============================
 
-I installed [jake](https://github.com/mde/jake) for automated task execution:
+I installed [jasmine](http://pivotal.github.io/jasmine) for automated task execution. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
+
+    sudo npm install jasmine-node
+
+To run the jasmine-node tests do this:
+
+    ./node_modules/.bin/jasmine-node www/spec
+
+I installed [jake](https://github.com/mde/jake) for automated task execution. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
 
     sudo npm install jake
 
 To see all available Jake tasks run 'jake -T'. The default task should lint, build and run the unit tests - just run 'jake'.
 
-I installed [jshint]() for linting:
+I installed [jshint]() for linting. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
 
     sudo npm install jshint
 
@@ -45,10 +72,12 @@ To run the specs in a browser instead of using [PhantomJS](http://www.phantomjs.
 Todo
 ====
 
+- Use jasmine-node to run tests instead of PhantomJS. This runs them under node, giving 'require'.
 - 'jake' will run lint but it fails due to not using 'use strict' in a function scope in helper.js and index.js. Making the function scope hides the global variables 'app' and 'helper' causing the tests to fail when run with phantomJS. How do I resolve both these issues?
+    - Exclude these 'example tests and app' from the linting, use files.exclude() in Jakefile.js
+- Use requirejs to manage inclusion of different js source files in each other or run the tests/jasmine under nodejs to get require built in.
 - Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
   - See www/spec.html
-- Use requirejs to manage inclusion of different js source files in each other?
 - Proposed test list:
   - View
     - DONE Should update description div when receiving a description changed event
