@@ -22,7 +22,7 @@ var jasmine = require('jasmine-node');
                     fail();
                 }
             },
-            isVerbose: true,
+            isVerbose: false,
             showColors: true
         });
     });
@@ -41,8 +41,8 @@ var jasmine = require('jasmine-node');
         // Exclude example PhoneGap app
         files.exclude("www/js/index.js");
         // Exclude example PhoneGap app tests
-        files.exclude("www/spec/helper.js");
-        files.exclude("www/spec/index.js");
+        files.exclude("www/spec_phonegap/helper.js");
+        files.exclude("www/spec_phonegap/index.js");
 
         var options = {
             bitwise: true,
