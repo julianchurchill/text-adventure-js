@@ -1,9 +1,9 @@
 /*global desc, task, jake, fail, console, require*/
 
-var jasmine = require('jasmine-node');
-
 (function () {
     "use strict";
+
+    var jasmine = require('jasmine-node');
 
     desc("Lint, build and run the tests");
     task("default", ["lint", "unit tests"], function () {
