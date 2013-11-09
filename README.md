@@ -57,7 +57,7 @@ I installed [jake](https://github.com/mde/jake) for automated task execution. Th
 
     sudo npm install jake
 
-To see all available Jake tasks run 'jake -T'. The default task should lint, build and run the unit tests - just run 'jake'.
+I've added a local shell script to run the _local_ version of jake to avoid version clashes with globally installed jake. Use ./build/runJake.sh instead of 'jake'. To see all available Jake tasks run './build/runJake.sh -T'. The default task should lint, build and run the unit tests - just run './build/runJake.sh'.
 
 I installed [jshint]() for linting. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
 
