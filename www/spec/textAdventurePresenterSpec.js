@@ -12,6 +12,22 @@
         this.model.exitTriggered( exitid );
     };
 
+    Presenter.prototype.descriptionChanged = function(description) {
+        this.view.onDescriptionChanged( this.model.currentDescription() );
+    };
+
+    Presenter.prototype.exitsChanged = function(description) {
+        this.view.onExitsChanged( this.model.currentExits() );
+    };
+
+    Presenter.prototype.itemsChanged = function(description) {
+        this.view.onItemsChanged( this.model.currentItems() );
+    };
+
+    Presenter.prototype.actionsChanged = function(description) {
+        this.view.onActionsChanged( this.model.currentActions() );
+    };
+
     Presenter.prototype.render = function() {
         this.view.onDescriptionChanged( this.model.currentDescription() );
         this.view.onExitsChanged( this.model.currentExits() );
@@ -100,27 +116,53 @@
             });
         });
 
-        //describe('on event from model', function() {
-            //describe('current location description changed', function() {
-                //it('should tell the view what the current location description is', function() {
-                //});
-            //});
+        // describe('on creation', function() {
+            // it('registers with model for events', function() {
 
-            //describe('current location exits changed', function() {
-                //it('should tell the view what the current location exits are', function() {
-                //});
-            //});
+        describe('on event from model', function() {
+            describe('current location description changed', function() {
+                it('should tell the view what the current location description is', function() {
+                    spyOn( model, 'currentDescription' ).andReturn( 'description' );
 
-            //describe('current location items changed', function() {
-                //it('should tell the view what the current location items are', function() {
-                //});
-            //});
+                    presenter.descriptionChanged();
 
-            //describe('current available actions changed', function() {
-                //it('should tell the view what the current available actions are', function() {
-                //});
-            //});
-        //});
+                    expect(my_view.onDescriptionChanged).toHaveBeenCalledWith( 'description' );
+                });
+            });
+
+            describe('current location exits changed', function() {
+                it('should tell the view what the current location exits are', function() {
+                    var exits = [{ label: 'exit1', id: 'exit1' }];
+                    spyOn( model, 'currentExits' ).andReturn( exits );
+
+                    presenter.exitsChanged();
+
+                    expect(my_view.onExitsChanged).toHaveBeenCalledWith( exits );
+                });
+            });
+
+            describe('current location items changed', function() {
+                it('should tell the view what the current location items are', function() {
+                    var items = [{ label: 'item1', id: 'item1' }];
+                    spyOn( model, 'currentItems' ).andReturn( items );
+
+                    presenter.itemsChanged();
+
+                    expect(my_view.onItemsChanged).toHaveBeenCalledWith( items );
+                });
+            });
+
+            describe('current available actions changed', function() {
+                it('should tell the view what the current available actions are', function() {
+                    var actions = [{ id: 'action1' }];
+                    spyOn( model, 'currentActions' ).andReturn( actions );
+
+                    presenter.actionsChanged();
+
+                    expect(my_view.onActionsChanged).toHaveBeenCalledWith( actions );
+                });
+            });
+        });
     });
 
 }());
