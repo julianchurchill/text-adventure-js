@@ -6,6 +6,7 @@
     function Presenter(model, view) {
         this.model = model;
         this.view = view;
+        this.model.subscribe( this );
     }
 
     Presenter.prototype.exitTriggered = function(exitid) {
@@ -38,6 +39,9 @@
     function Model() {
     }
 
+    Model.prototype.subscribe = function(subscriber) {
+    };
+
     Model.prototype.exitTriggered = function(exitid) {
     };
 
@@ -67,6 +71,16 @@
                                                     'onItemsChanged',
                                                     'onActionsChanged']);
             presenter = new Presenter( model, my_view );
+        });
+
+        describe('on creation', function() {
+            it('subscribes to model for events', function() {
+                spyOn( model, 'subscribe' );
+
+                var another_presenter = new Presenter( model, my_view );
+
+                expect(model.subscribe).toHaveBeenCalledWith( another_presenter );
+            });
         });
 
         describe('on exit action', function() {
@@ -115,9 +129,6 @@
                 expect(my_view.onActionsChanged).toHaveBeenCalledWith( actions );
             });
         });
-
-        // describe('on creation', function() {
-            // it('registers with model for events', function() {
 
         describe('on event from model', function() {
             describe('current location description changed', function() {
