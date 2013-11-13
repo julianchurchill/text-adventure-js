@@ -36,36 +36,16 @@
         this.view.onActionsChanged( this.model.currentActions() );
     };
 
-    function Model() {
-    }
-
-    Model.prototype.subscribe = function(subscriber) {
-    };
-
-    Model.prototype.exitTriggered = function(exitid) {
-    };
-
-    Model.prototype.currentDescription = function() {
-        return '';
-    };
-
-    Model.prototype.currentExits = function() {
-        return [];
-    };
-
-    Model.prototype.currentItems = function() {
-        return [];
-    };
-
-    Model.prototype.currentActions = function() {
-        return [];
-    };
-
     describe('TextAdventurePresenter', function() {
         var model, my_view, presenter;
 
         beforeEach(function() {
-            model = new Model();
+            model =   jasmine.createSpyObj('model', ['subscribe',
+                                                    'exitTriggered',
+                                                    'currentDescription',
+                                                    'currentExits',
+                                                    'currentItems',
+                                                    'currentActions']);
             my_view = jasmine.createSpyObj('view', ['onDescriptionChanged',
                                                     'onExitsChanged',
                                                     'onItemsChanged',
@@ -75,8 +55,6 @@
 
         describe('on creation', function() {
             it('subscribes to model for events', function() {
-                spyOn( model, 'subscribe' );
-
                 var another_presenter = new Presenter( model, my_view );
 
                 expect(model.subscribe).toHaveBeenCalledWith( another_presenter );
@@ -85,8 +63,6 @@
 
         describe('on exit action', function() {
             it('should tell model to use an exit', function() {
-                spyOn( model, 'exitTriggered' );
-
                 presenter.exitTriggered( 'exitid' );
 
                 expect(model.exitTriggered).toHaveBeenCalledWith( 'exitid' );
@@ -95,7 +71,7 @@
 
         describe('on render', function() {
             it('should tell the view what the current location description is', function() {
-                spyOn( model, 'currentDescription' ).andReturn( 'description' );
+                model.currentDescription.andReturn( 'description' );
 
                 presenter.render();
 
@@ -104,7 +80,7 @@
 
             it('should tell the view what the current exits are', function() {
                 var exits = [{ label: 'exit1', id: 'exit1' }];
-                spyOn( model, 'currentExits' ).andReturn( exits );
+                model.currentExits.andReturn( exits );
 
                 presenter.render();
 
@@ -113,7 +89,7 @@
 
             it('should tell the view what the current items are', function() {
                 var items = [{ label: 'item1', id: 'item1' }];
-                spyOn( model, 'currentItems' ).andReturn( items );
+                model.currentItems.andReturn( items );
 
                 presenter.render();
 
@@ -122,7 +98,7 @@
 
             it('should tell the view what the current available actions are', function() {
                 var actions = [{ id: 'action1' }];
-                spyOn( model, 'currentActions' ).andReturn( actions );
+                model.currentActions.andReturn( actions );
 
                 presenter.render();
 
@@ -133,7 +109,7 @@
         describe('on event from model', function() {
             describe('current location description changed', function() {
                 it('should tell the view what the current location description is', function() {
-                    spyOn( model, 'currentDescription' ).andReturn( 'description' );
+                    model.currentDescription.andReturn( 'description' );
 
                     presenter.descriptionChanged();
 
@@ -144,7 +120,7 @@
             describe('current location exits changed', function() {
                 it('should tell the view what the current location exits are', function() {
                     var exits = [{ label: 'exit1', id: 'exit1' }];
-                    spyOn( model, 'currentExits' ).andReturn( exits );
+                    model.currentExits.andReturn( exits );
 
                     presenter.exitsChanged();
 
@@ -155,7 +131,7 @@
             describe('current location items changed', function() {
                 it('should tell the view what the current location items are', function() {
                     var items = [{ label: 'item1', id: 'item1' }];
-                    spyOn( model, 'currentItems' ).andReturn( items );
+                    model.currentItems.andReturn( items );
 
                     presenter.itemsChanged();
 
@@ -166,7 +142,7 @@
             describe('current available actions changed', function() {
                 it('should tell the view what the current available actions are', function() {
                     var actions = [{ id: 'action1' }];
-                    spyOn( model, 'currentActions' ).andReturn( actions );
+                    model.currentActions.andReturn( actions );
 
                     presenter.actionsChanged();
 
