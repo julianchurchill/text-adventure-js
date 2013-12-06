@@ -96,7 +96,7 @@ Todo
 ====
 
 - Model
-  - Add some dummy model locations, exits, items and actions
+  - Should return description, exits, items and actions for current location
   - On exit triggered, change the location description, exits, items and actions to the new location
   - Should send a changed event for description when it changes
   - Should send a changed event for exits when they change
