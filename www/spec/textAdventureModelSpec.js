@@ -11,10 +11,14 @@
         return this.properties.description;
     };
 
+    Location.prototype.exits = function() {
+        return this.properties.exits;
+    };
+
     Location.prototype.getLocationForExit = function(exitid) {
-        for (var i = 0; i < this.properties.exits.length; i++) {
-            if( this.properties.exits[i].id === exitid )
-                return this.properties.exits[i].destination;
+        for (var i = 0; i < this.exits().length; i++) {
+            if( this.exits()[i].id === exitid )
+                return this.exits()[i].destination;
         }
         return undefined;
     };
@@ -38,7 +42,7 @@
     };
 
     Model.prototype.currentExits = function() {
-        return [];
+        return this.currentLocation.exits();
     };
 
     Model.prototype.currentItems = function() {
@@ -57,6 +61,18 @@
 
             expect( model.currentDescription()).toBe( 'location description' );
         });
+
+        it('current exits are current location exits', function() {
+            var exits = [ { id: 'exit1', label: 'label1' } ];
+            var location = new Location( { exits: exits } );
+            var model = new Model();
+            model.setCurrentLocation( location );
+
+            expect( model.currentExits()).toBe( exits );
+        });
+
+        // it('current items are current location items', function() {
+        // it('current actions are current location actions', function() {
 
         it('triggering an exit changes the location description', function() {
             var location2 = new Location( { description: 'location2 description' } );
