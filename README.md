@@ -97,7 +97,6 @@ Todo
 
 - Set up some manual acceptance test data so a user can step between locations by clicking the exit links and see the exits and descriptions get updated
 - Model
-  - Should return description, exits, items and actions for current location
   - On exit triggered, change the location description, exits, items and actions to the new location
   - Should send a changed event for description when it changes
   - Should send a changed event for exits when they change
@@ -133,3 +132,5 @@ DONE
   - Should return exits for current location when sending an exits changed event
   - Should return items for current location when sending an items changed event
   - Should return available actions when sending an actions changed event
+- Model
+  - Should return description, exits, items and actions for current location

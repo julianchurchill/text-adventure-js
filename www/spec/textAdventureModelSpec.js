@@ -62,37 +62,35 @@
     };
 
     describe('TextAdventureModel', function() {
+        var model;
+
+        beforeEach(function() {
+            model = new Model();
+        });
+
         it('current description is current location description', function() {
-            var location = new Location( { description: 'location description' } );
-            var model = new Model();
-            model.setCurrentLocation( location );
+            model.setCurrentLocation( new Location( { description: 'location description' } ) );
 
             expect( model.currentDescription()).toBe( 'location description' );
         });
 
         it('current exits are current location exits', function() {
             var exits = [ { id: 'exit1', label: 'label1' } ];
-            var location = new Location( { exits: exits } );
-            var model = new Model();
-            model.setCurrentLocation( location );
+            model.setCurrentLocation( new Location( { exits: exits } ) );
 
             expect( model.currentExits()).toBe( exits );
         });
 
         it('current items are current location items', function() {
             var items = [ { id: 'item1', label: 'label1' } ];
-            var location = new Location( { items: items } );
-            var model = new Model();
-            model.setCurrentLocation( location );
+            model.setCurrentLocation( new Location( { items: items } ) );
 
             expect( model.currentItems()).toBe( items );
         });
 
         it('current actions are current location actions', function() {
             var actions = [ { id: 'action1', label: 'label1' } ];
-            var location = new Location( { actions: actions } );
-            var model = new Model();
-            model.setCurrentLocation( location );
+            model.setCurrentLocation( new Location( { actions: actions } ) );
 
             expect( model.currentActions()).toBe( actions );
         });
@@ -100,7 +98,6 @@
         it('triggering an exit changes the location description', function() {
             var location2 = new Location( { description: 'location2 description' } );
             var location1 = new Location( { exits: [ { id: 'door1', destination: location2 } ] } );
-            var model = new Model();
             model.setCurrentLocation( location1 );
 
             model.exitTriggered( 'door1' );
