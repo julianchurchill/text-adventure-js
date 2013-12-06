@@ -95,14 +95,14 @@
             expect( model.currentActions()).toBe( actions );
         });
 
-        it('triggering an exit changes the location description', function() {
+        it('triggering an exit changes the current location', function() {
             var location2 = new Location( { description: 'location2 description' } );
             var location1 = new Location( { exits: [ { id: 'door1', destination: location2 } ] } );
             model.setCurrentLocation( location1 );
 
             model.exitTriggered( 'door1' );
 
-            expect( model.currentDescription()).toBe( 'location2 description' );
+            expect( model.currentLocation ).toBe( location2 );
         });
 
         // it('sends description changed event to subscribers', function() {

@@ -97,11 +97,14 @@ Todo
 
 - Set up some manual acceptance test data so a user can step between locations by clicking the exit links and see the exits and descriptions get updated
 - Model
-  - On exit triggered, change the location description, exits, items and actions to the new location
-  - Should send a changed event for description when it changes
-  - Should send a changed event for exits when they change
-  - Should send a changed event for items when they change
-  - Should send a changed event for actions when they change
+  - Should send a changed event for description on set current location
+  - Should send a changed event for exits on set current location
+  - Should send a changed event for items on set current location
+  - Should send a changed event for actions on set current location
+  - Should send a changed event for description on exit triggered
+  - Should send a changed event for exits on exit triggered
+  - Should send a changed event for items on exit triggered
+  - Should send a changed event for actions on exit triggered
 - View
   - Should update exits div when receiving an exits changed event
     - DONE Update labels
@@ -134,3 +137,4 @@ DONE
   - Should return available actions when sending an actions changed event
 - Model
   - Should return description, exits, items and actions for current location
+  - On exit triggered change the current location to the new location
