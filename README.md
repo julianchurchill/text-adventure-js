@@ -95,6 +95,7 @@ To run the specs in a browser instead of using [PhantomJS](http://www.phantomjs.
 Todo
 ====
 
+- Set up some manual acceptance test data so a user can step between locations by clicking the exit links and see the exits and descriptions get updated
 - Model
   - Should return description, exits, items and actions for current location
   - On exit triggered, change the location description, exits, items and actions to the new location

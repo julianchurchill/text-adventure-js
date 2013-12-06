@@ -15,6 +15,10 @@
         return this.properties.exits;
     };
 
+    Location.prototype.items = function() {
+        return this.properties.items;
+    };
+
     Location.prototype.getLocationForExit = function(exitid) {
         for (var i = 0; i < this.exits().length; i++) {
             if( this.exits()[i].id === exitid )
@@ -46,7 +50,7 @@
     };
 
     Model.prototype.currentItems = function() {
-        return [];
+        return this.currentLocation.items();
     };
 
     Model.prototype.currentActions = function() {
@@ -71,7 +75,15 @@
             expect( model.currentExits()).toBe( exits );
         });
 
-        // it('current items are current location items', function() {
+        it('current items are current location items', function() {
+            var items = [ { id: 'item1', label: 'label1' } ];
+            var location = new Location( { items: items } );
+            var model = new Model();
+            model.setCurrentLocation( location );
+
+            expect( model.currentItems()).toBe( items );
+        });
+
         // it('current actions are current location actions', function() {
 
         it('triggering an exit changes the location description', function() {
