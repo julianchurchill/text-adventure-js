@@ -19,6 +19,10 @@
         return this.properties.items;
     };
 
+    Location.prototype.actions = function() {
+        return this.properties.actions;
+    };
+
     Location.prototype.getLocationForExit = function(exitid) {
         for (var i = 0; i < this.exits().length; i++) {
             if( this.exits()[i].id === exitid )
@@ -54,7 +58,7 @@
     };
 
     Model.prototype.currentActions = function() {
-        return [];
+        return this.currentLocation.actions();
     };
 
     describe('TextAdventureModel', function() {
@@ -84,7 +88,14 @@
             expect( model.currentItems()).toBe( items );
         });
 
-        // it('current actions are current location actions', function() {
+        it('current actions are current location actions', function() {
+            var actions = [ { id: 'action1', label: 'label1' } ];
+            var location = new Location( { actions: actions } );
+            var model = new Model();
+            model.setCurrentLocation( location );
+
+            expect( model.currentActions()).toBe( actions );
+        });
 
         it('triggering an exit changes the location description', function() {
             var location2 = new Location( { description: 'location2 description' } );
