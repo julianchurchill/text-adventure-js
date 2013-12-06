@@ -13,27 +13,27 @@
         this.model.exitTriggered( exitid );
     };
 
-    Presenter.prototype.descriptionChanged = function(description) {
+    Presenter.prototype.descriptionChanged = function() {
         this.view.onDescriptionChanged( this.model.currentDescription() );
     };
 
-    Presenter.prototype.exitsChanged = function(description) {
+    Presenter.prototype.exitsChanged = function() {
         this.view.onExitsChanged( this.model.currentExits() );
     };
 
-    Presenter.prototype.itemsChanged = function(description) {
+    Presenter.prototype.itemsChanged = function() {
         this.view.onItemsChanged( this.model.currentItems() );
     };
 
-    Presenter.prototype.actionsChanged = function(description) {
+    Presenter.prototype.actionsChanged = function() {
         this.view.onActionsChanged( this.model.currentActions() );
     };
 
     Presenter.prototype.render = function() {
-        this.view.onDescriptionChanged( this.model.currentDescription() );
-        this.view.onExitsChanged( this.model.currentExits() );
-        this.view.onItemsChanged( this.model.currentItems() );
-        this.view.onActionsChanged( this.model.currentActions() );
+        this.descriptionChanged();
+        this.exitsChanged();
+        this.itemsChanged();
+        this.actionsChanged();
     };
 
     describe('TextAdventurePresenter', function() {
