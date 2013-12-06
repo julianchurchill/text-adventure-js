@@ -6,12 +6,12 @@
     var jasmine = require('jasmine-node');
 
     desc("Lint, build and run the tests");
-    task("default", ["lint", "unit tests"], function () {
+    task("default", ["lint", "unit_tests"], function () {
         console.log("Running default task...");
     });
 
     desc('Run Jasmine specs');
-    task('unit tests', function() {
+    task('unit_tests', function() {
         var specDir = './www/spec';
         console.log('Running unit test task, including jasmine tests from', specDir);
         jasmine.executeSpecsInFolder({

@@ -19,10 +19,23 @@ Clone this repository. Then:
 
     Download [PhantomJS](http://www.phantomjs.org) and install the executable in your path. I put mine in ~/bin.
 
+# Build, lint and run unit tests:
+
+    ./build/runJake.sh
+
+# List available build tasks:
+
+    ./build/runJake.sh -T
+
 # Run the unit tests from the code root directory:
 
-    With jasmine-node    ./node_modules/.bin/jasmine-node www/spec
+    With script          ./build/runJake.sh unit_tests
     With PhantomJS       phantomjs build/jasmine/run-jasmine-under-phantomjs.js www/spec.html
+
+# Automatically build and run tests when code changes:
+
+    ./build/watchAndRun.sh 1 ./build/runJake.sh www
+
 
 Project Creation and Setup
 ==========================
