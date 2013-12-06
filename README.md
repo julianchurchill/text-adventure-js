@@ -95,30 +95,40 @@ To run the specs in a browser instead of using [PhantomJS](http://www.phantomjs.
 Todo
 ====
 
+- Model
+  - Add some dummy model locations, exits, items and actions
+  - On exit triggered, change the location description, exits, items and actions to the new location
+  - Should send a changed event for description when it changes
+  - Should send a changed event for exits when they change
+  - Should send a changed event for items when they change
+  - Should send a changed event for actions when they change
+- View
+  - Should update exits div when receiving an exits changed event
+    - DONE Update labels
+    - Create user selectable links to trigger call back into presenter when selected
+  - Should update actions div when receiving an actions changed event
+    - Update labels
+    - Create user selectable links to trigger call back into presenter when selected
+- Presenter
+  - Should append action results to description when sending a description changed event
+  - on action tells model to enact the action
 - Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
   - See www/spec.html
   - Can this be done with jasmine-node?
-- Proposed test list:
-  - View
-    - DONE Should update description div when receiving a description changed event
-    - DONE Should update items div when receiving an items changed event
-        - Pluralisation of items (is, are)
-        - Countable noun prefix (a, an, some)
-        - Proper nouns (no pronoun - e.g. no 'a', 'an', 'some')
-    - Should update exits div when receiving an exits changed event
-        - DONE Update labels
-        - Create user selectable links to trigger call back into presenter when selected
-    - Should update actions div when receiving an actions changed event
-        - Update labels
-        - Create user selectable links to trigger call back into presenter when selected
-  - Presenter
-    - DONE on exit action tells the model to use the exit
-    - on action tells model to enact the action
-    -DONE Should send a changed event for description, exits, items and actions to view when told to render
-    - Should return description for current location when sending a description changed event
-    - Should return exits for current location when sending an exits changed event
-    - Should return items for current location when sending an items changed event
-    - Should return available actions when sending an actions changed event
-    - Should append action results to description when sending a description changed event
-  - Model
-    - ... perhaps we should just let this evolve from the presenter tests...
+
+DONE
+====
+
+- View
+  - Should update description div when receiving a description changed event
+  - Should update items div when receiving an items changed event
+    - Pluralisation of items (is, are)
+    - Countable noun prefix (a, an, some)
+    - Proper nouns (no pronoun - e.g. no 'a', 'an', 'some')
+- Presenter
+  - on exit action tells the model to use the exit
+  - Should send a changed event for description, exits, items and actions to view when told to render
+  - Should return description for current location when sending a description changed event
+  - Should return exits for current location when sending an exits changed event
+  - Should return items for current location when sending an items changed event
+  - Should return available actions when sending an actions changed event
