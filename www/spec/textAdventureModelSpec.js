@@ -11,14 +11,10 @@
         return this.properties.description;
     };
 
-    Location.prototype.addExit = function(exit) {
-        this.exits = [ exit ];
-    };
-
     Location.prototype.getLocationForExit = function(exitid) {
-        for (var i = 0; i < this.exits.length; i++) {
-            if( this.exits[i].id === exitid )
-                return this.exits[i].destination;
+        for (var i = 0; i < this.properties.exits.length; i++) {
+            if( this.properties.exits[i].id === exitid )
+                return this.properties.exits[i].destination;
         }
         return undefined;
     };
@@ -64,8 +60,7 @@
 
         it('triggering an exit changes the location description', function() {
             var location2 = new Location( { description: 'location2 description' } );
-            var location1 = new Location();
-            location1.addExit( { id: 'door1', destination: location2 } );
+            var location1 = new Location( { exits: [ { id: 'door1', destination: location2 } ] } );
             var model = new Model();
             model.setCurrentLocation( location1 );
 
