@@ -100,6 +100,14 @@ To run the specs type:
 
     ./node_modules/.bin/cucumber.js www/features -r www/features/step_definitions
 
+[zombie](http://zombie.labnotes.org) is used for running Cucumber feature specs in a headless browser, similar to PhantomJS. I installed this in the git repository in node_modules so you do not have to do it again. The command I used was:
+
+    sudo npm install zombie
+
+[servedir](http://github.com/remy/servedir) is used for running a standalone web file server for use by the Cucumber tests. I installed this in the git repository in node_modules so you do not have to do it again. The command I used was:
+
+    sudo npm install servedir
+
 ## Todo
 
 - Write some cucumber tests for navigation
