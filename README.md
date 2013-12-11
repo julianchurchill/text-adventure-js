@@ -1,48 +1,45 @@
-text-adventure-js
-=================
+# text-adventure-js
 
 A JavaScript implementation of the Tiny Text Adventure engine
 
-Quick Start (TLDR)
-==================
+## Quick Start (TLDR)
 
 Clone this repository. Then:
 
-# Install nodejs, npm and phonegap to your development machine:
+### Install nodejs, npm and phonegap to your development machine:
 
     sudo apt-get install node-js
     cd ~/bin && ln -s /usr/bin/nodejs node
     sudo apt-get install npm
     sudo npm install -g phonegap
 
-# Download and install PhantomJS for headless Javascript unit test running:
+### Download and install PhantomJS for headless Javascript unit test running:
 
     Download [PhantomJS](http://www.phantomjs.org) and install the executable in your path. I put mine in ~/bin.
 
-# Build, lint and run unit tests:
+### Build, lint and run unit tests:
 
     ./build/runJake.sh
 
-# List available build tasks:
+### List available build tasks:
 
     ./build/runJake.sh -T
 
-# Run the unit tests from the code root directory:
+### Run the unit tests from the code root directory:
 
     With script          ./build/runJake.sh unit_tests
     With PhantomJS       phantomjs build/jasmine/run-jasmine-under-phantomjs.js www/spec.html
 
-# Run the acceptance tests from the code root directory:
+### Run the acceptance tests from the code root directory:
 
     ./build/runJake.sh acceptance_tests
 
-# Automatically build and run tests when code changes:
+### Automatically build and run tests when code changes:
 
     ./build/watchAndRun.sh 1 ./build/runJake.sh www
 
 
-Project Creation and Setup
-==========================
+## Project Creation and Setup
 
 This project was created with [phonegap](http://www.phonegap.com). [phonegap](http://www.phonegap.com) itself is installed with [nodejs](http://nodejs.org/) and [npm](https://npmjs.org/). The version selected by the install tools below was 3.1.0-0.15.0. I used the following commands on Ubuntu 13.10:
 
@@ -63,8 +60,7 @@ For DOM manipulation I used JQuery. This is installed in the git repository in n
 
     sudo npm install jquery
 
-Unit Testing and Build Tools
-============================
+## Unit Testing and Build Tools
 
 I installed [jasmine](http://pivotal.github.io/jasmine) for BDD style unit testing. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
 
@@ -104,10 +100,9 @@ To run the specs type:
 
     ./node_modules/.bin/cucumber.js www/features -r www/features/step_definitions
 
-Todo
-====
+## Todo
 
-- Set up some manual acceptance test data so a user can step between locations by clicking the exit links and see the exits and descriptions get updated
+- Write some cucumber tests for navigation
 - Model
   - Should send a changed event for description on set current location
   - Should send a changed event for exits on set current location
@@ -131,8 +126,7 @@ Todo
   - See www/spec.html
   - Can this be done with jasmine-node?
 
-DONE
-====
+## DONE
 
 - View
   - Should update description div when receiving a description changed event
