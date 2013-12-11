@@ -17,7 +17,7 @@ Clone this repository. Then:
 
     Download [PhantomJS](http://www.phantomjs.org) and install the executable in your path. I put mine in ~/bin.
 
-### Build, lint and run unit tests:
+### Build, lint and run tests:
 
     ./build/runJake.sh
 
@@ -94,7 +94,7 @@ To run the specs in a browser instead of using [PhantomJS](http://www.phantomjs.
 
 [Cucumber-js](http://github.com/cucumber/cucumber-js) is required for running Cucumber feature spec. I installed this in the git repository in node_modules so you do not have to do it again. The command I used was:
 
-  sudo npm install cucumber
+    sudo npm install cucumber
 
 To run the specs type:
 
