@@ -7,6 +7,7 @@
         this.World = require("../support/world.js").World;
 
         this.Given(/^a location with an exit labelled 'Library' that goes to the library$/, function(callback) {
+            // callback.fail(new Error("Test failure"));
             callback.pending();
         });
 

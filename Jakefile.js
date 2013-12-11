@@ -1,4 +1,4 @@
-/*global desc, task, jake, fail, console, require*/
+/*global desc, task, jake, fail, console, require, complete*/
 
 (function () {
     "use strict";
@@ -6,12 +6,20 @@
     var jasmine = require('jasmine-node');
 
     desc("Lint, build and run the tests");
-    task("default", ["lint", "unit_tests"], function () {
-        console.log("Running default task...");
+    task("default", ["lint", "unit_tests", "acceptance_tests"], function () {
+    });
+
+    desc("Cucumber feature tests");
+    task("acceptance_tests", {async: true}, function () {
+        console.log("Running cucumber feature tests...");
+        var cmds = [ './node_modules/.bin/cucumber.js www/features -r www/features/step_definitions' ];
+        jake.exec(cmds, {printStdout: true}, function () {
+            complete();
+        });
     });
 
     desc('Run Jasmine specs');
-    task('unit_tests', function() {
+    task('unit_tests', {async: true}, function() {
         var specDir = './www/spec';
         console.log('Running unit test task, including jasmine tests from', specDir);
         jasmine.executeSpecsInFolder({
@@ -21,6 +29,7 @@
                 if (failed > 0) {
                     fail();
                 }
+                complete();
             },
             isVerbose: false,
             showColors: true

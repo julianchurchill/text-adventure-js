@@ -32,6 +32,10 @@ Clone this repository. Then:
     With script          ./build/runJake.sh unit_tests
     With PhantomJS       phantomjs build/jasmine/run-jasmine-under-phantomjs.js www/spec.html
 
+# Run the acceptance tests from the code root directory:
+
+    ./build/runJake.sh acceptance_tests
+
 # Automatically build and run tests when code changes:
 
     ./build/watchAndRun.sh 1 ./build/runJake.sh www
