@@ -92,6 +92,14 @@ I installed [jshint]() for linting. This is installed in the git repository in n
 
 To run the specs in a browser instead of using [PhantomJS](http://www.phantomjs.org) for headless, just load the www/spec.html page in Chrome.
 
+[Cucumber-js](http://github.com/cucumber/cucumber-js) is required for running Cucumber feature spec. I installed this in the git repository in node_modules so you do not have to do it again. The command I used was:
+
+  sudo npm install cucumber
+
+To run the specs type:
+
+    ./node_modules/.bin/cucumber.js www/features -r www/features/step_definitions
+
 Todo
 ====
 
