@@ -6,9 +6,10 @@
     var navigationStepDefsWrapper = function () {
         this.World = require("../support/world.js").World;
         var servedir = require("servedir");
+        var httpRootDirectory = 'www';
 
         this.Before(function(callback) {
-            this.server = servedir('www', 3000, { quiet: true });
+            this.server = servedir(httpRootDirectory, 3000, { quiet: true });
             callback();
         });
 
@@ -18,13 +19,17 @@
         });
 
         this.Given(/^a location with an exit labelled 'Library' that goes to the library$/, function(callback) {
-            this.visit('http://localhost:3000', callback);
-            // var html = '<html><script file="blah"></script></html>';
-            // this.loadHTML(html, callback);
-            // callback.pending();
+            // this.visit('http://localhost:3000/test.html', callback);
+            callback.pending();
         });
 
         this.When(/^I click the exit 'Library'$/, function (callback) {
+            // *** This is a test to see if we can assert something about the web page
+            // if( this.browser.text('title') !== 'Hello World')
+            //     callback.fail(new Error('Title is not Hello World'));
+            // else
+            //     callback();
+
             callback.pending();
         });
 
