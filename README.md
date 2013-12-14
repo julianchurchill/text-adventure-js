@@ -110,7 +110,15 @@ To run the specs type:
 
 ## Todo
 
+- Split source and tests for Model, Presenter and View. Use Browserify to allow 'require' to be used in client side code like the jasmine tests.
+  - http://browserify.org/
+- Use browserify to 'bundle' up our source that uses 'require' and 'export' into bundle.js. Import this in a script tag into index.html. Import also into test.html for Cucumber tests ,now see if they run...
 - Write some cucumber tests for navigation
+  - Cucumber and mocking HTTP requests, i.e. requests for a data file containing the model content...
+    - http://theycallmeswift.com/2012/05/01/excuse-me-thats-not-an-integration-test/
+- Figure out model loading strategy, load from a JSON file or our current text based format?
+  - See this for loading JSON into the environment from a file as an HTTP request
+    - http://www.kryptonite-dove.com/blog/load-json-file-locally-using-pure-javascript
 - Model
   - Should send a changed event for description on set current location
   - Should send a changed event for exits on set current location
