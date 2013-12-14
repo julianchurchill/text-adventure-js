@@ -19,8 +19,8 @@
         });
 
         this.Given(/^a location with an exit labelled 'Library' that goes to the library$/, function(callback) {
-            // this.visit('http://localhost:3000/test.html', callback);
-            callback.pending();
+            this.visit('http://localhost:3000/test.html', callback);
+            // callback.pending();
         });
 
         this.When(/^I click the exit 'Library'$/, function (callback) {

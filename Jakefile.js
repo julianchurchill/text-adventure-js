@@ -1,16 +1,26 @@
-/*global desc, task, jake, fail, console, require, complete*/
+/*global desc, task, file, jake, fail, console, require, complete*/
 
 (function () {
     "use strict";
 
     var jasmine = require('jasmine-node');
+    var cuke_bootstrap_bundle = "www/features/support/cucumber_bootstrap_bundle.js";
 
     desc("Lint, build and run the tests");
     task("default", ["lint", "unit_tests", "acceptance_tests"], function () {
     });
 
+    desc("Browserify cucumber bootstrap");
+    file(cuke_bootstrap_bundle, ["www/features/support/cucumber_bootstrap.js"], {async: true}, function () {
+        console.log("Regenerating cucumber bootstrap bundle with browserify...");
+        var cmds = [ './node_modules/.bin/browserify www/features/support/cucumber_bootstrap.js -o ' + cuke_bootstrap_bundle ];
+        jake.exec(cmds, {printStdout: true}, function () {
+            complete();
+        });
+    });
+
     desc("Cucumber feature tests");
-    task("acceptance_tests", {async: true}, function () {
+    task("acceptance_tests", [cuke_bootstrap_bundle], {async: true}, function () {
         console.log("Running cucumber feature tests...");
         var cmds = [ './node_modules/.bin/cucumber.js www/features -r www/features/step_definitions' ];
         jake.exec(cmds, {printStdout: true}, function () {
@@ -52,6 +62,7 @@
         // Exclude example PhoneGap app tests
         files.exclude("www/spec_phonegap/helper.js");
         files.exclude("www/spec_phonegap/index.js");
+        files.exclude("www/features/support/cucumber_bootstrap_bundle.js");
 
         var options = {
             bitwise: true,

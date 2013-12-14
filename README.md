@@ -108,10 +108,12 @@ To run the specs type:
 
     sudo npm install servedir
 
+[browserify](http://browserify.org) is used to 'bundle' up javascript files, parsing 'require' and 'export' statements to allow these server-side features to be used in client side code. This is particularly useful for running a bootstrapped Cucumber test runner. I installed this in the git repository in node_modules so you do not have to do it again. The command I used was:
+
+    sudo npm install browserify
+
 ## Todo
 
-- Use browserify to 'bundle' up our source that uses 'require' and 'export' into bundle.js. Import this in a script tag into index.html. Import also into test.html for Cucumber tests ,now see if they run...
-  - http://browserify.org/
 - Write some cucumber tests for navigation
   - Cucumber and mocking HTTP requests, i.e. requests for a data file containing the model content...
     - http://theycallmeswift.com/2012/05/01/excuse-me-thats-not-an-integration-test/
@@ -143,6 +145,8 @@ To run the specs type:
 
 ## DONE
 
+- Use browserify to 'bundle' up our source that uses 'require' and 'export' into bundle.js. Import this into test.html for Cucumber tests, now see if they run...
+  - http://browserify.org/
 - Split source and tests for Model, Presenter and View. Use 'require' to include client code in the jasmine tests.
 - View
   - Should update description div when receiving a description changed event
