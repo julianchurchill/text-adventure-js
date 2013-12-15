@@ -1,4 +1,4 @@
-/*global */
+/*global jasmine*/
 
 (function () {
     "use strict";
@@ -49,14 +49,95 @@
             expect( model.currentLocation ).toBe( location2 );
         });
 
-        // it('sends description changed event to subscribers', function() {
-        // });
-        // it('sends exits changed event to subscribers', function() {
-        // });
-        // it('sends items changed event to subscribers', function() {
-        // });
-        // it('sends actions changed event to subscribers', function() {
-        // });
+        describe('sends events to subscriber', function() {
+            var subscriber;
+
+            beforeEach(function() {
+                subscriber = jasmine.createSpyObj('subscriber', ['descriptionChanged',
+                                                                 'exitsChanged',
+                                                                 'itemsChanged',
+                                                                 'actionsChanged']);
+                model.subscribe( subscriber );
+            });
+
+            describe('on set current location', function() {
+                it('description changed event', function() {
+                    var new_location = new Location( { description: 'new description' } );
+                    model.setCurrentLocation( new_location );
+
+                    expect(subscriber.descriptionChanged).toHaveBeenCalledWith( 'new description' );
+                });
+
+                it('exits changed event', function() {
+                    var new_exits = [{ id: 'exit1' }, { id: 'exit2' }];
+                    var new_location = new Location( { exits: new_exits } );
+                    model.setCurrentLocation( new_location );
+
+                    expect(subscriber.exitsChanged).toHaveBeenCalledWith( new_exits );
+                });
+
+                it('items changed event', function() {
+                    var new_items = [{ id: 'item1' }, { id: 'item2' }];
+                    var new_location = new Location( { items: new_items } );
+                    model.setCurrentLocation( new_location );
+
+                    expect(subscriber.itemsChanged).toHaveBeenCalledWith( new_items );
+                });
+
+                it('actions changed event', function() {
+                    var new_actions = [{ id: 'action1' }, { id: 'action2' }];
+                    var new_location = new Location( { actions: new_actions } );
+                    model.setCurrentLocation( new_location );
+
+                    expect(subscriber.actionsChanged).toHaveBeenCalledWith( new_actions );
+                });
+            });
+
+            describe('on exit triggered', function() {
+                it('description changed event', function() {
+                    var location2 = new Location( { description: 'new description' } );
+                    var location1 = new Location( { exits: [ { id: 'door1', destination: location2 } ] } );
+                    model.setCurrentLocation( location1 );
+
+                    model.exitTriggered( 'door1' );
+
+                    expect(subscriber.descriptionChanged).toHaveBeenCalledWith( 'new description' );
+                });
+
+                it('exits changed event', function() {
+                    var new_exits = [{ id: 'exit1' }, { id: 'exit2' }];
+                    var location2 = new Location( { exits: new_exits } );
+                    var location1 = new Location( { exits: [ { id: 'door1', destination: location2 } ] } );
+                    model.setCurrentLocation( location1 );
+
+                    model.exitTriggered( 'door1' );
+
+                    expect(subscriber.exitsChanged).toHaveBeenCalledWith( new_exits );
+                });
+
+                it('items changed event', function() {
+                    var new_items = [{ id: 'item1' }, { id: 'item2' }];
+                    var location2 = new Location( { items: new_items } );
+                    var location1 = new Location( { exits: [ { id: 'door1', destination: location2 } ] } );
+                    model.setCurrentLocation( location1 );
+
+                    model.exitTriggered( 'door1' );
+
+                    expect(subscriber.itemsChanged).toHaveBeenCalledWith( new_items );
+                });
+
+                it('actions changed event', function() {
+                    var new_actions = [{ id: 'action1' }, { id: 'action2' }];
+                    var location2 = new Location( { actions: new_actions } );
+                    var location1 = new Location( { exits: [ { id: 'door1', destination: location2 } ] } );
+                    model.setCurrentLocation( location1 );
+
+                    model.exitTriggered( 'door1' );
+
+                    expect(subscriber.actionsChanged).toHaveBeenCalledWith( new_actions );
+                });
+            });
+        });
     });
 
 }());

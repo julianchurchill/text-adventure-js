@@ -4,17 +4,25 @@
     "use strict";
 
     function Model() {
+        this.subscriber = undefined;
     }
 
     Model.prototype.subscribe = function(subscriber) {
+        this.subscriber = subscriber;
     };
 
     Model.prototype.setCurrentLocation = function(location) {
         this.currentLocation = location;
+        if( this.subscriber !== undefined ) {
+            this.subscriber.descriptionChanged( this.currentDescription() );
+            this.subscriber.exitsChanged( this.currentExits() );
+            this.subscriber.itemsChanged( this.currentItems() );
+            this.subscriber.actionsChanged( this.currentActions() );
+        }
     };
 
     Model.prototype.exitTriggered = function(exitid) {
-        this.currentLocation = this.currentLocation.getLocationForExit( exitid );
+        this.setCurrentLocation( this.currentLocation.getLocationForExit( exitid ) );
     };
 
     Model.prototype.currentDescription = function() {

@@ -124,11 +124,6 @@ To run the specs type:
 
 - Write some cucumber tests for navigation
   - Shorten cuke failure backtrace
-  - Model
-    - Should send a changed event for description on set current location
-    - Should send a changed event for exits on set current location
-    - Should send a changed event for description on exit triggered
-    - Should send a changed event for exits on exit triggered
   - View
     - Should update exits div when receiving an exits changed event
       - DONE Update labels
@@ -138,11 +133,6 @@ To run the specs type:
     - http://www.kryptonite-dove.com/blog/load-json-file-locally-using-pure-javascript
   - Cucumber and mocking HTTP requests, i.e. requests for a data file containing the model content...
     - http://theycallmeswift.com/2012/05/01/excuse-me-thats-not-an-integration-test/
-- Model
-  - Should send a changed event for items on set current location
-  - Should send a changed event for actions on set current location
-  - Should send a changed event for items on exit triggered
-  - Should send a changed event for actions on exit triggered
 - View
   - Should update actions div when receiving an actions changed event
     - Update labels
@@ -174,5 +164,7 @@ To run the specs type:
   - Should return items for current location when sending an items changed event
   - Should return available actions when sending an actions changed event
 - Model
+  - Sends a changed event for description, exits, items and actions on set current location
+  - Sends a changed event for description, exits, items and actions on exit triggered
   - Should return description, exits, items and actions for current location
   - On exit triggered change the current location to the new location
