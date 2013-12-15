@@ -122,6 +122,9 @@ To run the specs type:
 
 ## Todo
 
+*** Browserify of cucumber_bootstrap.js currently fails giving a zero-size bundle file
+  - Fails because view.js include jquery which browserify cannot handle. Research and fix.
+  - Once fixed the 'Library' link should be created when test.html is visited (both manually and during Cucumber tests).
 - Write some cucumber tests for navigation
   - Shorten cuke failure backtrace
   - View
