@@ -17,14 +17,14 @@
         if ( newExits.length > 0 ) {
             exits = "The following exits are available:";
             for( var i = 0 ; i < newExits.length; i++ ) {
-                exits += " " + newExits[i].label;
+                exits += " " + "<a id=" + "'" + newExits[i].id + "'" + ">" + newExits[i].label + "</a>";
                 if( i !== (newExits.length-1) )
                     exits += ",";
             }
         } else {
             exits = "There are no exits visible.";
         }
-        $('#exits').text(exits);
+        $('#exits').html(exits);
     };
 
     View.prototype.onItemsChanged = function(newItems) {

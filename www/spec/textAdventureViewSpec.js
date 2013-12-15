@@ -36,6 +36,15 @@
                 view.onExitsChanged( [ { label: "label1" }, { label: "label2" } ] );
                 expect(exits_div.text()).toEqual('The following exits are available: label1, label2');
             });
+
+            it('should create links out of exit labels', function() {
+                view.onExitsChanged( [ { id: 'exit_id1', label: "label1" } ] );
+                expect($('#exit_id1')).toBe('a');
+                expect($('#exit_id1').text()).toEqual('label1');
+            });
+            // it('exit links should call back to action handler with exit id', function() {
+            //     expect(actionHandler.exitTriggered).toHaveBeenCalledWith( exit_id );
+            // });
         });
 
         describe('when receiving an items changed event', function() {
