@@ -6,8 +6,15 @@
     var jasmine = require('jasmine-node');
     var cuke_bootstrap_bundle = "www/features/support/cucumber_bootstrap_bundle.js";
 
+    task("default", ["all"], function () {
+    });
+
     desc("Lint, build and run the tests");
-    task("default", ["lint", "unit_tests", "acceptance_tests"], function () {
+    task("all", ["lint", "unit_tests", "acceptance_tests"], function () {
+    });
+
+    desc("Lint, build and run the unit tests and work in progress features");
+    task("wip", ["lint", "unit_tests", "wip_acceptance_tests"], function () {
     });
 
     desc("Browserify cucumber bootstrap");
@@ -19,10 +26,19 @@
         });
     });
 
-    desc("Cucumber feature tests");
+    desc("Production Cucumber feature tests");
     task("acceptance_tests", [cuke_bootstrap_bundle], {async: true}, function () {
         console.log("Running cucumber feature tests...");
-        var cmds = [ './node_modules/.bin/cucumber.js www/features -r www/features/step_definitions' ];
+        var cmds = [ './node_modules/.bin/cucumber.js --tags ~@wip www/features -r www/features/step_definitions' ];
+        jake.exec(cmds, {printStdout: true}, function () {
+            complete();
+        });
+    });
+
+    desc("Work in progress Cucumber feature tests");
+    task("wip_acceptance_tests", [cuke_bootstrap_bundle], {async: true}, function () {
+        console.log("Running work in progress (wip) tagged cucumber feature tests...");
+        var cmds = [ './node_modules/.bin/cucumber.js --tags @wip www/features -r www/features/step_definitions' ];
         jake.exec(cmds, {printStdout: true}, function () {
             complete();
         });
