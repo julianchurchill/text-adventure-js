@@ -20,21 +20,14 @@
 
         this.Given(/^a location with an exit labelled 'Library' that goes to the library$/, function(callback) {
             this.visit('http://localhost:3000/test.html', callback);
-            // callback.pending();
         });
 
         this.When(/^I click the exit 'Library'$/, function (callback) {
-            // *** This is a test to see if we can assert something about the web page
-            // if( this.browser.text('title') !== 'Hello World')
-            //     callback.fail(new Error('Title is not Hello World'));
-            // else
-            //     callback();
-
-            callback.pending();
+            this.clickExit( 'Library', callback );
         });
 
-        this.Then(/^the current location changes to the library$/, function (callback) {
-            callback.pending();
+        this.Then(/^the current location description changes to the 'library description'$/, function (callback) {
+            this.assertDescriptionIs( 'library description', callback );
         });
     };
 

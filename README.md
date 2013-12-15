@@ -34,9 +34,17 @@ Clone this repository. Then:
 
     ./build/runJake.sh acceptance_tests
 
+### Run the work in progress acceptance tests from the code root directory:
+
+    ./build/runJake.sh wip_acceptance_tests
+
 ### Automatically build and run tests when code changes:
 
     ./build/watchAndRun.sh 1 ./build/runJake.sh www
+
+### Automatically build and run all tests including work in progress tests when code changes:
+
+    ./build/watchAndRun.sh 1 "./build/runJake.sh wip" www
 
 
 ## Project Creation and Setup
@@ -115,24 +123,27 @@ To run the specs type:
 ## Todo
 
 - Write some cucumber tests for navigation
-  - Cucumber and mocking HTTP requests, i.e. requests for a data file containing the model content...
-    - http://theycallmeswift.com/2012/05/01/excuse-me-thats-not-an-integration-test/
+  - Shorten cuke failure backtrace
+  - Model
+    - Should send a changed event for description on set current location
+    - Should send a changed event for exits on set current location
+    - Should send a changed event for description on exit triggered
+    - Should send a changed event for exits on exit triggered
+  - View
+    - Should update exits div when receiving an exits changed event
+      - DONE Update labels
+      - Create user selectable links to trigger call back into presenter when selected
 - Figure out model loading strategy, load from a JSON file or our current text based format?
   - See this for loading JSON into the environment from a file as an HTTP request
     - http://www.kryptonite-dove.com/blog/load-json-file-locally-using-pure-javascript
+  - Cucumber and mocking HTTP requests, i.e. requests for a data file containing the model content...
+    - http://theycallmeswift.com/2012/05/01/excuse-me-thats-not-an-integration-test/
 - Model
-  - Should send a changed event for description on set current location
-  - Should send a changed event for exits on set current location
   - Should send a changed event for items on set current location
   - Should send a changed event for actions on set current location
-  - Should send a changed event for description on exit triggered
-  - Should send a changed event for exits on exit triggered
   - Should send a changed event for items on exit triggered
   - Should send a changed event for actions on exit triggered
 - View
-  - Should update exits div when receiving an exits changed event
-    - DONE Update labels
-    - Create user selectable links to trigger call back into presenter when selected
   - Should update actions div when receiving an actions changed event
     - Update labels
     - Create user selectable links to trigger call back into presenter when selected
@@ -145,6 +156,7 @@ To run the specs type:
 
 ## DONE
 
+- Mark work in progress cucumber features with @wip tag, to avoid running them with a default 'runJake.sh'. Run them with 'runJake.sh wip'.
 - Use browserify to 'bundle' up our source that uses 'require' and 'export' into bundle.js. Import this into test.html for Cucumber tests, now see if they run...
   - http://browserify.org/
 - Split source and tests for Model, Presenter and View. Use 'require' to include client code in the jasmine tests.
