@@ -21,7 +21,7 @@
     file(cuke_bootstrap_bundle, ["www/features/support/cucumber_bootstrap.js"], {async: true}, function () {
         console.log("Regenerating cucumber bootstrap bundle with browserify...");
         var cmds = [ './node_modules/.bin/browserify www/features/support/cucumber_bootstrap.js -o ' + cuke_bootstrap_bundle ];
-        jake.exec(cmds, {printStdout: true}, function () {
+        jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
             complete();
         });
     });
@@ -30,7 +30,7 @@
     task("acceptance_tests", [cuke_bootstrap_bundle], {async: true}, function () {
         console.log("Running cucumber feature tests...");
         var cmds = [ './node_modules/.bin/cucumber.js --tags ~@wip www/features -r www/features/step_definitions' ];
-        jake.exec(cmds, {printStdout: true}, function () {
+        jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
             complete();
         });
     });
@@ -39,7 +39,7 @@
     task("wip_acceptance_tests", [cuke_bootstrap_bundle], {async: true}, function () {
         console.log("Running work in progress (wip) tagged cucumber feature tests...");
         var cmds = [ './node_modules/.bin/cucumber.js --tags @wip www/features -r www/features/step_definitions' ];
-        jake.exec(cmds, {printStdout: true}, function () {
+        jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
             complete();
         });
     });
