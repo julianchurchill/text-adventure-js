@@ -3,6 +3,11 @@
 (function () {
     "use strict";
 
+    // Create fake 'document' with jsdom
+    var jsdom = require('jsdom');
+    global.window = jsdom.jsdom().createWindow('<html><body></body></html>');
+    global.document = window.document;
+
     var $ = require('jquery');
     // jasmine-jquery needs a global definition to jQuery like this
     global.jQuery = $;

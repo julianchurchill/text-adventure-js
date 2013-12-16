@@ -3,13 +3,19 @@
 (function () {
     "use strict";
 
-    var $ = require('jquery');
-
     function View() {
     }
 
+    function setTextOnSelector(selector, text) {
+        document.querySelector(selector).appendChild(document.createTextNode(text));
+    }
+
+    function setHtmlOnSelector(selector, html) {
+        document.querySelector(selector).innerHTML = html;
+    }
+
     View.prototype.onDescriptionChanged = function(newDescription) {
-        $('#description').text(newDescription);
+        setTextOnSelector('#description', newDescription);
     };
 
     View.prototype.onExitsChanged = function(newExits) {
@@ -24,7 +30,7 @@
         } else {
             exits = "There are no exits visible.";
         }
-        $('#exits').html(exits);
+        setHtmlOnSelector('#exits', exits);
     };
 
     View.prototype.onItemsChanged = function(newItems) {
@@ -55,7 +61,7 @@
         } else {
             items = "";
         }
-        $('#items').text(items);
+        setTextOnSelector('#items', items);
     };
 
     module.exports = View;

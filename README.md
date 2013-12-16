@@ -122,10 +122,8 @@ To run the specs type:
 
 ## Todo
 
-*** Browserify of cucumber_bootstrap.js currently fails giving a zero-size bundle file
-  - Fails because view.js include jquery which browserify cannot handle. Research and fix.
-  - Once fixed the 'Library' link should be created when test.html is visited (both manually and during Cucumber tests).
 - Write some cucumber tests for navigation
+  - Once browserify is fixed the 'Library' link should be created when test.html is visited (both manually and during Cucumber tests).
   - Shorten cuke failure backtrace
   - View
     - Should update exits div when receiving an exits changed event
@@ -149,6 +147,8 @@ To run the specs type:
 
 ## DONE
 
+- Browserify of cucumber_bootstrap.js failed giving a zero-size bundle file because view.js include jquery which browserify cannot handle. Remove use of jquery in view, use DOM API.
+    - http://substack.net/weaning_yourself_off_jquery
 - Mark work in progress cucumber features with @wip tag, to avoid running them with a default 'runJake.sh'. Run them with 'runJake.sh wip'.
 - Use browserify to 'bundle' up our source that uses 'require' and 'export' into bundle.js. Import this into test.html for Cucumber tests, now see if they run...
   - http://browserify.org/
