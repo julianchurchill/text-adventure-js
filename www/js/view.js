@@ -64,5 +64,8 @@
         setTextOnSelector('#items', items);
     };
 
+    View.prototype.onActionsChanged = function(newActions) {
+    };
+
     module.exports = View;
 })();
