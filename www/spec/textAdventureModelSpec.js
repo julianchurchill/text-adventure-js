@@ -12,6 +12,22 @@
             model = new Model();
         });
 
+        it('new locations have an empty description', function() {
+            expect( new Location().description() ).toEqual( '' );
+        });
+
+        it('new locations have an empty list of exits', function() {
+            expect( new Location().exits() ).toEqual( [] );
+        });
+
+        it('new locations have an empty list of items', function() {
+            expect( new Location().items() ).toEqual( [] );
+        });
+
+        it('new locations have an empty list of actions', function() {
+            expect( new Location().actions() ).toEqual( [] );
+        });
+
         it('current description is current location description', function() {
             model.setCurrentLocation( new Location( { description: 'location description' } ) );
 
