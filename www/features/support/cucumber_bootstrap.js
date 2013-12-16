@@ -18,6 +18,6 @@
                                     description: 'library description' } );
     var location1 = new Location( { id: 'location 1',
                                     description: 'location 1',
-                                    exits: [ { id: 'Library', destination: 'Library' } ] } );
+                                    exits: [ { id: 'Library', destination: 'Library', label: 'Library' } ] } );
     model.setCurrentLocation( location1 );
 })();

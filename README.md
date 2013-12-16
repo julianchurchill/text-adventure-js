@@ -123,7 +123,6 @@ To run the specs type:
 ## Todo
 
 - Write some cucumber tests for navigation
-  - Once browserify is fixed the 'Library' link should be created when test.html is visited (both manually and during Cucumber tests).
   - Shorten cuke failure backtrace
   - View
     - Should update exits div when receiving an exits changed event
