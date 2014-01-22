@@ -9,12 +9,12 @@
 *.class
 
 # generated files
-bin/
-gen/
+platforms/android/bin/
+platforms/android/gen/
 www/features/support/cucumber_bootstrap_bundle.js
 
 # Local configuration file (sdk path, etc)
-local.properties
+platforms/android/local.properties
 
 # Eclipse project files
 .classpath
