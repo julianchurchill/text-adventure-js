@@ -45,7 +45,7 @@
     });
 
     desc('Run Jasmine specs');
-    task('unit_tests', {async: true}, function() {
+    task('unit_tests', [cuke_bootstrap_bundle], {async: true}, function() {
         var specDir = './www/spec';
         console.log('Running unit test task, including jasmine tests from', specDir);
         jasmine.executeSpecsInFolder({
