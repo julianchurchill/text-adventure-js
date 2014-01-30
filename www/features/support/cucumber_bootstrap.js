@@ -13,6 +13,7 @@
     var view = new View();
     var model = new Model();
     var presenter = new Presenter(model, view);
+    view.setActionHandler( presenter );
 
     var location2 = new Location( { id: 'Library',
                                     description: 'library description' } );

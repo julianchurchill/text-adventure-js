@@ -47,9 +47,18 @@
                 expect($('#exit_id1')).toBe('a');
                 expect($('#exit_id1').text()).toEqual('label1');
             });
-            // it('exit links should call back to action handler with exit id', function() {
-            //     expect(actionHandler.exitTriggered).toHaveBeenCalledWith( exit_id );
-            // });
+        });
+
+        describe('when user selects an exit', function() {
+            it('should call back to action handler with exit id', function() {
+                var actionHandler = jasmine.createSpyObj('actionHandler', ['exitTriggered']);
+                view.setActionHandler(actionHandler);
+                view.onExitsChanged( [ { id: 'exit_id1', label: "label1" } ] );
+
+                $('#exit_id1').click();
+
+                expect(actionHandler.exitTriggered).toHaveBeenCalledWith('exit_id1');
+            });
         });
 
         describe('when receiving an items changed event', function() {

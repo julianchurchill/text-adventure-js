@@ -14,6 +14,10 @@
         document.querySelector(selector).innerHTML = html;
     }
 
+    View.prototype.setActionHandler = function(handler) {
+        this.actionHandler = handler;
+    };
+
     View.prototype.onDescriptionChanged = function(newDescription) {
         setTextOnSelector('#description', newDescription);
     };
@@ -23,7 +27,7 @@
         if ( newExits.length > 0 ) {
             exits = "The following exits are available:";
             for( var i = 0 ; i < newExits.length; i++ ) {
-                exits += " " + "<a id=" + "'" + newExits[i].id + "'" + ">" + newExits[i].label + "</a>";
+                exits += " " + "<a id=" + "'" + newExits[i].id + "'>" + newExits[i].label + "</a>";
                 if( i !== (newExits.length-1) )
                     exits += ",";
             }
@@ -31,6 +35,15 @@
             exits = "There are no exits visible.";
         }
         setHtmlOnSelector('#exits', exits);
+        if ( newExits.length > 0 ) {
+            for( var i = 0 ; i < newExits.length; i++ ) {
+                var view = this;
+                var exit_id = newExits[i].id;
+                document.querySelector('#' + exit_id).onclick = function() {
+                    view.actionHandler.exitTriggered( exit_id );
+                }
+            }
+        }
     };
 
     View.prototype.onItemsChanged = function(newItems) {
