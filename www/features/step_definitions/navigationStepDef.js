@@ -26,8 +26,8 @@
             this.clickExit( 'Library', callback );
         });
 
-        this.Then(/^the current location description changes to the 'library description'$/, function (callback) {
-            this.assertDescriptionIs( 'library description', callback );
+        this.Then(/^the current location description changes to 'Library description'$/, function (callback) {
+            this.assertDescriptionIs( 'Library description', callback );
         });
     };
 

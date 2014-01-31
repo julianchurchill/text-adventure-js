@@ -15,10 +15,13 @@
     var presenter = new Presenter(model, view);
     view.setActionHandler( presenter );
 
-    var location2 = new Location( { id: 'Library',
-                                    description: 'library description' } );
-    var location1 = new Location( { id: 'location 1',
-                                    description: 'location 1',
-                                    exits: [ { id: 'Library', destination: 'Library', label: 'Library' } ] } );
-    model.setCurrentLocation( location1 );
+    var library     = new Location( { id: 'Library',
+                                    description: 'Library description' } );
+    var sittingroom = new Location( { id: 'sittingroom',
+                                    description: 'Sitting room description',
+                                    exits: [ { id: 'library_exit', destination: library, label: 'Library' } ] } );
+    // Exits must be set up after location objects exist
+    library.properties.exits = [ { id: 'sittingroom_exit', destination: sittingroom, label: 'Sitting room' } ];
+
+    model.setCurrentLocation( sittingroom );
 })();

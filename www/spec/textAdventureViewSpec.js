@@ -26,9 +26,12 @@
             items_div = $('#items');
         });
 
-        it('should update description div when description changed', function() {
-            view.onDescriptionChanged( "new description" );
-            expect(description_div.text()).toEqual('new description');
+        describe('when receiving a description changed event', function() {
+            it('should replace description text with new description', function() {
+                description_div.text('old description');
+                view.onDescriptionChanged( "new description" );
+                expect(description_div.text()).toEqual('new description');
+            });
         });
 
         describe('when receiving an exits changed event', function() {

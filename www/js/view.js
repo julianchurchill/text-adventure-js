@@ -18,11 +18,16 @@
         document.querySelector(selector).innerHTML = html;
     }
 
+    function clearSelector(selector) {
+        setHtmlOnSelector(selector,'');
+    }
+
     View.prototype.setActionHandler = function(handler) {
         this.actionHandler = handler;
     };
 
     View.prototype.onDescriptionChanged = function(newDescription) {
+        clearSelector('#description');
         addTextToSelector('#description', newDescription);
     };
 
@@ -38,7 +43,7 @@
     };
 
     function clearExits() {
-        setHtmlOnSelector('#exits','');
+        clearSelector('#exits');
     }
 
     function addExitsPrecursorText(newExits) {

@@ -124,10 +124,6 @@ To run the specs type:
 
 - Write some cucumber tests for navigation
   - Shorten cuke failure backtrace
-  - View
-    - Should update exits div when receiving an exits changed event
-      - DONE Update labels
-      - Create user selectable links to trigger call back into presenter when selected
 - Figure out model loading strategy, load from a JSON file or our current text based format?
   - See this for loading JSON into the environment from a file as an HTTP request
     - http://www.kryptonite-dove.com/blog/load-json-file-locally-using-pure-javascript
@@ -153,6 +149,7 @@ To run the specs type:
   - http://browserify.org/
 - Split source and tests for Model, Presenter and View. Use 'require' to include client code in the jasmine tests.
 - View
+  - Should update exits div when receiving an exits changed event
   - Should update description div when receiving a description changed event
   - Should update items div when receiving an items changed event
     - Pluralisation of items (is, are)
