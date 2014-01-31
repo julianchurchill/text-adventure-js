@@ -130,6 +130,7 @@ To run the specs type:
   - Cucumber and mocking HTTP requests, i.e. requests for a data file containing the model content...
     - http://theycallmeswift.com/2012/05/01/excuse-me-thats-not-an-integration-test/
 - View
+  - Write cuke tests to check items are shown
   - Should update actions div when receiving an actions changed event
     - Update labels
     - Create user selectable links to trigger call back into presenter when selected
