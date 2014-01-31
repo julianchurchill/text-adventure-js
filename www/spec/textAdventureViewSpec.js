@@ -65,6 +65,12 @@
         });
 
         describe('when receiving an items changed event', function() {
+            it('should replace old items text', function() {
+                items_div.text('old items');
+                view.onItemsChanged( [] );
+                expect(items_div.text()).toEqual('');
+            });
+
             it('should use blank items text when no items available ', function() {
                 view.onItemsChanged( [] );
                 expect(items_div.text()).toEqual('');

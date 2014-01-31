@@ -68,6 +68,7 @@
     };
 
     View.prototype.onItemsChanged = function(newItems) {
+        clearSelector('#items');
         var items = "";
         if ( newItems.length > 0 ) {
             items = "There";
