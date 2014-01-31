@@ -29,7 +29,7 @@
     desc("Production Cucumber feature tests");
     task("acceptance_tests", [cuke_bootstrap_bundle], {async: true}, function () {
         console.log("Running cucumber feature tests...");
-        var cmds = [ './node_modules/.bin/cucumber.js --tags ~@wip www/features -r www/features/step_definitions' ];
+        var cmds = [ './node_modules/.bin/cucumber.js --tags ~@wip --tags ~@future www/features -r www/features/step_definitions' ];
         jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
             complete();
         });
