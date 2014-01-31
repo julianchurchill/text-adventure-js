@@ -6,8 +6,12 @@
     function View() {
     }
 
-    function setTextOnSelector(selector, text) {
-        document.querySelector(selector).appendChild(document.createTextNode(text));
+    function addChildToSelector(selector, child) {
+        document.querySelector(selector).appendChild(child);
+    }
+
+    function addTextToSelector(selector, text) {
+        addChildToSelector(selector,document.createTextNode(text));
     }
 
     function setHtmlOnSelector(selector, html) {
@@ -19,31 +23,43 @@
     };
 
     View.prototype.onDescriptionChanged = function(newDescription) {
-        setTextOnSelector('#description', newDescription);
+        addTextToSelector('#description', newDescription);
     };
 
+    function createNewExitLink(exit,view) {
+        var exit_id = exit.id;
+        var new_link = document.createElement( 'a' );
+        new_link.id = exit_id;
+        new_link.appendChild(document.createTextNode(exit.label));
+        new_link.onclick = function() {
+            view.actionHandler.exitTriggered( exit_id );
+        }
+        return new_link;
+    };
+
+    function clearExits() {
+        setHtmlOnSelector('#exits','');
+    }
+
+    function addExitsPrecursorText(newExits) {
+        if ( newExits.length > 0 )
+            addTextToSelector('#exits',"The following exits are available: ");
+        else
+            addTextToSelector('#exits',"There are no exits visible.");
+    }
+
+    function addLinkForEachExit(newExits,view) {
+        for( var i = 0 ; i < newExits.length; i++ ) {
+            addChildToSelector('#exits',createNewExitLink(newExits[i],view));
+            if( i !== (newExits.length-1) )
+                addTextToSelector('#exits',', ');
+        }
+    }
+
     View.prototype.onExitsChanged = function(newExits) {
-        var exits = "";
-        if ( newExits.length > 0 ) {
-            exits = "The following exits are available:";
-            for( var i = 0 ; i < newExits.length; i++ ) {
-                exits += " " + "<a id=" + "'" + newExits[i].id + "'>" + newExits[i].label + "</a>";
-                if( i !== (newExits.length-1) )
-                    exits += ",";
-            }
-        } else {
-            exits = "There are no exits visible.";
-        }
-        setHtmlOnSelector('#exits', exits);
-        if ( newExits.length > 0 ) {
-            for( var i = 0 ; i < newExits.length; i++ ) {
-                var view = this;
-                var exit_id = newExits[i].id;
-                document.querySelector('#' + exit_id).onclick = function() {
-                    view.actionHandler.exitTriggered( exit_id );
-                }
-            }
-        }
+        clearExits();
+        addExitsPrecursorText(newExits);
+        addLinkForEachExit(newExits,this);
     };
 
     View.prototype.onItemsChanged = function(newItems) {
@@ -74,7 +90,7 @@
         } else {
             items = "";
         }
-        setTextOnSelector('#items', items);
+        addTextToSelector('#items', items);
     };
 
     View.prototype.onActionsChanged = function(newActions) {
