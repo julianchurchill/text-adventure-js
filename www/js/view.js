@@ -67,36 +67,55 @@
         addLinkForEachExit(newExits,this);
     };
 
+    function addItemsPrecursorText(newItems) {
+        if ( newItems.length > 0 ) {
+            var precursorText = "There";
+            if( newItems[0].plural !== undefined && newItems[0].plural === true )
+                precursorText += " are";
+            else
+                precursorText += " is";
+            addTextToSelector('#items', precursorText);
+        }
+    }
+
+    function addIndefiniteArticleForItemText(item) {
+        var indefinite_article = " a";
+        if( item.indefinite_article !== undefined )
+            indefinite_article = " " + item.indefinite_article;
+        if( item.plural !== undefined && item.plural === true )
+            indefinite_article = " some";
+        if( item.proper_noun !== undefined && item.proper_noun  === true )
+            indefinite_article = "";
+        addTextToSelector('#items', indefinite_article);
+    }
+
+    function addItemTextSeperator(newItems,currentItemIndex) {
+        if( newItems.length > 1 ) {
+            if( currentItemIndex === (newItems.length-2) )
+                addTextToSelector('#items', " and");
+            else if( currentItemIndex !== (newItems.length-1) )
+                addTextToSelector('#items', ",");
+        }
+    }
+
+    function addTextForEachItem(newItems) {
+        for( var i = 0 ; i < newItems.length; i++ ) {
+            addIndefiniteArticleForItemText(newItems[i]);
+            addTextToSelector('#items', " " + newItems[i].label);
+            addItemTextSeperator(newItems,i);
+        }
+    }
+
+    function addItemsSuccessorText(newItems) {
+        if ( newItems.length > 0 )
+            addTextToSelector('#items', ' here.');
+    }
+
     View.prototype.onItemsChanged = function(newItems) {
         clearSelector('#items');
-        var items = "";
-        if ( newItems.length > 0 ) {
-            items = "There";
-            if( newItems[0].plural !== undefined && newItems[0].plural === true )
-                items += " are";
-            else
-                items += " is";
-            for( var i = 0 ; i < newItems.length; i++ ) {
-                var indefinite_article = " a";
-                if( newItems[i].indefinite_article !== undefined )
-                    indefinite_article = " " + newItems[i].indefinite_article;
-                if( newItems[i].plural !== undefined && newItems[i].plural === true )
-                    indefinite_article = " some";
-                if( newItems[i].proper_noun !== undefined && newItems[i].proper_noun  === true )
-                    indefinite_article = "";
-                items += indefinite_article + " " + newItems[i].label;
-                if( newItems.length > 1 ) {
-                    if( i === (newItems.length-2) )
-                        items += " and";
-                    else if( i !== (newItems.length-1) )
-                        items += ",";
-                }
-            }
-            items += " here.";
-        } else {
-            items = "";
-        }
-        addTextToSelector('#items', items);
+        addItemsPrecursorText(newItems);
+        addTextForEachItem(newItems);
+        addItemsSuccessorText(newItems);
     };
 
     View.prototype.onActionsChanged = function(newActions) {
