@@ -58,7 +58,7 @@
         it('triggering an exit changes the current location', function() {
             var location2 = { description: 'location2 description', id: 'location2' };
             var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
-            model.loadModelFromJSON( [ location1, location2 ] );
+            model.loadModelFromJSON( { locations: [ location1, location2 ] } );
 
             model.exitTriggered( 'door1' );
 
@@ -113,7 +113,7 @@
                 it('description changed event', function() {
                     var location2 = { description: 'new description', id: 'location2' };
                     var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
-                    model.loadModelFromJSON( [ location1, location2 ] );
+                    model.loadModelFromJSON( { locations: [ location1, location2 ] } );
 
                     model.exitTriggered( 'door1' );
 
@@ -124,7 +124,7 @@
                     var new_exits = [{ id: 'exit1' }, { id: 'exit2' }];
                     var location2 = { exits: new_exits, id: 'location2' };
                     var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
-                    model.loadModelFromJSON( [ location1, location2 ] );
+                    model.loadModelFromJSON( { locations: [ location1, location2 ] } );
 
                     model.exitTriggered( 'door1' );
 
@@ -135,7 +135,7 @@
                     var new_items = [{ id: 'item1' }, { id: 'item2' }];
                     var location2 = { items: new_items, id: 'location2' };
                     var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
-                    model.loadModelFromJSON( [ location1, location2 ] );
+                    model.loadModelFromJSON( { locations: [ location1, location2 ] } );
 
                     model.exitTriggered( 'door1' );
 
@@ -146,7 +146,7 @@
                     var new_actions = [{ id: 'action1' }, { id: 'action2' }];
                     var location2 = { actions: new_actions, id: 'location2' };
                     var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
-                    model.loadModelFromJSON( [ location1, location2 ] );
+                    model.loadModelFromJSON( { locations: [ location1, location2 ] } );
 
                     model.exitTriggered( 'door1' );
 

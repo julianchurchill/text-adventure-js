@@ -122,6 +122,7 @@ To run the specs type:
 
 ## Todo
 
+- Figure out how to stop indefinite rebuilds in watchAndRun.sh because model.json is written on every cuke test, causing cucumber_bootstrap_bundle.js to be written, causing a rebuild.
 - Write some cucumber tests for navigation
   - Shorten cuke failure backtrace
 - View

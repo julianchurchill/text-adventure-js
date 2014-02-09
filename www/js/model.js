@@ -31,8 +31,8 @@
 
     Model.prototype.loadModelFromJSON = function(model_json) {
         this.locations = [];
-        for (var i = 0; i < model_json.length; i++)
-            this.locations.push( new Location( model_json[i] ) );
+        for (var i = 0; i < model_json.locations.length; i++)
+            this.locations.push( new Location( model_json.locations[i] ) );
         if( this.locations.length > 0 )
             this.setCurrentLocation( this.locations[0] );
     }

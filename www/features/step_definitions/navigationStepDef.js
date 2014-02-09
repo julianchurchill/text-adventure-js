@@ -5,6 +5,7 @@
 
     var navigationStepDefsWrapper = function () {
         this.World = require("../support/world.js").World;
+        var fs = require('fs');
         var servedir = require("servedir");
         var httpRootDirectory = 'www';
 
@@ -18,13 +19,14 @@
             callback();
         });
 
-        this.Given(/^a location with an exit labelled '(.*)' that goes to (.*)$/, function(exit_label, destination_id, callback) {
-            var test_model = [
-                { id: "first room", exits: [ { destinationid: destination_id, label: exit_label } ] },
-                { id: destination_id }
-            ];
+        this.Given(/^a location with an exit labelled '(.*)' that goes to (.*) with a description '(.*)'$/, function(exit_label, destination_id, destination_description, callback) {
+            var test_model = {
+                locations: [
+                    { id: "first room", exits: [ { id: "Library", destinationid: destination_id, label: exit_label } ] },
+                    { id: destination_id, description: destination_description }
+                ]
+            };
 
-            var fs = require('fs');
             fs.writeFileSync('www/features/support/model.json', JSON.stringify(test_model));
             this.visit('http://localhost:3000/test.html', callback);
         });
