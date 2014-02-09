@@ -18,7 +18,14 @@
             callback();
         });
 
-        this.Given(/^a location with an exit labelled 'Library' that goes to the library$/, function(callback) {
+        this.Given(/^a location with an exit labelled '(.*)' that goes to (.*)$/, function(exit_label, destination_id, callback) {
+            var test_model = [
+                { id: "first room", exits: [ { destinationid: destination_id, label: exit_label } ] },
+                { id: destination_id }
+            ];
+
+            var fs = require('fs');
+            fs.writeFileSync('www/features/support/model.json', JSON.stringify(test_model));
             this.visit('http://localhost:3000/test.html', callback);
         });
 

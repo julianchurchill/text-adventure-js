@@ -122,12 +122,6 @@ To run the specs type:
 
 ## Todo
 
-- Figure out model loading strategy, load from a JSON file
-  - First try, load the test JSON with 'require' from a local file
-  - See this for loading JSON into the environment from a file as an HTTP request
-    - http://www.kryptonite-dove.com/blog/load-json-file-locally-using-pure-javascript
-  - Cucumber and mocking HTTP requests, i.e. requests for a data file containing the model content...
-    - http://theycallmeswift.com/2012/05/01/excuse-me-thats-not-an-integration-test/
 - Write some cucumber tests for navigation
   - Shorten cuke failure backtrace
 - View

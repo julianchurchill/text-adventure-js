@@ -14,11 +14,6 @@
     var presenter = new Presenter(model, view);
     view.setActionHandler( presenter );
 
-    var sittingroom_json = { id: 'sittingroom',
-                                    description: 'Sitting room description',
-                                    exits: [ { id: 'library_exit', destinationid: 'Library', label: 'Library' } ] };
-    var library_json     = { id: 'Library',
-                                    description: 'Library description',
-                                    exits: [ { id: 'sittingroom_exit', destinationid: 'sittingroom', label: 'Sitting room' } ] };
-    model.loadModelFromJSON( [ sittingroom_json, library_json ] );
+    var model_json = require('./model.json');
+    model.loadModelFromJSON( model_json );
 })();

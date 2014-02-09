@@ -12,6 +12,7 @@
 platforms/android/bin/
 platforms/android/gen/
 www/features/support/cucumber_bootstrap_bundle.js
+www/features/support/model.json
 
 # Local configuration file (sdk path, etc)
 platforms/android/local.properties
