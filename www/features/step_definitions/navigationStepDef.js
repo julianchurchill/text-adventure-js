@@ -22,12 +22,24 @@
             this.visit('http://localhost:3000/test.html', callback);
         });
 
-        this.When(/^I click the exit 'Library'$/, function (callback) {
-            this.clickExit( 'Library', callback );
+        this.When(/^I click the exit '(.*)'$/, function (exit, callback) {
+            this.clickExit( exit, callback );
         });
 
-        this.Then(/^the current location description changes to 'Library description'$/, function (callback) {
-            this.assertDescriptionIs( 'Library description', callback );
+        this.Then(/^the current location description changes to '(.*)'$/, function (description, callback) {
+            this.assertDescriptionIs( description, callback );
+        });
+
+        this.Given(/^a location has an item labelled '(.*)'$/, function(item_label, callback) {
+            callback();
+        });
+
+        this.When(/^I enter the location$/, function (callback) {
+            this.visit('http://localhost:3000/test.html', callback);
+        });
+
+        this.Then(/^the current location item list includes '(.*)'$/, function (item_label, callback) {
+            this.assertItemListIncludes( item_label, callback );
         });
     };
 

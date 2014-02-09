@@ -41,6 +41,10 @@
                 visit_callback();
         };
 
+        this.assertItemListIncludes = function(expected_item, callback) {
+            callback.fail(new Error("This assertion has not been written properly yet"));
+        };
+
         // last line to tell cucumber.js the World is ready and use world as this
         callback();
     };
