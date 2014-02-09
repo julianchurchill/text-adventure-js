@@ -58,9 +58,7 @@
         it('triggering an exit changes the current location', function() {
             var location2 = new Location( { description: 'location2 description', id: 'location2' } );
             var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-            model.addLocation( location1 );
-            model.addLocation( location2 );
-            model.setCurrentLocation( location1 );
+            model.setLocations( [ location1, location2 ] );
 
             model.exitTriggered( 'door1' );
 
@@ -115,9 +113,7 @@
                 it('description changed event', function() {
                     var location2 = new Location( { description: 'new description', id: 'location2' } );
                     var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-                    model.addLocation( location1 );
-                    model.addLocation( location2 );
-                    model.setCurrentLocation( location1 );
+                    model.setLocations( [ location1, location2 ] );
 
                     model.exitTriggered( 'door1' );
 
@@ -128,9 +124,7 @@
                     var new_exits = [{ id: 'exit1' }, { id: 'exit2' }];
                     var location2 = new Location( { exits: new_exits, id: 'location2' } );
                     var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-                    model.addLocation( location1 );
-                    model.addLocation( location2 );
-                    model.setCurrentLocation( location1 );
+                    model.setLocations( [ location1, location2 ] );
 
                     model.exitTriggered( 'door1' );
 
@@ -141,9 +135,7 @@
                     var new_items = [{ id: 'item1' }, { id: 'item2' }];
                     var location2 = new Location( { items: new_items, id: 'location2' } );
                     var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-                    model.addLocation( location1 );
-                    model.addLocation( location2 );
-                    model.setCurrentLocation( location1 );
+                    model.setLocations( [ location1, location2 ] );
 
                     model.exitTriggered( 'door1' );
 
@@ -154,9 +146,7 @@
                     var new_actions = [{ id: 'action1' }, { id: 'action2' }];
                     var location2 = new Location( { actions: new_actions, id: 'location2' } );
                     var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-                    model.addLocation( location1 );
-                    model.addLocation( location2 );
-                    model.setCurrentLocation( location1 );
+                    model.setLocations( [ location1, location2 ] );
 
                     model.exitTriggered( 'door1' );
 

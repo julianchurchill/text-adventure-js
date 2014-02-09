@@ -15,15 +15,12 @@
     var presenter = new Presenter(model, view);
     view.setActionHandler( presenter );
 
-    var library     = new Location( { id: 'Library',
-                                    description: 'Library description',
-                                    exits: [ { id: 'sittingroom_exit', destinationid: 'sittingroom', label: 'Sitting room' } ] } );
     var sittingroom = new Location( { id: 'sittingroom',
                                     description: 'Sitting room description',
                                     exits: [ { id: 'library_exit', destinationid: 'Library', label: 'Library' } ] } );
+    var library     = new Location( { id: 'Library',
+                                    description: 'Library description',
+                                    exits: [ { id: 'sittingroom_exit', destinationid: 'sittingroom', label: 'Sitting room' } ] } );
 
-    model.addLocation( library );
-    model.addLocation( sittingroom );
-
-    model.setCurrentLocation( sittingroom );
+    model.setLocations( [ sittingroom, library ] );
 })();

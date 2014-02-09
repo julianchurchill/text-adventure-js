@@ -27,9 +27,13 @@
         this.setCurrentLocation( this.findLocationByID( newLocationID ) );
     };
 
-    Model.prototype.addLocation = function(location) {
-        this.locations.push( location );
-    };
+    Model.prototype.setLocations = function(locations) {
+        this.locations = [];
+        for (var i = 0; i < locations.length; i++)
+            this.locations.push( locations[i] );
+        if( this.locations.length > 0 )
+            this.setCurrentLocation( this.locations[0] );
+    }
 
     Model.prototype.findLocationByID = function(locationid) {
         for (var i = 0; i < this.locations.length; i++) {
