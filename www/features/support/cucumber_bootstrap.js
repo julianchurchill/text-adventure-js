@@ -5,7 +5,6 @@
 (function () {
     "use strict";
 
-    var Location = require('../../js/location.js');
     var Model = require('../../js/model.js');
     var View = require('../../js/view.js');
     var Presenter = require('../../js/presenter.js');
@@ -15,12 +14,11 @@
     var presenter = new Presenter(model, view);
     view.setActionHandler( presenter );
 
-    var sittingroom = new Location( { id: 'sittingroom',
+    var sittingroom_json = { id: 'sittingroom',
                                     description: 'Sitting room description',
-                                    exits: [ { id: 'library_exit', destinationid: 'Library', label: 'Library' } ] } );
-    var library     = new Location( { id: 'Library',
+                                    exits: [ { id: 'library_exit', destinationid: 'Library', label: 'Library' } ] };
+    var library_json     = { id: 'Library',
                                     description: 'Library description',
-                                    exits: [ { id: 'sittingroom_exit', destinationid: 'sittingroom', label: 'Sitting room' } ] } );
-
-    model.setLocations( [ sittingroom, library ] );
+                                    exits: [ { id: 'sittingroom_exit', destinationid: 'sittingroom', label: 'Sitting room' } ] };
+    model.loadModelFromJSON( [ sittingroom_json, library_json ] );
 })();

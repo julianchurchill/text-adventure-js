@@ -3,6 +3,8 @@
 (function () {
     "use strict";
 
+    var Location = require('./location.js');
+
     function Model() {
         this.subscriber = undefined;
         this.locations = [];
@@ -27,10 +29,10 @@
         this.setCurrentLocation( this.findLocationByID( newLocationID ) );
     };
 
-    Model.prototype.setLocations = function(locations) {
+    Model.prototype.loadModelFromJSON = function(model_json) {
         this.locations = [];
-        for (var i = 0; i < locations.length; i++)
-            this.locations.push( locations[i] );
+        for (var i = 0; i < model_json.length; i++)
+            this.locations.push( new Location( model_json[i] ) );
         if( this.locations.length > 0 )
             this.setCurrentLocation( this.locations[0] );
     }

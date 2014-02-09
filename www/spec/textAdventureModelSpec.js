@@ -56,13 +56,13 @@
         });
 
         it('triggering an exit changes the current location', function() {
-            var location2 = new Location( { description: 'location2 description', id: 'location2' } );
-            var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-            model.setLocations( [ location1, location2 ] );
+            var location2 = { description: 'location2 description', id: 'location2' };
+            var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
+            model.loadModelFromJSON( [ location1, location2 ] );
 
             model.exitTriggered( 'door1' );
 
-            expect( model.currentLocation ).toBe( location2 );
+            expect( model.currentLocation.id() ).toBe( 'location2' );
         });
 
         describe('sends events to subscriber', function() {
@@ -111,9 +111,9 @@
 
             describe('on exit triggered', function() {
                 it('description changed event', function() {
-                    var location2 = new Location( { description: 'new description', id: 'location2' } );
-                    var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-                    model.setLocations( [ location1, location2 ] );
+                    var location2 = { description: 'new description', id: 'location2' };
+                    var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
+                    model.loadModelFromJSON( [ location1, location2 ] );
 
                     model.exitTriggered( 'door1' );
 
@@ -122,9 +122,9 @@
 
                 it('exits changed event', function() {
                     var new_exits = [{ id: 'exit1' }, { id: 'exit2' }];
-                    var location2 = new Location( { exits: new_exits, id: 'location2' } );
-                    var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-                    model.setLocations( [ location1, location2 ] );
+                    var location2 = { exits: new_exits, id: 'location2' };
+                    var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
+                    model.loadModelFromJSON( [ location1, location2 ] );
 
                     model.exitTriggered( 'door1' );
 
@@ -133,9 +133,9 @@
 
                 it('items changed event', function() {
                     var new_items = [{ id: 'item1' }, { id: 'item2' }];
-                    var location2 = new Location( { items: new_items, id: 'location2' } );
-                    var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-                    model.setLocations( [ location1, location2 ] );
+                    var location2 = { items: new_items, id: 'location2' };
+                    var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
+                    model.loadModelFromJSON( [ location1, location2 ] );
 
                     model.exitTriggered( 'door1' );
 
@@ -144,9 +144,9 @@
 
                 it('actions changed event', function() {
                     var new_actions = [{ id: 'action1' }, { id: 'action2' }];
-                    var location2 = new Location( { actions: new_actions, id: 'location2' } );
-                    var location1 = new Location( { exits: [ { id: 'door1', destinationid: 'location2' } ] } );
-                    model.setLocations( [ location1, location2 ] );
+                    var location2 = { actions: new_actions, id: 'location2' };
+                    var location1 = { exits: [ { id: 'door1', destinationid: 'location2' } ] };
+                    model.loadModelFromJSON( [ location1, location2 ] );
 
                     model.exitTriggered( 'door1' );
 
