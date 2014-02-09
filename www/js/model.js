@@ -5,6 +5,7 @@
 
     function Model() {
         this.subscriber = undefined;
+        this.locations = [];
     }
 
     Model.prototype.subscribe = function(subscriber) {
@@ -22,7 +23,20 @@
     };
 
     Model.prototype.exitTriggered = function(exitid) {
-        this.setCurrentLocation( this.currentLocation.getLocationForExit( exitid ) );
+        var newLocationID = this.currentLocation.getLocationIDForExit( exitid );
+        this.setCurrentLocation( this.findLocationByID( newLocationID ) );
+    };
+
+    Model.prototype.addLocation = function(location) {
+        this.locations.push( location );
+    };
+
+    Model.prototype.findLocationByID = function(locationid) {
+        for (var i = 0; i < this.locations.length; i++) {
+            if( this.locations[i].id() === locationid )
+                return this.locations[i];
+        }
+        return undefined;
     };
 
     Model.prototype.currentDescription = function() {

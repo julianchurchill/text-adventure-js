@@ -9,6 +9,10 @@
             this.properties = {};
     }
 
+    Location.prototype.id = function() {
+        return this.properties.id;
+    };
+
     Location.prototype.description = function() {
         if( this.properties.description === undefined )
             this.properties.description = '';
@@ -33,10 +37,10 @@
         return this.properties.actions;
     };
 
-    Location.prototype.getLocationForExit = function(exitid) {
+    Location.prototype.getLocationIDForExit = function(exitid) {
         for (var i = 0; i < this.exits().length; i++) {
             if( this.exits()[i].id === exitid )
-                return this.exits()[i].destination;
+                return this.exits()[i].destinationid;
         }
         return undefined;
     };
