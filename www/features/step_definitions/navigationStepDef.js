@@ -5,7 +5,6 @@
 
     var navigationStepDefsWrapper = function () {
         this.World = require("../support/world.js").World;
-        var fs = require('fs');
         var servedir = require("servedir");
         var httpRootDirectory = 'www';
 
@@ -15,6 +14,7 @@
         });
 
         this.After(function(callback) {
+            this.clearModel();
             this.server.close();
             callback();
         });
@@ -26,9 +26,10 @@
                     { id: destination_id, description: destination_description }
                 ]
             };
-
-            fs.writeFileSync('www/features/support/model.json', JSON.stringify(test_model));
-            this.visit('http://localhost:3000/test.html', callback);
+            var world = this;
+            this.setModel( test_model, function () {
+                world.visit('http://localhost:3000/test.html', callback);
+            });
         });
 
         this.When(/^I click the exit '(.*)'$/, function (exit, callback) {

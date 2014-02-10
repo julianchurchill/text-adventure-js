@@ -18,7 +18,7 @@
     });
 
     desc("Browserify cucumber bootstrap");
-    file(cuke_bootstrap_bundle, ["www/features/support/cucumber_bootstrap.js", "www/features/support/model.json", "www/js"], {async: true}, function () {
+    file(cuke_bootstrap_bundle, ["www/features/support/cucumber_bootstrap.js", "www/js"], {async: true}, function () {
         console.log("Regenerating cucumber bootstrap bundle with browserify...");
         var cmds = [ './node_modules/.bin/browserify www/features/support/cucumber_bootstrap.js -o ' + cuke_bootstrap_bundle ];
         jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {

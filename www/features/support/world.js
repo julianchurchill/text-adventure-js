@@ -8,6 +8,24 @@
     var World = function World(callback) {
         this.browser = new Zombie();
         this.browser.debug = true;
+        var fs = require('fs');
+        var model_location = 'www/features/support/model.json';
+
+        this.clearModel = function() {
+            fs.unlinkSync(model_location);
+        };
+
+        this.setModel = function( model_content, callback ) {
+            fs.writeFileSync(model_location, JSON.stringify(model_content));
+
+            // We must re-browserify cucumber_bootstrap since we've changed model.json
+            var cuke_bootstrap_bundle = "www/features/support/cucumber_bootstrap_bundle.js";
+            var cmds = [ './node_modules/.bin/browserify www/features/support/cucumber_bootstrap.js -o ' + cuke_bootstrap_bundle ];
+            var jake = require('jake');
+            jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
+                callback();
+            });
+        };
 
         function checkForBrowserError(error, error_message_prefix, callback) {
             if(error !== undefined)
