@@ -40,11 +40,11 @@ Clone this repository. Then:
 
 ### Automatically build and run tests when code changes:
 
-    ./build/watchAndRun.sh 1 ./build/runJake.sh www
+    ./build/watchAndRun.sh --ignore cucumber_bootstrap_bundle.js 1 ./build/runJake.sh www
 
 ### Automatically build and run all tests including work in progress tests when code changes:
 
-    ./build/watchAndRun.sh 1 "./build/runJake.sh wip" www
+    ./build/watchAndRun.sh --ignore cucumber_bootstrap_bundle.js 1 "./build/runJake.sh wip" www
 
 
 ## Project Creation and Setup
@@ -122,7 +122,6 @@ To run the specs type:
 
 ## Todo
 
-- Figure out how to stop indefinite rebuilds in watchAndRun.sh because model.json is written on every cuke test, causing cucumber_bootstrap_bundle.js to be written, causing a rebuild.
 - Write some cucumber tests for navigation
   - Shorten cuke failure backtrace
 - View

@@ -14,10 +14,21 @@ run_command() {
 }
 
 usage() {
-    echo "Usage: watchAndRun.sh <check period in seconds> <command to run on change> <list of directories to watch for changes>";
+    echo "Usage: watchAndRun.sh [--ignore <filename>] <check period in seconds> <command to run on change> <list of directories to watch for changes>";
     echo " e.g. watchAndRun.sh 5 \"echo 'yes'\" src . .."
     exit 1;
 }
+
+# Arg one and two might be --ignore <filename>
+if [ "$1" == "--ignore" -a "$2" == "" ]; then
+    usage
+fi
+ignore_file_command=""
+if [ "$1" == "--ignore" ]; then
+    ignore_file="$2"
+    ignore_file_command="! -name ${ignore_file}"
+    shift; shift; # remove switch and argument
+fi
 
 # Arg one is delay in seconds between checking for changes
 # Arg two is command to run on change detected
@@ -45,14 +56,14 @@ while [ 1 ]; do
     if [ ! -e ${watchFile} ]; then
         echo "Created watch timestamp file '${watchFile}'"
         run_command
-        echo "Waiting for changes (ignoring *.tmp *.class)..."
+        echo "Waiting for changes (ignoring *.tmp *.class ${ignore_file})..."
     fi
 
-    if [ `find ${directory_list} -type f -newer ${watchFile}  ! -iname *.tmp ! -iname *.class | wc -l` != "0" ]; then
+    if [ `find ${directory_list} -type f -newer ${watchFile}  ! -iname *.tmp ! -iname *.class ${ignore_file_command} | wc -l` != "0" ]; then
         echo "*** Found changes: "
-        echo `find ${directory_list} -type f -newer ${watchFile} ! -iname *.tmp ! -iname *.class`
+        echo `find ${directory_list} -type f -newer ${watchFile} ! -iname *.tmp ! -iname *.class ${ignore_file_command}`
         run_command
-        echo "Waiting for changes (ignoring *.tmp *.class)..."
+        echo "Waiting for changes (ignoring *.tmp *.class ${ignore_file})..."
     fi
 
     # echo "Sleeping for $delay seconds"
