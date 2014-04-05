@@ -122,7 +122,7 @@ To run the specs type:
 
 ## Todo
 
-- Write some cucumber tests for navigation
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         - Write some cucumber tests for navigation
   - Shorten cuke failure backtrace
 - View
   - Write cuke tests to check items are shown
