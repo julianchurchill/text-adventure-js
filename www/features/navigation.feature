@@ -7,16 +7,3 @@ Feature: Navigation
         Given a location with an exit labelled 'Library' that goes to the library with a description 'Library description'
         When I click the exit 'Library'
         Then the current location description changes to 'Library description'
-
-    @wip
-    Scenario: Items are visible when entering a location
-        Given a location has an item labelled 'banana'
-        When I enter the location
-        Then the current location item list includes 'banana'
-
-    @future
-    Scenario: Click an action link
-        Given a location with an action labelled 'Take banana' has a 'banana' item
-        When I click the action 'Take banana'
-        Then the current location item list no longer includes 'banana'
-        And the current location action list no longer includes 'Take banana'

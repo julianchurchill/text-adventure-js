@@ -122,8 +122,8 @@ To run the specs type:
 
 ## Todo
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         - Write some cucumber tests for navigation
-  - Shorten cuke failure backtrace
+- Include all production tests in the 'wip' cuke target. This means we can check the wip doesn't break anything as it's being implemented.
+- Shorten cuke failure backtrace
 - View
   - Write cuke tests to check items are shown
   - Should update actions div when receiving an actions changed event

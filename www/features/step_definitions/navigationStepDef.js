@@ -41,11 +41,19 @@
         });
 
         this.Given(/^a location has an item labelled '(.*)'$/, function(item_label, callback) {
-            callback();
+            var test_model = {
+                locations: [
+                    { id: "location1", exits: [], items: [ { id: "item1", label: item_label } ] },
+                ]
+            };
+            var world = this;
+            this.setModel( test_model, function () {
+                world.visit('http://localhost:3000/test.html', callback);
+            });
         });
 
         this.When(/^I enter the location$/, function (callback) {
-            this.visit('http://localhost:3000/test.html', callback);
+            callback();
         });
 
         this.Then(/^the current location item list includes '(.*)'$/, function (item_label, callback) {

@@ -60,7 +60,10 @@
         };
 
         this.assertItemListIncludes = function(expected_item, callback) {
-            callback.fail(new Error("This assertion has not been written properly yet"));
+            if( this.browser.text('#items').indexOf( expected_item ) == -1 )
+                callback.fail(new Error("Expected item '" + expected_item + "' was not found in '" + this.browser.text('#items') + "'"));
+            else
+                callback();
         };
 
         // last line to tell cucumber.js the World is ready and use world as this
