@@ -122,7 +122,6 @@ To run the specs type:
 
 ## Todo
 
-- Include all production tests in the 'wip' cuke target. This means we can check the wip doesn't break anything as it's being implemented.
 - Shorten cuke failure backtrace
 - View
   - Write cuke tests to check items are shown

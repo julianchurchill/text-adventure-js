@@ -38,7 +38,7 @@
     desc("Work in progress Cucumber feature tests");
     task("wip_acceptance_tests", [cuke_bootstrap_bundle], {async: true}, function () {
         console.log("Running work in progress (wip) tagged cucumber feature tests...");
-        var cmds = [ './node_modules/.bin/cucumber.js --tags @wip www/features -r www/features/step_definitions' ];
+        var cmds = [ './node_modules/.bin/cucumber.js --tags ~@future www/features -r www/features/step_definitions' ];
         jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
             complete();
         });
