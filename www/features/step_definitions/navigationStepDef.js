@@ -19,6 +19,22 @@
             callback();
         });
 
+        // this.Given(/^a location with an action labelled '(.*)' has a '(.*)' item$/, function(action_label, item_label, callback) {
+        //     callback();
+        // });
+
+        // this.When(/^I click the action '(.*)'$/, function(action_label, callback) {
+        //     callback();
+        // });
+
+        // this.Then(/^the current location item list no longer includes '(.*)'$/, function(item_label, callback) {
+        //     callback();
+        // });
+
+        // this.Then(/^the current location action list no longer includes '(.*)'$/, function(action_label, callback) {
+        //     callback();
+        // });
+
         this.Given(/^a location with an exit labelled '(.*)' that goes to (.*) with a description '(.*)'$/, function(exit_label, destination_id, destination_description, callback) {
             var test_model = {
                 locations: [
