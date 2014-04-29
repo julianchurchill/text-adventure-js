@@ -10,12 +10,15 @@
         this.browser.debug = true;
         var fs = require('fs');
         var model_location = 'www/features/support/model.json';
+        var model_has_been_set = false;
 
         this.clearModel = function() {
-            fs.unlinkSync(model_location);
+            if(model_has_been_set)
+                fs.unlinkSync(model_location);
         };
 
         this.setModel = function( model_content, callback ) {
+            model_has_been_set = true;
             fs.writeFileSync(model_location, JSON.stringify(model_content));
 
             // We must re-browserify cucumber_bootstrap since we've changed model.json
