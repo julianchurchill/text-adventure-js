@@ -122,6 +122,8 @@ To run the specs type:
 
 ## Todo
 
+- Do we need a cucumber_bootstrap _and_ an app_bootstrap? Aren't they both just 'main' for the application?
+  - How do we put 'model.json' in the right place for the cucumber tests if we combine the app and cuke bootstraps?
 - Shorten cuke failure backtrace
 - View
   - Write cuke tests to check items are shown

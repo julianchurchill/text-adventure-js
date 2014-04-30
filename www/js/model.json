@@ -1,0 +1,14 @@
+{
+    "locations": [
+        {
+            "id":"first room",
+            "exits": [
+                { "id":"Library", "destinationid":"the library", "label":"Library" }
+            ]
+        },
+        {
+            "id":"the library",
+            "description":"Library description"
+        }
+    ]
+}
