@@ -2,6 +2,7 @@
     "locations": [
         {
             "id":"first room",
+            "description":"This is the first room description. Anything could happen here, anything. I said anything!",
             "exits": [
                 { "id":"Library", "destinationid":"the library", "label":"Library" }
             ]
