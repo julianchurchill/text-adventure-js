@@ -59,6 +59,16 @@ body {
     margin:0px 0px 0px 0px;
 }
 
+.exits_precursor {
+    display:inline;
+    font-style:italic;
+}
+
+.exit {
+    cursor:pointer;
+    text-decoration:underline;
+}
+
 /* Portrait layout (default) */
 .app {
     background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */

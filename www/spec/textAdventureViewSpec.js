@@ -50,6 +50,17 @@
                 expect($('#exit_id1')).toBe('a');
                 expect($('#exit_id1').text()).toEqual('label1');
             });
+
+            it('should wrap exits precursor in its own div', function() {
+                view.onExitsChanged( [] );
+                expect($('#exits_precursor').text()).toEqual('There are no exits visible.');
+                expect($('#exits_precursor').hasClass('exits_precursor')).toEqual(true);
+            });
+
+            it('should give each exit the correct css class', function() {
+                view.onExitsChanged( [ { id: 'exit_id1', label: "label1" } ] );
+                expect($('#exit_id1').hasClass('exit')).toEqual(true);
+            });
         });
 
         describe('when user selects an exit', function() {

@@ -35,6 +35,7 @@
         var exit_id = exit.id;
         var new_link = document.createElement( 'a' );
         new_link.id = exit_id;
+        new_link.className = 'exit';
         new_link.appendChild(document.createTextNode(exit.label));
         new_link.onclick = function() {
             view.actionHandler.exitTriggered( exit_id );
@@ -46,11 +47,19 @@
         clearSelector('#exits');
     }
 
+    var exits_precursor_id = 'exits_precursor';
+
     function addExitsPrecursorText(newExits) {
+        if( document.querySelector('#exits_precursor') === null ) {
+            var d = document.createElement('div');
+            d.setAttribute('id', exits_precursor_id);
+            d.className = 'exits_precursor';
+            addChildToSelector('#exits',d);
+        }
         if ( newExits.length > 0 )
-            addTextToSelector('#exits',"The following exits are available: ");
+            addChildToSelector('#exits_precursor',document.createTextNode("The following exits are available: "));
         else
-            addTextToSelector('#exits',"There are no exits visible.");
+            addChildToSelector('#exits_precursor',document.createTextNode("There are no exits visible."));
     }
 
     function addLinkForEachExit(newExits,view) {
