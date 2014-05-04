@@ -4,7 +4,11 @@
             "id":"first room",
             "description":"This is the first room description. Anything could happen here, anything. I said anything!",
             "exits": [
-                { "id":"Library", "destinationid":"the library", "label":"Library" }
+                { "id":"Library north", "destinationid":"the library", "label":"Library north", "direction_hint":"north" },
+                { "id":"south", "destinationid":"the library", "label":"south", "direction_hint":"south" },
+                { "id":"west", "destinationid":"the library", "label":"west", "direction_hint":"west" },
+                { "id":"east", "destinationid":"the library", "label":"east", "direction_hint":"east" },
+                { "id":"dont care direction", "destinationid":"the library", "label":"don't care direction" }
             ]
         },
         {

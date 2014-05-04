@@ -61,6 +61,22 @@
                 view.onExitsChanged( [ { id: 'exit_id1', label: "label1" } ] );
                 expect($('#exit_id1').hasClass('exit')).toEqual(true);
             });
+
+            it('should give each exit the css class matching the exit hint', function() {
+                view.onExitsChanged( [ { id: 'exit_id1', label: "label1", direction_hint: "north" },
+                                       { id: 'exit_id2', label: "label2", direction_hint: "south" },
+                                       { id: 'exit_id3', label: "label3", direction_hint: "east" },
+                                       { id: 'exit_id4', label: "label4", direction_hint: "west" },
+                                       { id: 'exit_id5', label: "label5", direction_hint: "unknown" },
+                                       { id: 'exit_id6', label: "label6" },
+                                        ] );
+                expect($('#exit_id1').hasClass('north_direction')).toEqual(true);
+                expect($('#exit_id2').hasClass('south_direction')).toEqual(true);
+                expect($('#exit_id3').hasClass('east_direction')).toEqual(true);
+                expect($('#exit_id4').hasClass('west_direction')).toEqual(true);
+                expect($('#exit_id5').hasClass('dontcare_direction')).toEqual(true);
+                expect($('#exit_id6').hasClass('dontcare_direction')).toEqual(true);
+            });
         });
 
         describe('when user selects an exit', function() {

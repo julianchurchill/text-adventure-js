@@ -31,11 +31,29 @@
         addTextToSelector('#description', newDescription);
     };
 
+    function updateCSSClassesWithDirectionHint( new_link, exit ) {
+        if( exit.direction_hint !== undefined ) {
+            if( exit.direction_hint === 'north' )
+                new_link.className += ' north_direction';
+            else if( exit.direction_hint === 'south' )
+                new_link.className += ' south_direction';
+            else if( exit.direction_hint === 'west' )
+                new_link.className += ' west_direction';
+            else if( exit.direction_hint === 'east' )
+                new_link.className += ' east_direction';
+            else
+                new_link.className += ' dontcare_direction';
+        }
+        else
+            new_link.className += ' dontcare_direction';
+    }
+
     function createNewExitLink(exit,view) {
         var exit_id = exit.id;
         var new_link = document.createElement( 'a' );
         new_link.id = exit_id;
         new_link.className = 'exit';
+        updateCSSClassesWithDirectionHint( new_link, exit );
         new_link.appendChild(document.createTextNode(exit.label));
         new_link.onclick = function() {
             view.actionHandler.exitTriggered( exit_id );

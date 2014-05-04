@@ -69,6 +69,26 @@ body {
     text-decoration:underline;
 }
 
+.north_direction {
+    color:#8200BA;  /* purple 130,0,186 */
+}
+
+.south_direction {
+    color:#FF0000;  /* red 255,0,0 */
+}
+
+.east_direction {
+    color:#0000FF;  /* blue 0,0,255 */
+}
+
+.west_direction {
+    color:#009AFF;  /* light blue 0,154,255 */
+}
+
+.dontcare_direction {
+    color:#FF00FF;  /* magenta 255,0,255 */
+}
+
 /* Portrait layout (default) */
 .app {
     background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
