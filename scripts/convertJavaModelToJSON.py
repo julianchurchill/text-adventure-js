@@ -3,16 +3,28 @@ import unittest
 
 class JavaModelConverter():
     seperator = ':';
-    locationAreaSection = "LOCATION AREA";
     propertiesSection = "PROPERTIES";
-    locationAreasKey = "location areas";
+    locationAreaSection = "LOCATION AREA";
+    inventoryItemSection = "INVENTORY ITEM";
     propertiesKey = "properties";
+    locationAreasKey = "location areas";
+    inventoryItemsKey = "inventory items";
     output = [];
     locationAreasDict = {};
+    inventoryItemsDict = {};
+    sectionHandlingFunctions = {};
+    onNewSectionKey = "onNewSection";
+    onNewValuesKey = "onNewValues";
 
     def __init__(self):
-        self.output = [{self.propertiesKey:{}, self.locationAreasKey:[]}];
+        self.output = [{self.propertiesKey:{}, self.locationAreasKey:[], self.inventoryItemsKey:[]}];
         self.locationAreasDict = self.output[0][self.locationAreasKey];
+        self.inventoryItemsDict = self.output[0][self.inventoryItemsKey];
+        self.sectionHandlingFunctions = {
+            self.propertiesSection:{self.onNewSectionKey:self.onNewPropertiesSection, self.onNewValuesKey:self.onNewPropertiesValues},
+            self.locationAreaSection:{self.onNewSectionKey:self.onNewLocationAreaSection, self.onNewValuesKey:self.onNewLocationValues},
+            self.inventoryItemSection:{self.onNewSectionKey:self.onNewInventoryItemSection, self.onNewValuesKey:self.onNewInventoryItemValues}
+        };
 
     def convertToDictionary(self, input):
         if input == "":
@@ -21,21 +33,33 @@ class JavaModelConverter():
         for line in input.splitlines():
             if self.isSectionHeader(line):
                 sectionHeader = line;
-                if sectionHeader == self.locationAreaSection:
-                    self.locationAreasDict.append({});
+                if sectionHeader in self.sectionHandlingFunctions:
+                    if self.onNewSectionKey in self.sectionHandlingFunctions[sectionHeader]:
+                        self.sectionHandlingFunctions[sectionHeader][self.onNewSectionKey]();
             else:
                 (key, values) = line.split(self.seperator,1)
-                if sectionHeader == self.locationAreaSection:
-                    self.addPropertyToLocationArea(key, values);
-                elif sectionHeader == self.propertiesSection:
-                    self.addPropertyToProperties(key, values);
+                if sectionHeader in self.sectionHandlingFunctions:
+                    if self.onNewValuesKey in self.sectionHandlingFunctions[sectionHeader]:
+                        self.sectionHandlingFunctions[sectionHeader][self.onNewValuesKey](key, values);
         return self.output;
 
-    def addPropertyToProperties(self, key, values):
+    def onNewLocationAreaSection(self):
+        self.locationAreasDict.append({});
+
+    def onNewPropertiesSection(self):
+        pass;
+
+    def onNewInventoryItemSection(self):
+        self.inventoryItemsDict.append({});
+
+    def onNewPropertiesValues(self, key, values):
         self.output[0][self.propertiesKey][key] = values;
 
-    def addPropertyToLocationArea(self, key, values):
+    def onNewLocationValues(self, key, values):
         self.locationAreasDict[-1][self.removeFirstWord(key)] = values;
+
+    def onNewInventoryItemValues(self, key, values):
+        self.inventoryItemsDict[-1][self.removeFirstWord(key)] = values;
 
     def removeFirstWord(self, input):
         return input.split(' ',1)[1];
@@ -45,21 +69,37 @@ class JavaModelConverter():
 
 class TestScript(unittest.TestCase):
 
+    empty_converted_dict = {"properties":{}, "location areas":[], "inventory items":[]};
+
+    def createDict(self, valuesToAddToDict):
+        return [dict(self.empty_converted_dict.items() + valuesToAddToDict.items())];
+
+    def test_basic_inventory_item_is_parsed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "INVENTORY ITEM\nitem name:item_name\nitem description:item_description\nitem id:item_id\n" ),
+            self.createDict(
+                {"inventory items":[
+                    { "name":"item_name", "description":"item_description", "id":"item_id" }
+                ]}));
+
     def test_location_area_is_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
             j.convertToDictionary(
                 "LOCATION AREA\nlocation area id:area_id\nlocation area name:area_name\n"
-                "LOCATION AREA\nlocation area id:area_id2\nlocation area name:area_name2\n"
-                ),
-            [{"properties":{}, "location areas":[
-                {"area id":"area_id", "area name":"area_name"},
-                {"area id":"area_id2", "area name":"area_name2"}
-            ]}]);
+                "LOCATION AREA\nlocation area id:area_id2\nlocation area name:area_name2\n" ),
+            self.createDict(
+                {"location areas":[
+                    {"area id":"area_id", "area name":"area_name"},
+                    {"area id":"area_id2", "area name":"area_name2"}
+                ]}));
 
     def test_maximum_score_is_parsed(self):
         j = JavaModelConverter();
-        self.assertEqual( j.convertToDictionary( "PROPERTIES\nmaximum score:27" ), [{"properties":{"maximum score":"27"}, "location areas":[]}]);
+        self.assertEqual(
+            j.convertToDictionary( "PROPERTIES\nmaximum score:27" ),
+            self.createDict( {"properties":{"maximum score":"27"}} ));
 
     def test_from_nothing_comes_nothing(self):
         j = JavaModelConverter();
