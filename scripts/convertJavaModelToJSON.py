@@ -120,9 +120,11 @@ class TestScript(unittest.TestCase):
     def test_inventory_item_basic_use_is_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
-            j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\n" ),
+            j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\n"
+                                                   "item can be used with:another_id2\nitem successful use message:some_text2\n" ),
             self.createDict( {"inventory items":[ { "can be used with":[
-                    { "id": "another_id", "successful use message":"some_text" }
+                    { "id": "another_id", "successful use message":"some_text" },
+                    { "id": "another_id2", "successful use message":"some_text2" }
                 ]}]}));
 
     def test_inventory_item_boolean_flags_are_parsed(self):
@@ -131,7 +133,7 @@ class TestScript(unittest.TestCase):
             j.convertToDictionary( "INVENTORY ITEM\nitem is untakeable:\nitem is proper noun:\nitem is plural:\n" ),
             self.createDict( {"inventory items":[ { "is untakeable":"True", "is proper noun":"True", "is plural":"True" } ]}));
 
-    def test_basic_inventory_item_is_parsed(self):
+    def test_basic_inventory_items_are_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
             j.convertToDictionary(
@@ -143,7 +145,7 @@ class TestScript(unittest.TestCase):
                     { "name":"item_name2", "description":"item_description2", "id":"item_id2" }
                 ]}));
 
-    def test_location_area_is_parsed(self):
+    def test_location_areas_are_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
             j.convertToDictionary(
