@@ -10,16 +10,16 @@ class JavaModelConverter():
     locationAreasKey = "location areas";
     inventoryItemsKey = "inventory items";
     output = [];
-    locationAreasDict = {};
-    inventoryItemsDict = {};
+    locationAreas = {};
+    inventoryItems = {};
     sectionHandlingFunctions = {};
     onNewSectionKey = "onNewSection";
     onNewValuesKey = "onNewValues";
 
     def __init__(self):
         self.output = [{self.propertiesKey:{}, self.locationAreasKey:[], self.inventoryItemsKey:[]}];
-        self.locationAreasDict = self.output[0][self.locationAreasKey];
-        self.inventoryItemsDict = self.output[0][self.inventoryItemsKey];
+        self.locationAreas = self.output[0][self.locationAreasKey];
+        self.inventoryItems = self.output[0][self.inventoryItemsKey];
         self.sectionHandlingFunctions = {
             self.propertiesSection:{self.onNewSectionKey:self.onNewPropertiesSection, self.onNewValuesKey:self.onNewPropertiesValues},
             self.locationAreaSection:{self.onNewSectionKey:self.onNewLocationAreaSection, self.onNewValuesKey:self.onNewLocationValues},
@@ -38,28 +38,33 @@ class JavaModelConverter():
                         self.sectionHandlingFunctions[sectionHeader][self.onNewSectionKey]();
             else:
                 (key, values) = line.split(self.seperator,1)
+                if values == "":
+                    values = "True";
                 if sectionHeader in self.sectionHandlingFunctions:
                     if self.onNewValuesKey in self.sectionHandlingFunctions[sectionHeader]:
                         self.sectionHandlingFunctions[sectionHeader][self.onNewValuesKey](key, values);
         return self.output;
 
     def onNewLocationAreaSection(self):
-        self.locationAreasDict.append({});
+        self.locationAreas.append({});
 
     def onNewPropertiesSection(self):
         pass;
 
     def onNewInventoryItemSection(self):
-        self.inventoryItemsDict.append({});
+        self.inventoryItems.append({});
 
     def onNewPropertiesValues(self, key, values):
         self.output[0][self.propertiesKey][key] = values;
 
     def onNewLocationValues(self, key, values):
-        self.locationAreasDict[-1][self.removeFirstWord(key)] = values;
+        self.addKeyValueToLastDictIn( self.locationAreas, key, values );
 
     def onNewInventoryItemValues(self, key, values):
-        self.inventoryItemsDict[-1][self.removeFirstWord(key)] = values;
+        self.addKeyValueToLastDictIn( self.inventoryItems, key, values );
+
+    def addKeyValueToLastDictIn( self, listToAddTo, key, values ):
+        listToAddTo[-1][self.removeFirstWord(key)] = values;
 
     def removeFirstWord(self, input):
         return input.split(' ',1)[1];
@@ -74,13 +79,31 @@ class TestScript(unittest.TestCase):
     def createDict(self, valuesToAddToDict):
         return [dict(self.empty_converted_dict.items() + valuesToAddToDict.items())];
 
+    def test_inventory_item_talk_phrases_are_parsed(self):
+        pass;
+
+    def test_inventory_item_examine_actions_are_parsed(self):
+        pass;
+
+    def test_inventory_item_use_actions_are_parsed(self):
+        pass;
+
+    def test_inventory_item_boolean_flags_are_parsed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "INVENTORY ITEM\nitem is untakeable:\nitem is proper noun:\nitem is plural:\n" ),
+            self.createDict( {"inventory items":[ { "is untakeable":"True", "is proper noun":"True", "is plural":"True" } ]}));
+
     def test_basic_inventory_item_is_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
-            j.convertToDictionary( "INVENTORY ITEM\nitem name:item_name\nitem description:item_description\nitem id:item_id\n" ),
+            j.convertToDictionary(
+                "INVENTORY ITEM\nitem name:item_name\nitem description:item_description\nitem id:item_id\n"
+                "INVENTORY ITEM\nitem name:item_name2\nitem description:item_description2\nitem id:item_id2\n" ),
             self.createDict(
                 {"inventory items":[
-                    { "name":"item_name", "description":"item_description", "id":"item_id" }
+                    { "name":"item_name", "description":"item_description", "id":"item_id" },
+                    { "name":"item_name2", "description":"item_description2", "id":"item_id2" }
                 ]}));
 
     def test_location_area_is_parsed(self):
