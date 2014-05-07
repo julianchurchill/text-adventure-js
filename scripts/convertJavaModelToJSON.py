@@ -124,19 +124,11 @@ class TestScript(unittest.TestCase):
     def test_inventory_item_use_with_actions_without_arguments_is_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
-            j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\nitem use action:action_name" ),
+            j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\nitem use action:action_name\n"
+                                                   "item can be used with:another_id2\nitem successful use message:some_text2\nitem use action:action_name2\n" ),
             self.createDict( {"inventory items":[ { "can be used with":[
-                    { "id": "another_id", "successful use message":"some_text", "use actions":[ {"action name":"action_name", "arguments":[]} ] }
-                ]}]}));
-
-    def test_inventory_item_basic_use_is_parsed(self):
-        j = JavaModelConverter();
-        self.assertEqual(
-            j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\n"
-                                                   "item can be used with:another_id2\nitem successful use message:some_text2\n" ),
-            self.createDict( {"inventory items":[ { "can be used with":[
-                    { "id": "another_id", "successful use message":"some_text" },
-                    { "id": "another_id2", "successful use message":"some_text2" }
+                    { "id": "another_id", "successful use message":"some_text", "use actions":[ {"action name":"action_name", "arguments":[]} ] },
+                    { "id": "another_id2", "successful use message":"some_text2", "use actions":[ {"action name":"action_name2", "arguments":[]} ] }
                 ]}]}));
 
     def test_inventory_item_boolean_flags_are_parsed(self):
