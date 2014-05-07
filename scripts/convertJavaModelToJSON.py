@@ -15,15 +15,22 @@ class JavaModelConverter():
     sectionHandlingFunctions = {};
     onNewSectionKey = "onNewSection";
     onNewValuesKey = "onNewValues";
+    preProcessKeyKey = "preProcessKey";
 
     def __init__(self):
         self.output = [{self.propertiesKey:{}, self.locationAreasKey:[], self.inventoryItemsKey:[]}];
         self.locationAreas = self.output[0][self.locationAreasKey];
         self.inventoryItems = self.output[0][self.inventoryItemsKey];
         self.sectionHandlingFunctions = {
-            self.propertiesSection:{self.onNewSectionKey:self.onNewPropertiesSection, self.onNewValuesKey:self.onNewPropertiesValues},
-            self.locationAreaSection:{self.onNewSectionKey:self.onNewLocationAreaSection, self.onNewValuesKey:self.onNewLocationValues},
-            self.inventoryItemSection:{self.onNewSectionKey:self.onNewInventoryItemSection, self.onNewValuesKey:self.onNewInventoryItemValues}
+            self.propertiesSection:{ self.onNewValuesKey:self.onNewPropertiesValues },
+            self.locationAreaSection:{
+                self.onNewSectionKey:self.onNewLocationAreaSection,
+                self.onNewValuesKey:self.onNewLocationAreaValues,
+                self.preProcessKeyKey:self.preProcessLocationAreaKey},
+            self.inventoryItemSection:{
+                self.onNewSectionKey:self.onNewInventoryItemSection,
+                self.onNewValuesKey:self.onNewInventoryItemValues,
+                self.preProcessKeyKey:self.preProcessInventoryItemKey}
         };
 
     def convertToDictionary(self, input):
@@ -41,6 +48,8 @@ class JavaModelConverter():
                 if values == "":
                     values = "True";
                 if sectionHeader in self.sectionHandlingFunctions:
+                    if self.preProcessKeyKey in self.sectionHandlingFunctions[sectionHeader]:
+                        key = self.sectionHandlingFunctions[sectionHeader][self.preProcessKeyKey]( key );
                     if self.onNewValuesKey in self.sectionHandlingFunctions[sectionHeader]:
                         self.sectionHandlingFunctions[sectionHeader][self.onNewValuesKey](key, values);
         return self.output;
@@ -48,23 +57,42 @@ class JavaModelConverter():
     def onNewLocationAreaSection(self):
         self.locationAreas.append({});
 
-    def onNewPropertiesSection(self):
-        pass;
-
     def onNewInventoryItemSection(self):
         self.inventoryItems.append({});
 
     def onNewPropertiesValues(self, key, values):
         self.output[0][self.propertiesKey][key] = values;
 
-    def onNewLocationValues(self, key, values):
+    def onNewLocationAreaValues(self, key, values):
         self.addKeyValueToLastDictIn( self.locationAreas, key, values );
 
     def onNewInventoryItemValues(self, key, values):
-        self.addKeyValueToLastDictIn( self.inventoryItems, key, values );
+        canBeUsedWithKey = "can be used with";
+        successfulUseMessageKey = "successful use message";
+        if key == canBeUsedWithKey:
+            self.ensureListInDictIsInitialized(self.inventoryItems, canBeUsedWithKey);
+            self.lastOf(self.inventoryItems)[canBeUsedWithKey].append( {} );
+            self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )["id"] = values;
+        elif key == successfulUseMessageKey:
+            self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )[successfulUseMessageKey] = values;
+        else:
+            self.addKeyValueToLastDictIn( self.inventoryItems, key, values );
+
+    def ensureListInDictIsInitialized(self, inDict, key):
+        if key not in self.lastOf(inDict):
+            self.lastOf(inDict)[key] = [];
+
+    def preProcessLocationAreaKey(self, key):
+        return self.removeFirstWord(key);
+
+    def preProcessInventoryItemKey(self, key):
+        return self.removeFirstWord(key);
 
     def addKeyValueToLastDictIn( self, listToAddTo, key, values ):
-        listToAddTo[-1][self.removeFirstWord(key)] = values;
+        self.lastOf(listToAddTo)[key] = values;
+
+    def lastOf( self, thing ):
+        return thing[-1];
 
     def removeFirstWord(self, input):
         return input.split(' ',1)[1];
@@ -85,8 +113,17 @@ class TestScript(unittest.TestCase):
     def test_inventory_item_examine_actions_are_parsed(self):
         pass;
 
-    def test_inventory_item_use_actions_are_parsed(self):
-        pass;
+# item can be used with:another_id
+# item successful use message:some_text
+# item use action:action_name:action_arg1:action_arg2
+# item use action:action_name2:action2_arg1:action2_arg2
+    def test_inventory_item_basic_use_is_parsed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\n" ),
+            self.createDict( {"inventory items":[ { "can be used with":[
+                    { "id": "another_id", "successful use message":"some_text" }
+                ]}]}));
 
     def test_inventory_item_boolean_flags_are_parsed(self):
         j = JavaModelConverter();
