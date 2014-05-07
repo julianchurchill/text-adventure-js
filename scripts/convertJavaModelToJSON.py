@@ -70,17 +70,21 @@ class JavaModelConverter():
         canBeUsedWithKey = "can be used with";
         successfulUseMessageKey = "successful use message";
         if key == canBeUsedWithKey:
-            self.ensureListInDictIsInitialized(self.inventoryItems, canBeUsedWithKey);
+            self.ensureListInDictIsInitialized(self.lastOf( self.inventoryItems ), canBeUsedWithKey);
             self.lastOf(self.inventoryItems)[canBeUsedWithKey].append( {} );
             self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )["id"] = values;
         elif key == successfulUseMessageKey:
             self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )[successfulUseMessageKey] = values;
+        elif key == "use action":
+            self.ensureListInDictIsInitialized( self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] ), "use actions" );
+            self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )["use actions"].append(
+                { "action name":values, "arguments":[] });
         else:
             self.addKeyValueToLastDictIn( self.inventoryItems, key, values );
 
     def ensureListInDictIsInitialized(self, inDict, key):
-        if key not in self.lastOf(inDict):
-            self.lastOf(inDict)[key] = [];
+        if key not in inDict:
+            inDict[key] = [];
 
     def preProcessLocationAreaKey(self, key):
         return self.removeFirstWord(key);
@@ -117,6 +121,14 @@ class TestScript(unittest.TestCase):
 # item successful use message:some_text
 # item use action:action_name:action_arg1:action_arg2
 # item use action:action_name2:action2_arg1:action2_arg2
+    def test_inventory_item_use_with_actions_without_arguments_is_parsed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\nitem use action:action_name" ),
+            self.createDict( {"inventory items":[ { "can be used with":[
+                    { "id": "another_id", "successful use message":"some_text", "use actions":[ {"action name":"action_name", "arguments":[]} ] }
+                ]}]}));
+
     def test_inventory_item_basic_use_is_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
