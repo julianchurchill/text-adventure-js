@@ -64,25 +64,32 @@ class JavaModelConverter():
         self.output[0][self.propertiesKey][key] = values;
 
     def onNewLocationAreaValues(self, key, values):
-        self.addKeyValueToLastDictIn( self.locationAreas, key, values );
+        self.lastOf( self.locationAreas )[key] = values;
 
     def onNewInventoryItemValues(self, key, values):
+        self.parseItem( key, values, self.lastOf( self.inventoryItems ) );
+
+    def parseItem(self, key, values, itemToPopulate):
         canBeUsedWithKey = "can be used with";
         successfulUseMessageKey = "successful use message";
         if key == canBeUsedWithKey:
-            self.ensureListInDictIsInitialized(self.lastOf( self.inventoryItems ), canBeUsedWithKey);
-            self.lastOf(self.inventoryItems)[canBeUsedWithKey].append( {} );
-            self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )["id"] = values;
+            self.ensureListInDictIsInitialized(itemToPopulate, canBeUsedWithKey);
+            itemToPopulate[canBeUsedWithKey].append( {} );
+            self.lastOf( itemToPopulate[canBeUsedWithKey] )["id"] = values;
         elif key == successfulUseMessageKey:
-            self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )[successfulUseMessageKey] = values;
+            self.lastOf( itemToPopulate[canBeUsedWithKey] )[successfulUseMessageKey] = values;
         elif key == "use action":
-            self.ensureListInDictIsInitialized( self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] ), "use actions" );
-            action_name = values.split(self.seperator)[0];
-            arguments = values.split(self.seperator)[1:];
-            self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )["use actions"].append(
-                { "action name":action_name, "arguments":arguments });
+            self.addActionWithArguments( self.lastOf( itemToPopulate[canBeUsedWithKey] ), "use actions", values );
+        elif key == "on examine action":
+            self.addActionWithArguments( itemToPopulate, "on examine actions", values );
         else:
-            self.addKeyValueToLastDictIn( self.inventoryItems, key, values );
+            itemToPopulate[key] = values;
+
+    def addActionWithArguments(self, itemToPopulate, actionsKey, values ):
+        self.ensureListInDictIsInitialized( itemToPopulate, actionsKey );
+        action_name = values.split(self.seperator)[0];
+        arguments = values.split(self.seperator)[1:];
+        itemToPopulate[actionsKey].append( { "action name":action_name, "arguments":arguments } );
 
     def ensureListInDictIsInitialized(self, inDict, key):
         if key not in inDict:
@@ -93,9 +100,6 @@ class JavaModelConverter():
 
     def preProcessInventoryItemKey(self, key):
         return self.removeFirstWord(key);
-
-    def addKeyValueToLastDictIn( self, listToAddTo, key, values ):
-        self.lastOf(listToAddTo)[key] = values;
 
     def lastOf( self, thing ):
         return thing[-1];
@@ -114,9 +118,25 @@ class TestScript(unittest.TestCase):
         return [dict(self.empty_converted_dict.items() + valuesToAddToDict.items())];
 
     def test_inventory_item_talk_phrases_are_parsed(self):
+# item talk initial phrase:helpme:Can you help me?:"Can you help me?" you say to the younger girl.
+# item talk response to:helpme:She looks at you moving forward but Oubliette pulls her back and tells her to keep away from you.
+# item talk follow up phrase to:helpme:sorehead:Sore.:"Sore. Why on earth did you hit me? And why am I tied up?!". Exasperated, you feel like chucking the towel in. After fighting your way past that beast only to be knocked out cold by a girl and now with a cracking headache, you wish someone would enlighten you as to what is going on.
+# item talk initial phrase:isthataboot:Is that a boot behind your back?:"Is that a boot behind your back?" you say to the younger girl.
+# item talk response to:isthataboot: She spins round on one leg with unsettling glee so that you can clearly see the large leather boot she is holding then she sticks out her tongue and blows a big raspberry at you. Oubliette looks at her sternly and tells her off in a terse whisper.
+# item talk follow up phrase to:helpme:sorehead:Sore.:"Sore. Why on earth did you hit me? And why am I tied up?!". Exasperated, you feel like chucking the towel in. After fighting your way past that beast only to be knocked out cold by a girl and now with a cracking headache, you wish someone would enlighten you as to what is going on.
         pass;
 
-    def test_inventory_item_examine_actions_are_parsed(self):
+    def test_inventory_item_examine_actions_with_arguments_are_parsed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "INVENTORY ITEM\nitem examine action is not repeatable:\nitem examine message:some_text\nitem on examine action:action_name:arg1:arg2\n"
+                                   "item on examine action:action_name2:arg21:arg22\n" ),
+            self.createDict( {"inventory items":[
+                    { "examine action is not repeatable": "True", "examine message":"some_text", "on examine actions":[
+                        {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
+                        {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]},
+                    ]},
+                ]}));
         pass;
 
     def test_inventory_item_use_with_actions_with_arguments_is_parsed(self):
@@ -127,16 +147,6 @@ class TestScript(unittest.TestCase):
             self.createDict( {"inventory items":[ { "can be used with":[
                     { "id": "another_id", "successful use message":"some_text", "use actions":[ {"action name":"action_name", "arguments":[ "arg1", "arg2" ]} ] },
                     { "id": "another_id2", "successful use message":"some_text2", "use actions":[ {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ] }
-                ]}]}));
-
-    def test_inventory_item_use_with_actions_without_arguments_is_parsed(self):
-        j = JavaModelConverter();
-        self.assertEqual(
-            j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\nitem use action:action_name\n"
-                                                   "item can be used with:another_id2\nitem successful use message:some_text2\nitem use action:action_name2\n" ),
-            self.createDict( {"inventory items":[ { "can be used with":[
-                    { "id": "another_id", "successful use message":"some_text", "use actions":[ {"action name":"action_name", "arguments":[]} ] },
-                    { "id": "another_id2", "successful use message":"some_text2", "use actions":[ {"action name":"action_name2", "arguments":[]} ] }
                 ]}]}));
 
     def test_inventory_item_boolean_flags_are_parsed(self):
