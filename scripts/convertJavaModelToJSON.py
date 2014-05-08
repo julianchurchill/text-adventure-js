@@ -77,8 +77,10 @@ class JavaModelConverter():
             self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )[successfulUseMessageKey] = values;
         elif key == "use action":
             self.ensureListInDictIsInitialized( self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] ), "use actions" );
+            action_name = values.split(self.seperator)[0];
+            arguments = values.split(self.seperator)[1:];
             self.lastOf( self.lastOf(self.inventoryItems)[canBeUsedWithKey] )["use actions"].append(
-                { "action name":values, "arguments":[] });
+                { "action name":action_name, "arguments":arguments });
         else:
             self.addKeyValueToLastDictIn( self.inventoryItems, key, values );
 
@@ -117,10 +119,16 @@ class TestScript(unittest.TestCase):
     def test_inventory_item_examine_actions_are_parsed(self):
         pass;
 
-# item can be used with:another_id
-# item successful use message:some_text
-# item use action:action_name:action_arg1:action_arg2
-# item use action:action_name2:action2_arg1:action2_arg2
+    def test_inventory_item_use_with_actions_with_arguments_is_parsed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\nitem use action:action_name:arg1:arg2\n"
+                                                   "item can be used with:another_id2\nitem successful use message:some_text2\nitem use action:action_name2:arg21:arg22\n" ),
+            self.createDict( {"inventory items":[ { "can be used with":[
+                    { "id": "another_id", "successful use message":"some_text", "use actions":[ {"action name":"action_name", "arguments":[ "arg1", "arg2" ]} ] },
+                    { "id": "another_id2", "successful use message":"some_text2", "use actions":[ {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ] }
+                ]}]}));
+
     def test_inventory_item_use_with_actions_without_arguments_is_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
