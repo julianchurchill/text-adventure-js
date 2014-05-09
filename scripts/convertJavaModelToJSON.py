@@ -7,10 +7,12 @@ class JavaModelConverter():
     locationAreaSection = "LOCATION AREA";
     inventoryItemSection = "INVENTORY ITEM";
     locationSection = "LOCATION";
+    exitSection = "EXIT";
     propertiesKey = "properties";
     locationAreasKey = "location areas";
     inventoryItemsKey = "inventory items";
     locationsKey = "locations";
+    exitsKey = "exits";
     output = [];
     locationAreas = {};
     inventoryItems = {};
@@ -38,7 +40,11 @@ class JavaModelConverter():
             self.locationSection:{
                 self.onNewSectionKey:self.onNewLocationSection,
                 self.onNewValuesKey:self.onNewLocationValues,
-                self.preProcessKeyKey:self.preProcessLocationKey}
+                self.preProcessKeyKey:self.preProcessLocationKey},
+            self.exitSection:{
+                self.onNewSectionKey:self.onNewExitSection,
+                self.onNewValuesKey:self.onNewExitValues,
+                self.preProcessKeyKey:self.preProcessExitKey}
         };
 
     def convertToDictionary(self, input):
@@ -68,6 +74,12 @@ class JavaModelConverter():
     def onNewLocationSection(self):
         self.locations.append({});
 
+    def onNewExitSection(self):
+        currentLocation = self.lastOf( self.locations );
+        if self.exitsKey not in currentLocation:
+            currentLocation[self.exitsKey] = [];
+        currentLocation[self.exitsKey].append({ "use actions":[] });
+
     def onNewInventoryItemSection(self):
         self.inventoryItems.append({});
 
@@ -79,6 +91,11 @@ class JavaModelConverter():
 
     def onNewLocationValues(self, key, values):
         self.lastOf( self.locations )[key] = values;
+
+    def onNewExitValues(self, key, values):
+        currentLocation = self.lastOf( self.locations );
+        currentExit = self.lastOf( currentLocation[self.exitsKey] );
+        currentExit[key] = values;
 
     def onNewInventoryItemValues(self, key, values):
         self.parseItem( key, values, self.lastOf( self.inventoryItems ) );
@@ -129,6 +146,9 @@ class JavaModelConverter():
             return key;
         return self.removeFirstWord(key);
 
+    def preProcessExitKey(self, key):
+        return self.removeFirstWord(key);
+
     def preProcessInventoryItemKey(self, key):
         return self.removeFirstWord(key);
 
@@ -169,15 +189,21 @@ class TestScript(unittest.TestCase):
 #                             ]
 #                         },
 
-    # def test_location_with_exit_is_parsed(self):
-    #     j = JavaModelConverter();
-    #     self.assertEqual(
-    #         j.convertToDictionary( "LOCATION\nEXIT\nexit label:some_label\nexit destination:some_destination_id\nexit direction hint:some_direction_hint\n"
-    #                                 "exit id:some_id\nexit is not visible:\n" ),
-    #         self.createDict( {"locations":[
-    #                 {"exits": [{"label":"some_label", "destination":"some_destination_id", "direction hint":"some_direction_hint",
-    #                             "id":"some_id", "is not visible":"True", "use actions":[]}]}
-    #             ]}));
+    def test_location_with_exits_with_actions_are_parsed(self):
+        pass;
+
+    def test_location_with_exit_with_actions_is_parsed(self):
+        pass;
+
+    def test_location_with_basic_exit_is_parsed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "LOCATION\nEXIT\nexit label:some_label\nexit destination:some_destination_id\nexit direction hint:some_direction_hint\n"
+                                    "exit id:some_id\nexit is not visible:\n" ),
+            self.createDict( {"locations":[
+                    {"exits": [{"label":"some_label", "destination":"some_destination_id", "direction hint":"some_direction_hint",
+                                "id":"some_id", "is not visible":"True", "use actions":[]}]}
+                ]}));
 
     def test_basic_location_is_parsed(self):
         j = JavaModelConverter();
