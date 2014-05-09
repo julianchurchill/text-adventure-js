@@ -82,8 +82,20 @@ class JavaModelConverter():
             self.addActionWithArguments( self.lastOf( itemToPopulate[canBeUsedWithKey] ), "use actions", values );
         elif key == "on examine action":
             self.addActionWithArguments( itemToPopulate, "on examine actions", values );
+        elif key == "talk initial phrase":
+            self.addTalkPhraseWithArguments( itemToPopulate, "initial phrase", values );
+        elif key == "talk response to":
+            self.addTalkPhraseWithArguments( itemToPopulate, "response to", values );
+        elif key == "talk follow up phrase to":
+            self.addTalkPhraseWithArguments( itemToPopulate, "follow up phrase to", values );
         else:
             itemToPopulate[key] = values;
+
+    def addTalkPhraseWithArguments(self, itemToPopulate, phrase_type, values ):
+        talkPhrasesKey = "talk phrases";
+        self.ensureListInDictIsInitialized( itemToPopulate, talkPhrasesKey );
+        arguments = values.split(self.seperator);
+        itemToPopulate[talkPhrasesKey].append( { "type":phrase_type, "arguments":arguments } );
 
     def addActionWithArguments(self, itemToPopulate, actionsKey, values ):
         self.ensureListInDictIsInitialized( itemToPopulate, actionsKey );
@@ -118,13 +130,25 @@ class TestScript(unittest.TestCase):
         return [dict(self.empty_converted_dict.items() + valuesToAddToDict.items())];
 
     def test_inventory_item_talk_phrases_are_parsed(self):
-# item talk initial phrase:helpme:Can you help me?:"Can you help me?" you say to the younger girl.
-# item talk response to:helpme:She looks at you moving forward but Oubliette pulls her back and tells her to keep away from you.
-# item talk follow up phrase to:helpme:sorehead:Sore.:"Sore. Why on earth did you hit me? And why am I tied up?!". Exasperated, you feel like chucking the towel in. After fighting your way past that beast only to be knocked out cold by a girl and now with a cracking headache, you wish someone would enlighten you as to what is going on.
-# item talk initial phrase:isthataboot:Is that a boot behind your back?:"Is that a boot behind your back?" you say to the younger girl.
-# item talk response to:isthataboot: She spins round on one leg with unsettling glee so that you can clearly see the large leather boot she is holding then she sticks out her tongue and blows a big raspberry at you. Oubliette looks at her sternly and tells her off in a terse whisper.
-# item talk follow up phrase to:helpme:sorehead:Sore.:"Sore. Why on earth did you hit me? And why am I tied up?!". Exasperated, you feel like chucking the towel in. After fighting your way past that beast only to be knocked out cold by a girl and now with a cracking headache, you wish someone would enlighten you as to what is going on.
-        pass;
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "INVENTORY ITEM\n"
+                                    "item talk initial phrase:arg1:arg2:arg3\n"
+                                    "item talk response to:arg1:arg2\n"
+                                    "item talk follow up phrase to:arg1:arg2:arg3:arg4\n"
+                                    "item talk initial phrase:arg1:arg2:arg3\n"
+                                    "item talk response to:arg1:arg2\n"
+                                    "item talk follow up phrase to:arg1:arg2:arg3:arg4\n" ),
+            self.createDict( {"inventory items":[
+                    { "talk phrases":[
+                        {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
+                        {"type":"response to", "arguments":["arg1","arg2"]},
+                        {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]},
+                        {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
+                        {"type":"response to", "arguments":["arg1","arg2"]},
+                        {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]}
+                    ]},
+                ]}));
 
     def test_inventory_item_examine_actions_with_arguments_are_parsed(self):
         j = JavaModelConverter();
@@ -137,7 +161,6 @@ class TestScript(unittest.TestCase):
                         {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]},
                     ]},
                 ]}));
-        pass;
 
     def test_inventory_item_use_with_actions_with_arguments_is_parsed(self):
         j = JavaModelConverter();
@@ -218,12 +241,12 @@ item examine action is not repeatable:
 item examine message:some examine message
 item on examine action:action_name:action_arg1:action_arg2
 item on examine action:action_name2:action2_arg1:action2_arg2
-item talk initial phrase:helpme:Can you help me?:"Can you help me?" you say to the younger girl.
-item talk response to:helpme:She looks at you moving forward but Oubliette pulls her back and tells her to keep away from you.
-item talk follow up phrase to:helpme:sorehead:Sore.:"Sore. Why on earth did you hit me? And why am I tied up?!". Exasperated, you feel like chucking the towel in. After fighting your way past that beast only to be knocked out cold by a girl and now with a cracking headache, you wish someone would enlighten you as to what is going on.
-item talk initial phrase:isthataboot:Is that a boot behind your back?:"Is that a boot behind your back?" you say to the younger girl.
-item talk response to:isthataboot: She spins round on one leg with unsettling glee so that you can clearly see the large leather boot she is holding then she sticks out her tongue and blows a big raspberry at you. Oubliette looks at her sternly and tells her off in a terse whisper.
-item talk follow up phrase to:helpme:sorehead:Sore.:"Sore. Why on earth did you hit me? And why am I tied up?!". Exasperated, you feel like chucking the towel in. After fighting your way past that beast only to be knocked out cold by a girl and now with a cracking headache, you wish someone would enlighten you as to what is going on.
+item talk initial phrase:arg1:arg2:arg3
+item talk response to:arg1:arg2
+item talk follow up phrase to:arg1:arg2:arg3:arg4
+item talk initial phrase:arg1:arg2:arg3
+item talk response to:arg1:arg2
+item talk follow up phrase to:arg1:arg2:arg3:arg4
 
 LOCATION AREA
 location area id:area_id
@@ -305,6 +328,14 @@ item id:some_id2
                     "on examine actions":[
                         {"action name":"action_name", "arguments":["action_arg1","action_arg2"]},
                         {"action name":"action_name2", "arguments":["action2_arg1","action2_arg2"]}
+                    ],
+                    "talk phrases":[
+                        {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
+                        {"type":"response to", "arguments":["arg1","arg2"]},
+                        {"type":"follow up phrase", "arguments":["arg1","arg2","arg3","arg4"]},
+                        {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
+                        {"type":"response to", "arguments":["arg1","arg2"]},
+                        {"type":"follow up phrase", "arguments":["arg1","arg2","arg3","arg4"]}
                     ]
                 }
             ],
