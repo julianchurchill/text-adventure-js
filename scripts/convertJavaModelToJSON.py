@@ -2,6 +2,7 @@
 import unittest
 
 class JavaModelConverter():
+    sectionHeader = "";
     seperator = ':';
     propertiesSection = "PROPERTIES";
     locationAreaSection = "LOCATION AREA";
@@ -16,6 +17,7 @@ class JavaModelConverter():
     exitsKey = "exits";
     itemsKey = "items";
     output = [];
+    properties = {};
     locationAreas = {};
     inventoryItems = {};
     locations = {};
@@ -26,6 +28,7 @@ class JavaModelConverter():
 
     def __init__(self):
         self.output = [{self.propertiesKey:{}, self.locationAreasKey:[], self.inventoryItemsKey:[], self.locationsKey:[]}];
+        self.properties = self.output[0][self.propertiesKey];
         self.locationAreas = self.output[0][self.locationAreasKey];
         self.inventoryItems = self.output[0][self.inventoryItemsKey];
         self.locations = self.output[0][self.locationsKey];
@@ -34,45 +37,51 @@ class JavaModelConverter():
             self.locationAreaSection:{
                 self.onNewSectionKey:self.onNewLocationAreaSection,
                 self.onNewValuesKey:self.onNewLocationAreaValues,
-                self.preProcessKeyKey:self.preProcessLocationAreaKey},
+                self.preProcessKeyKey:self.removeFirstWord },
             self.inventoryItemSection:{
                 self.onNewSectionKey:self.onNewInventoryItemSection,
                 self.onNewValuesKey:self.onNewInventoryItemValues,
-                self.preProcessKeyKey:self.preProcessInventoryItemKey},
+                self.preProcessKeyKey:self.removeFirstWord },
             self.locationSection:{
                 self.onNewSectionKey:self.onNewLocationSection,
                 self.onNewValuesKey:self.onNewLocationValues,
-                self.preProcessKeyKey:self.preProcessLocationKey},
+                self.preProcessKeyKey:self.preProcessLocationKey },
             self.exitSection:{
                 self.onNewSectionKey:self.onNewExitSection,
                 self.onNewValuesKey:self.onNewExitValues,
-                self.preProcessKeyKey:self.preProcessExitKey},
+                self.preProcessKeyKey:self.removeFirstWord },
             self.itemSection:{
                 self.onNewSectionKey:self.onNewItemSection,
                 self.onNewValuesKey:self.onNewItemValues,
-                self.preProcessKeyKey:self.preProcessItemKey}
+                self.preProcessKeyKey:self.removeFirstWord }
         };
 
     def convertToDictionary(self, input):
         if input == "":
             return [];
-        sectionHeader = "";
+        self.sectionHeader = "";
         for line in input.splitlines():
             if self.isSectionHeader(line):
-                sectionHeader = line;
-                if sectionHeader in self.sectionHandlingFunctions:
-                    if self.onNewSectionKey in self.sectionHandlingFunctions[sectionHeader]:
-                        self.sectionHandlingFunctions[sectionHeader][self.onNewSectionKey]();
+                self.processSectionHeader( line );
             else:
-                (key, values) = line.split(self.seperator,1)
-                if values == "":
-                    values = "True";
-                if sectionHeader in self.sectionHandlingFunctions:
-                    if self.preProcessKeyKey in self.sectionHandlingFunctions[sectionHeader]:
-                        key = self.sectionHandlingFunctions[sectionHeader][self.preProcessKeyKey]( key );
-                    if self.onNewValuesKey in self.sectionHandlingFunctions[sectionHeader]:
-                        self.sectionHandlingFunctions[sectionHeader][self.onNewValuesKey](key, values);
+                self.processNonHeaderLine( line );
         return self.output;
+
+    def processSectionHeader(self, line):
+        self.sectionHeader = line;
+        if self.sectionHeader in self.sectionHandlingFunctions:
+            if self.onNewSectionKey in self.sectionHandlingFunctions[self.sectionHeader]:
+                self.sectionHandlingFunctions[self.sectionHeader][self.onNewSectionKey]();
+
+    def processNonHeaderLine(self, line):
+        (key, values) = line.split(self.seperator,1)
+        if values == "":
+            values = "True";
+        if self.sectionHeader in self.sectionHandlingFunctions:
+            if self.preProcessKeyKey in self.sectionHandlingFunctions[self.sectionHeader]:
+                key = self.sectionHandlingFunctions[self.sectionHeader][self.preProcessKeyKey]( key );
+            if self.onNewValuesKey in self.sectionHandlingFunctions[self.sectionHeader]:
+                self.sectionHandlingFunctions[self.sectionHeader][self.onNewValuesKey](key, values);
 
     def onNewLocationAreaSection(self):
         self.locationAreas.append({});
@@ -81,20 +90,21 @@ class JavaModelConverter():
         self.locations.append({});
 
     def onNewExitSection(self):
-        currentLocation = self.lastOf( self.locations );
-        self.ensureListInDictIsInitialized( currentLocation, self.exitsKey );
-        currentLocation[self.exitsKey].append({ "use actions":[] });
+        self.addEmptyMapToListInCurrentLocation( self.exitsKey );
 
     def onNewItemSection(self):
+        self.addEmptyMapToListInCurrentLocation( self.itemsKey );
+
+    def addEmptyMapToListInCurrentLocation(self, listKey):
         currentLocation = self.lastOf( self.locations );
-        self.ensureListInDictIsInitialized( currentLocation, self.itemsKey );
-        currentLocation[self.itemsKey].append({});
+        self.ensureListInDictIsInitialized( currentLocation, listKey );
+        currentLocation[listKey].append({});
 
     def onNewInventoryItemSection(self):
         self.inventoryItems.append({});
 
     def onNewPropertiesValues(self, key, values):
-        self.output[0][self.propertiesKey][key] = values;
+        self.properties[key] = values;
 
     def onNewLocationAreaValues(self, key, values):
         self.lastOf( self.locationAreas )[key] = values;
@@ -156,21 +166,9 @@ class JavaModelConverter():
         if key not in inDict:
             inDict[key] = [];
 
-    def preProcessLocationAreaKey(self, key):
-        return self.removeFirstWord(key);
-
     def preProcessLocationKey(self, key):
         if key == "x" or key == "y" or key == "text to show on first entry":
             return key;
-        return self.removeFirstWord(key);
-
-    def preProcessExitKey(self, key):
-        return self.removeFirstWord(key);
-
-    def preProcessItemKey(self, key):
-        return self.removeFirstWord(key);
-
-    def preProcessInventoryItemKey(self, key):
         return self.removeFirstWord(key);
 
     def lastOf( self, thing ):
@@ -257,7 +255,7 @@ class TestScript(unittest.TestCase):
                                     "exit id:some_id\nexit is not visible:\n" ),
             self.createDict( {"locations":[
                     {"exits": [{"label":"some_label", "destination":"some_destination_id", "direction hint":"some_direction_hint",
-                                "id":"some_id", "is not visible":"True", "use actions":[]}]}
+                                "id":"some_id", "is not visible":"True" }]}
                 ]}));
 
     def test_basic_location_is_parsed(self):
@@ -352,9 +350,7 @@ class TestScript(unittest.TestCase):
         j = JavaModelConverter();
         self.assertEqual( j.convertToDictionary( "" ), []);
 
-    # Once it all works comment this test title back in to keep the golden ticket test running
-    # def test_golden_ticket(self):
-    def golden_ticket(self):
+    def test_golden_ticket(self):
         goldenTicketInput = """
 PROPERTIES
 maximum score:27
@@ -472,10 +468,10 @@ item id:some_id2
                     "talk phrases":[
                         {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
                         {"type":"response to", "arguments":["arg1","arg2"]},
-                        {"type":"follow up phrase", "arguments":["arg1","arg2","arg3","arg4"]},
+                        {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]},
                         {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
                         {"type":"response to", "arguments":["arg1","arg2"]},
-                        {"type":"follow up phrase", "arguments":["arg1","arg2","arg3","arg4"]}
+                        {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]}
                     ]
                 }
             ],
