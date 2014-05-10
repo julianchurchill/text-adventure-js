@@ -1,4 +1,6 @@
 #!/usr/bin/python
+import json
+import sys
 import unittest
 
 class JavaModelConverter():
@@ -56,11 +58,17 @@ class JavaModelConverter():
                 self.preProcessKeyKey:self.removeFirstWord }
         };
 
+    def convertToDictionaryFromFile(self, file):
+        return self.convertToDictionaryFromLineList( file );
+
     def convertToDictionary(self, input):
         if input == "":
             return [];
+        return self.convertToDictionaryFromLineList( input.splitlines() );
+
+    def convertToDictionaryFromLineList(self, lines):
         self.sectionHeader = "";
-        for line in input.splitlines():
+        for line in lines:
             if self.isSectionHeader(line):
                 self.processSectionHeader( line );
             else:
@@ -519,8 +527,9 @@ item id:some_id2
         }]);
 
 if __name__ == '__main__':
-    # if file argument supplied:
-    #   j = JavaModelConverter();
-    #   print json.toJSON( j.convertToDictionary( fileContent ) );
-    # else:
-    unittest.main()
+    if len( sys.argv ) == 2 and sys.argv[1] != None:
+        with open(sys.argv[1]) as f:
+            linesWithoutNewlines = [ line.strip('\n') for line in f.readlines() ]
+            print json.dumps( JavaModelConverter().convertToDictionaryFromLineList( linesWithoutNewlines ), indent=2 );
+    else:
+        unittest.main();
