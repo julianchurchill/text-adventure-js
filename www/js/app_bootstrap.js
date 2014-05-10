@@ -15,5 +15,5 @@
     view.setActionHandler( presenter );
 
     var model_json = require('./model.json');
-    model.loadModelFromJSON( model_json );
+    model.loadModelFromJSON( model_json[0] );
 })();
