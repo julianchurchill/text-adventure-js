@@ -33,13 +33,14 @@
 
     function updateCSSClassesWithDirectionHint( new_link, exit ) {
         if( exit.direction_hint !== undefined ) {
-            if( exit.direction_hint === 'north' )
+            var d = exit.direction_hint.toLowerCase();
+            if( d === 'north' )
                 new_link.className += ' north_direction';
-            else if( exit.direction_hint === 'south' )
+            else if( d === 'south' )
                 new_link.className += ' south_direction';
-            else if( exit.direction_hint === 'west' )
+            else if( d === 'west' )
                 new_link.className += ' west_direction';
-            else if( exit.direction_hint === 'east' )
+            else if( d === 'east' )
                 new_link.className += ' east_direction';
             else
                 new_link.className += ' dontcare_direction';

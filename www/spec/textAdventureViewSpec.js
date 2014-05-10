@@ -77,6 +77,11 @@
                 expect($('#exit_id5').hasClass('dontcare_direction')).toEqual(true);
                 expect($('#exit_id6').hasClass('dontcare_direction')).toEqual(true);
             });
+
+            it('ignores case of exit hint', function() {
+                view.onExitsChanged( [ { id: 'exit_id1', label: "label1", direction_hint: "NoRtH" } ] );
+                expect($('#exit_id1').hasClass('north_direction')).toEqual(true);
+            });
         });
 
         describe('when user selects an exit', function() {
