@@ -13,8 +13,8 @@ class JavaModelConverter():
     exitSection = "EXIT";
     itemSection = "ITEM";
     propertiesKey = "properties";
-    locationAreasKey = "location areas";
-    inventoryItemsKey = "inventory items";
+    locationAreasKey = "location_areas";
+    inventoryItemsKey = "inventory_items";
     locationsKey = "locations";
     exitsKey = "exits";
     itemsKey = "items";
@@ -111,22 +111,25 @@ class JavaModelConverter():
     def onNewInventoryItemSection(self):
         self.inventoryItems.append({});
 
+    def replaceSpacesWithUnderscores(self, value):
+        return value.replace(' ', '_');
+
     def onNewPropertiesValues(self, key, values):
-        self.properties[key] = values;
+        self.properties[self.replaceSpacesWithUnderscores(key)] = values;
 
     def onNewLocationAreaValues(self, key, values):
-        self.lastOf( self.locationAreas )[key] = values;
+        self.lastOf( self.locationAreas )[self.replaceSpacesWithUnderscores(key)] = values;
 
     def onNewLocationValues(self, key, values):
-        self.lastOf( self.locations )[key] = values;
+        self.lastOf( self.locations )[self.replaceSpacesWithUnderscores(key)] = values;
 
     def onNewExitValues(self, key, values):
         currentLocation = self.lastOf( self.locations );
         currentExit = self.lastOf( currentLocation[self.exitsKey] );
         if key == "on use action":
-            self.addActionWithArguments( currentExit, "use actions", values );
+            self.addActionWithArguments( currentExit, "use_actions", values );
         else:
-            currentExit[key] = values;
+            currentExit[self.replaceSpacesWithUnderscores(key)] = values;
 
     def onNewItemValues(self, key, values):
         currentLocation = self.lastOf( self.locations );
@@ -137,18 +140,17 @@ class JavaModelConverter():
         self.parseItem( key, values, self.lastOf( self.inventoryItems ) );
 
     def parseItem(self, key, values, itemToPopulate):
-        canBeUsedWithKey = "can be used with";
-        successfulUseMessageKey = "successful use message";
-        if key == canBeUsedWithKey:
+        canBeUsedWithKey = "can_be_used_with";
+        if key == "can be used with":
             self.ensureListInDictIsInitialized(itemToPopulate, canBeUsedWithKey);
             itemToPopulate[canBeUsedWithKey].append( {} );
             self.lastOf( itemToPopulate[canBeUsedWithKey] )["id"] = values;
-        elif key == successfulUseMessageKey:
-            self.lastOf( itemToPopulate[canBeUsedWithKey] )[successfulUseMessageKey] = values;
+        elif key == "successful use message":
+            self.lastOf( itemToPopulate[canBeUsedWithKey] )[self.replaceSpacesWithUnderscores(key)] = values;
         elif key == "use action":
-            self.addActionWithArguments( self.lastOf( itemToPopulate[canBeUsedWithKey] ), "use actions", values );
+            self.addActionWithArguments( self.lastOf( itemToPopulate[canBeUsedWithKey] ), "use_actions", values );
         elif key == "on examine action":
-            self.addActionWithArguments( itemToPopulate, "on examine actions", values );
+            self.addActionWithArguments( itemToPopulate, "on_examine_actions", values );
         elif key == "talk initial phrase":
             self.addTalkPhraseWithArguments( itemToPopulate, "initial phrase", values );
         elif key == "talk response to":
@@ -156,10 +158,10 @@ class JavaModelConverter():
         elif key == "talk follow up phrase to":
             self.addTalkPhraseWithArguments( itemToPopulate, "follow up phrase to", values );
         else:
-            itemToPopulate[key] = values;
+            itemToPopulate[self.replaceSpacesWithUnderscores(key)] = values;
 
     def addTalkPhraseWithArguments(self, itemToPopulate, phrase_type, values ):
-        talkPhrasesKey = "talk phrases";
+        talkPhrasesKey = "talk_phrases";
         self.ensureListInDictIsInitialized( itemToPopulate, talkPhrasesKey );
         arguments = values.split(self.seperator);
         itemToPopulate[talkPhrasesKey].append( { "type":phrase_type, "arguments":arguments } );
@@ -168,7 +170,7 @@ class JavaModelConverter():
         self.ensureListInDictIsInitialized( itemToPopulate, actionsKey );
         action_name = values.split(self.seperator)[0];
         arguments = values.split(self.seperator)[1:];
-        itemToPopulate[actionsKey].append( { "action name":action_name, "arguments":arguments } );
+        itemToPopulate[actionsKey].append( { "action_name":action_name, "arguments":arguments } );
 
     def ensureListInDictIsInitialized(self, inDict, key):
         if key not in inDict:
@@ -190,7 +192,7 @@ class JavaModelConverter():
 
 class TestScript(unittest.TestCase):
 
-    empty_converted_dict = {"properties":{}, "location areas":[], "inventory items":[], "locations":[] };
+    empty_converted_dict = {"properties":{}, "location_areas":[], "inventory_items":[], "locations":[] };
 
     def createDict(self, valuesToAddToDict):
         return [dict(self.empty_converted_dict.items() + valuesToAddToDict.items())];
@@ -215,17 +217,17 @@ class TestScript(unittest.TestCase):
                                     "item talk follow up phrase to:arg1:arg2:arg3:arg4\n" ),
             self.createDict( {"locations":[
                 {"items":[
-                    { "can be used with":[
-                        { "id": "another_id", "successful use message":"some_text",
-                          "use actions":[
-                            {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
-                            {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ]},
-                        { "id": "another_id2", "successful use message":"some_text2",
-                          "use actions":[ {"action name":"action_name", "arguments":[ "arg1", "arg2" ]} ]} ],
-                    "examine action is not repeatable": "True", "examine message":"some_text", "on examine actions":[
-                      {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
-                      {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ],
-                    "talk phrases":[
+                    { "can_be_used_with":[
+                        { "id": "another_id", "successful_use_message":"some_text",
+                          "use_actions":[
+                            {"action_name":"action_name", "arguments":[ "arg1", "arg2" ]},
+                            {"action_name":"action_name2", "arguments":[ "arg21", "arg22" ]} ]},
+                        { "id": "another_id2", "successful_use_message":"some_text2",
+                          "use_actions":[ {"action_name":"action_name", "arguments":[ "arg1", "arg2" ]} ]} ],
+                    "examine_action_is_not_repeatable": "True", "examine_message":"some_text", "on_examine_actions":[
+                      {"action_name":"action_name", "arguments":[ "arg1", "arg2" ]},
+                      {"action_name":"action_name2", "arguments":[ "arg21", "arg22" ]} ],
+                    "talk_phrases":[
                       {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
                       {"type":"response to", "arguments":["arg1","arg2"]},
                       {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]},
@@ -252,8 +254,8 @@ class TestScript(unittest.TestCase):
         self.assertEqual(
             j.convertToDictionary( "LOCATION\nEXIT\nexit on use action:action_name:arg1:arg2\nexit on use action:action_name2:arg1:arg2\n" ),
             self.createDict( {"locations":[
-                    {"exits": [{"use actions":[{"action name":"action_name", "arguments":["arg1","arg2"]},
-                                               {"action name":"action_name2", "arguments":["arg1","arg2"]}]}]}
+                    {"exits": [{"use_actions":[{"action_name":"action_name", "arguments":["arg1","arg2"]},
+                                               {"action_name":"action_name2", "arguments":["arg1","arg2"]}]}]}
                 ]}));
 
     def test_location_with_basic_exit_is_parsed(self):
@@ -262,8 +264,8 @@ class TestScript(unittest.TestCase):
             j.convertToDictionary( "LOCATION\nEXIT\nexit label:some_label\nexit destination:some_destination_id\nexit direction hint:some_direction_hint\n"
                                     "exit id:some_id\nexit is not visible:\n" ),
             self.createDict( {"locations":[
-                    {"exits": [{"label":"some_label", "destination":"some_destination_id", "direction hint":"some_direction_hint",
-                                "id":"some_id", "is not visible":"True" }]}
+                    {"exits": [{"label":"some_label", "destination":"some_destination_id", "direction_hint":"some_direction_hint",
+                                "id":"some_id", "is_not_visible":"True" }]}
                 ]}));
 
     def test_basic_location_is_parsed(self):
@@ -272,7 +274,7 @@ class TestScript(unittest.TestCase):
             j.convertToDictionary( "LOCATION\nx:300\ny:480\nlocation id:some_id\nlocation area id:some_area_id\nlocation description:some_text\n"
                                    "text to show on first entry:some_more_text\n" ),
             self.createDict( {"locations":[
-                    {"x":"300", "y":"480", "id":"some_id", "area id":"some_area_id", "description":"some_text", "text to show on first entry":"some_more_text"}
+                    {"x":"300", "y":"480", "id":"some_id", "area_id":"some_area_id", "description":"some_text", "text_to_show_on_first_entry":"some_more_text"}
                 ]}));
 
     def test_inventory_item_talk_phrases_are_parsed(self):
@@ -285,8 +287,8 @@ class TestScript(unittest.TestCase):
                                     "item talk initial phrase:arg1:arg2:arg3\n"
                                     "item talk response to:arg1:arg2\n"
                                     "item talk follow up phrase to:arg1:arg2:arg3:arg4\n" ),
-            self.createDict( {"inventory items":[
-                    { "talk phrases":[
+            self.createDict( {"inventory_items":[
+                    { "talk_phrases":[
                         {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
                         {"type":"response to", "arguments":["arg1","arg2"]},
                         {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]},
@@ -301,10 +303,10 @@ class TestScript(unittest.TestCase):
         self.assertEqual(
             j.convertToDictionary( "INVENTORY ITEM\nitem examine action is not repeatable:\nitem examine message:some_text\nitem on examine action:action_name:arg1:arg2\n"
                                    "item on examine action:action_name2:arg21:arg22\n" ),
-            self.createDict( {"inventory items":[
-                    { "examine action is not repeatable": "True", "examine message":"some_text", "on examine actions":[
-                        {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
-                        {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]},
+            self.createDict( {"inventory_items":[
+                    { "examine_action_is_not_repeatable": "True", "examine_message":"some_text", "on_examine_actions":[
+                        {"action_name":"action_name", "arguments":[ "arg1", "arg2" ]},
+                        {"action_name":"action_name2", "arguments":[ "arg21", "arg22" ]},
                     ]},
                 ]}));
 
@@ -313,16 +315,16 @@ class TestScript(unittest.TestCase):
         self.assertEqual(
             j.convertToDictionary( "INVENTORY ITEM\nitem can be used with:another_id\nitem successful use message:some_text\nitem use action:action_name:arg1:arg2\n"
                                                    "item can be used with:another_id2\nitem successful use message:some_text2\nitem use action:action_name2:arg21:arg22\n" ),
-            self.createDict( {"inventory items":[ { "can be used with":[
-                    { "id": "another_id", "successful use message":"some_text", "use actions":[ {"action name":"action_name", "arguments":[ "arg1", "arg2" ]} ] },
-                    { "id": "another_id2", "successful use message":"some_text2", "use actions":[ {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ] }
+            self.createDict( {"inventory_items":[ { "can_be_used_with":[
+                    { "id": "another_id", "successful_use_message":"some_text", "use_actions":[ {"action_name":"action_name", "arguments":[ "arg1", "arg2" ]} ] },
+                    { "id": "another_id2", "successful_use_message":"some_text2", "use_actions":[ {"action_name":"action_name2", "arguments":[ "arg21", "arg22" ]} ] }
                 ]}]}));
 
     def test_inventory_item_boolean_flags_are_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
             j.convertToDictionary( "INVENTORY ITEM\nitem is untakeable:\nitem is proper noun:\nitem is plural:\n" ),
-            self.createDict( {"inventory items":[ { "is untakeable":"True", "is proper noun":"True", "is plural":"True" } ]}));
+            self.createDict( {"inventory_items":[ { "is_untakeable":"True", "is_proper_noun":"True", "is_plural":"True" } ]}));
 
     def test_basic_inventory_items_are_parsed(self):
         j = JavaModelConverter();
@@ -331,7 +333,7 @@ class TestScript(unittest.TestCase):
                 "INVENTORY ITEM\nitem name:item_name\nitem description:item_description\nitem id:item_id\n"
                 "INVENTORY ITEM\nitem name:item_name2\nitem description:item_description2\nitem id:item_id2\n" ),
             self.createDict(
-                {"inventory items":[
+                {"inventory_items":[
                     { "name":"item_name", "description":"item_description", "id":"item_id" },
                     { "name":"item_name2", "description":"item_description2", "id":"item_id2" }
                 ]}));
@@ -343,16 +345,16 @@ class TestScript(unittest.TestCase):
                 "LOCATION AREA\nlocation area id:area_id\nlocation area name:area_name\n"
                 "LOCATION AREA\nlocation area id:area_id2\nlocation area name:area_name2\n" ),
             self.createDict(
-                {"location areas":[
-                    {"area id":"area_id", "area name":"area_name"},
-                    {"area id":"area_id2", "area name":"area_name2"}
+                {"location_areas":[
+                    {"area_id":"area_id", "area_name":"area_name"},
+                    {"area_id":"area_id2", "area_name":"area_name2"}
                 ]}));
 
     def test_maximum_score_is_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
             j.convertToDictionary( "PROPERTIES\nmaximum score:27" ),
-            self.createDict( {"properties":{"maximum score":"27"}} ));
+            self.createDict( {"properties":{"maximum_score":"27"}} ));
 
     def test_from_nothing_comes_nothing(self):
         j = JavaModelConverter();
@@ -428,52 +430,52 @@ item id:some_id2
         j = JavaModelConverter();
         self.assertEqual( j.convertToDictionary( goldenTicketInput ), [{
             "properties":{
-                "maximum score": "27"
+                "maximum_score": "27"
             },
-            "inventory items": [
+            "inventory_items": [
                 {
                     "name":"some_name",
                     "description":"some_description",
-                    "countable noun prefix":"a_prefix",
-                    "mid sentence cased name":"some cased name",
-                    "is untakeable":"True",
+                    "countable_noun_prefix":"a_prefix",
+                    "mid_sentence_cased_name":"some cased name",
+                    "is_untakeable":"True",
                     "visibility":"invisible",
-                    "is proper noun":"True",
-                    "is plural":"True",
+                    "is_proper_noun":"True",
+                    "is_plural":"True",
                     "id":"some_id",
-                    "can be used with":[
+                    "can_be_used_with":[
                         {
                             "id":"another_id",
-                            "successful use message":"some_text",
-                            "use actions":[
+                            "successful_use_message":"some_text",
+                            "use_actions":[
                                 {
-                                    "action name":"action_name",
+                                    "action_name":"action_name",
                                     "arguments":["action_arg1", "action_arg2"]},
                                 {
-                                    "action name":"action_name2",
+                                    "action_name":"action_name2",
                                     "arguments":["action2_arg1", "action2_arg2"]}
                             ]
                         },
                         {
                             "id":"another_id2",
-                            "successful use message":"some_text2",
-                            "use actions":[
+                            "successful_use_message":"some_text2",
+                            "use_actions":[
                                 {
-                                    "action name":"action_name",
+                                    "action_name":"action_name",
                                     "arguments":["action_arg1", "action_arg2"]},
                                 {
-                                    "action name":"action_name2",
+                                    "action_name":"action_name2",
                                     "arguments":["action2_arg1", "action2_arg2"]}
                             ]
                         }
                     ],
-                    "examine action is not repeatable":"True",
-                    "examine message":"some examine message",
-                    "on examine actions":[
-                        {"action name":"action_name", "arguments":["action_arg1","action_arg2"]},
-                        {"action name":"action_name2", "arguments":["action2_arg1","action2_arg2"]}
+                    "examine_action_is_not_repeatable":"True",
+                    "examine_message":"some examine message",
+                    "on_examine_actions":[
+                        {"action_name":"action_name", "arguments":["action_arg1","action_arg2"]},
+                        {"action_name":"action_name2", "arguments":["action2_arg1","action2_arg2"]}
                     ],
-                    "talk phrases":[
+                    "talk_phrases":[
                         {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
                         {"type":"response to", "arguments":["arg1","arg2"]},
                         {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]},
@@ -483,25 +485,25 @@ item id:some_id2
                     ]
                 }
             ],
-            "location areas": [{ "area id":"area_id", "area name":"area_name" }],
+            "location_areas": [{ "area_id":"area_id", "area_name":"area_name" }],
             "locations": [
                 {
                     "x":"300",
                     "y":"480",
                     "id":"some_location_id",
-                    "area id":"some_area_id",
+                    "area_id":"some_area_id",
                     "description":"some_location_description",
-                    "text to show on first entry":"some_text",
+                    "text_to_show_on_first_entry":"some_text",
                     "exits":[
                         {
                             "label":"some_exit_label",
                             "destination":"some_destination_id",
-                            "direction hint":"some_direction_hint",
+                            "direction_hint":"some_direction_hint",
                             "id":"some_exit_id",
-                            "is not visible":"True",
-                            "use actions":[
-                                {"action name":"action_name", "arguments":["action_arg1", "action_arg2"]},
-                                {"action name":"action_name2", "arguments":["action2_arg1", "action2_arg2"]},
+                            "is_not_visible":"True",
+                            "use_actions":[
+                                {"action_name":"action_name", "arguments":["action_arg1", "action_arg2"]},
+                                {"action_name":"action_name2", "arguments":["action2_arg1", "action2_arg2"]},
                             ]
                         },
                         {
