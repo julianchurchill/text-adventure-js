@@ -51,7 +51,7 @@ class JavaModelConverter():
             self.exitSection:{
                 self.onNewSectionKey:self.onNewExitSection,
                 self.onNewValuesKey:self.onNewExitValues,
-                self.preProcessKeyKey:self.removeFirstWord },
+                self.preProcessKeyKey:self.preProcessExitKey },
             self.itemSection:{
                 self.onNewSectionKey:self.onNewItemSection,
                 self.onNewValuesKey:self.onNewItemValues,
@@ -181,6 +181,11 @@ class JavaModelConverter():
             return key;
         return self.removeFirstWord(key);
 
+    def preProcessExitKey(self, key):
+        if key == "exit destination":
+            return "destinationid";
+        return self.removeFirstWord(key);
+
     def lastOf( self, thing ):
         return thing[-1];
 
@@ -264,7 +269,7 @@ class TestScript(unittest.TestCase):
             j.convertToDictionary( "LOCATION\nEXIT\nexit label:some_label\nexit destination:some_destination_id\nexit direction hint:some_direction_hint\n"
                                     "exit id:some_id\nexit is not visible:\n" ),
             self.createDict( {"locations":[
-                    {"exits": [{"label":"some_label", "destination":"some_destination_id", "direction_hint":"some_direction_hint",
+                    {"exits": [{"label":"some_label", "destinationid":"some_destination_id", "direction_hint":"some_direction_hint",
                                 "id":"some_id", "is_not_visible":"True" }]}
                 ]}));
 
@@ -497,7 +502,7 @@ item id:some_id2
                     "exits":[
                         {
                             "label":"some_exit_label",
-                            "destination":"some_destination_id",
+                            "destinationid":"some_destination_id",
                             "direction_hint":"some_direction_hint",
                             "id":"some_exit_id",
                             "is_not_visible":"True",
@@ -508,7 +513,7 @@ item id:some_id2
                         },
                         {
                             "label":"some_exit_label2",
-                            "destination":"some_destination_id2",
+                            "destinationid":"some_destination_id2",
                             "id":"some_exit_id2"
                         }
                     ],
