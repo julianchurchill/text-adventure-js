@@ -95,7 +95,10 @@ class JavaModelConverter():
     def onNewExitValues(self, key, values):
         currentLocation = self.lastOf( self.locations );
         currentExit = self.lastOf( currentLocation[self.exitsKey] );
-        currentExit[key] = values;
+        if key == "on use action":
+            self.addActionWithArguments( currentExit, "use actions", values );
+        else:
+            currentExit[key] = values;
 
     def onNewInventoryItemValues(self, key, values):
         self.parseItem( key, values, self.lastOf( self.inventoryItems ) );
@@ -168,32 +171,20 @@ class TestScript(unittest.TestCase):
     def createDict(self, valuesToAddToDict):
         return [dict(self.empty_converted_dict.items() + valuesToAddToDict.items())];
 
-# EXIT
-# exit label:some_exit_label
-# exit destination:some_destination_id
-# exit direction hint:some_direction_hint
-# exit id:some_exit_id
-# exit is not visible:
-# exit on use action:action_name:action_arg1:action_arg2
-# exit on use action:action_name2:action2_arg1:action2_arg2
-#                     "exits":[
-#                         {
-#                             "label":"some_exit_label",
-#                             "destination":"some_destination_id",
-#                             "direction hint":"some_direction_hint",
-#                             "id":"some_exit_id",
-#                             "is not visible":"True",
-#                             "use actions":[
-#                                 {"action name":"action_name", "arguments":["action_arg1", "action_arg2"]},
-#                                 {"action name":"action_name2", "arguments":["action2_arg1", "action2_arg2"]},
-#                             ]
-#                         },
+    def test_location_with_complex_item_is_parsed(self):
+        pass;
 
-    def test_location_with_exits_with_actions_are_parsed(self):
+    def test_location_with_basic_item_is_parsed(self):
         pass;
 
     def test_location_with_exit_with_actions_is_parsed(self):
-        pass;
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "LOCATION\nEXIT\nexit on use action:action_name:arg1:arg2\nexit on use action:action_name2:arg1:arg2\n" ),
+            self.createDict( {"locations":[
+                    {"exits": [{"use actions":[{"action name":"action_name", "arguments":["arg1","arg2"]},
+                                               {"action name":"action_name2", "arguments":["arg1","arg2"]}]}]}
+                ]}));
 
     def test_location_with_basic_exit_is_parsed(self):
         j = JavaModelConverter();
