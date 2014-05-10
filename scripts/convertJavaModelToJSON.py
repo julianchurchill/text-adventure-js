@@ -193,6 +193,45 @@ class TestScript(unittest.TestCase):
 
     def test_location_with_complex_item_is_parsed(self):
         pass;
+        # j = JavaModelConverter();
+        # self.assertEqual(
+        #     j.convertToDictionary( "LOCATION\nITEM\n"
+        #                             "item can be used with:another_id\nitem successful use message:some_text\n"
+        #                                 "item use action:action_name:arg1:arg2\n"
+        #                                 "item use action:action_name2:arg21:arg22\n"
+        #                             "item can be used with:another_id2\nitem successful use message:some_text2\n"
+        #                                 "item use action:action_name:arg1:arg2\n"
+        #                             "item examine action is not repeatable:\nitem examine message:some_text\n"
+        #                                 "item on examine action:action_name:arg1:arg2\n"
+        #                                 "item on examine action:action_name2:arg21:arg22\n"
+        #                             "item talk initial phrase:arg1:arg2:arg3\n"
+        #                             "item talk response to:arg1:arg2\n"
+        #                             "item talk follow up phrase to:arg1:arg2:arg3:arg4\n"
+        #                             "item talk initial phrase:arg1:arg2:arg3\n"
+        #                             "item talk response to:arg1:arg2\n"
+        #                             "item talk follow up phrase to:arg1:arg2:arg3:arg4\n" ),
+        #     self.createDict( {"locations":[
+        #         {"items":[
+        #             { "can be used with":[
+        #                 { "id": "another_id", "successful use message":"some_text",
+        #                   "use actions":[
+        #                     {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
+        #                     {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ]},
+        #                 { "id": "another_id2", "successful use message":"some_text2",
+        #                   "use actions":[ {"action name":"action_name", "arguments":[ "arg1", "arg2" ]} ]} ],
+        #             "examine action is not repeatable": "True", "examine message":"some_text", "on examine actions":[
+        #               {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
+        #               {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ],
+        #             "talk phrases":[
+        #               {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
+        #               {"type":"response to", "arguments":["arg1","arg2"]},
+        #               {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]},
+        #               {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
+        #               {"type":"response to", "arguments":["arg1","arg2"]},
+        #               {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]} ]
+        #             }
+        #         ]}
+        #     ]}));
 
     def test_location_with_basic_item_is_parsed(self):
         j = JavaModelConverter();
