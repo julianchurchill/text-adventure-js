@@ -82,15 +82,13 @@ class JavaModelConverter():
 
     def onNewExitSection(self):
         currentLocation = self.lastOf( self.locations );
-        if self.exitsKey not in currentLocation:
-            currentLocation[self.exitsKey] = [];
+        self.ensureListInDictIsInitialized( currentLocation, self.exitsKey );
         currentLocation[self.exitsKey].append({ "use actions":[] });
 
     def onNewItemSection(self):
         currentLocation = self.lastOf( self.locations );
-        if self.itemsKey not in currentLocation:
-            currentLocation[self.itemsKey] = [];
-        currentLocation[self.itemsKey].append({ "use actions":[] });
+        self.ensureListInDictIsInitialized( currentLocation, self.itemsKey );
+        currentLocation[self.itemsKey].append({});
 
     def onNewInventoryItemSection(self):
         self.inventoryItems.append({});
@@ -115,7 +113,7 @@ class JavaModelConverter():
     def onNewItemValues(self, key, values):
         currentLocation = self.lastOf( self.locations );
         currentItem = self.lastOf( currentLocation[self.itemsKey] );
-        currentItem[key] = values;
+        self.parseItem( key, values, currentItem );
 
     def onNewInventoryItemValues(self, key, values):
         self.parseItem( key, values, self.lastOf( self.inventoryItems ) );
@@ -192,46 +190,45 @@ class TestScript(unittest.TestCase):
         return [dict(self.empty_converted_dict.items() + valuesToAddToDict.items())];
 
     def test_location_with_complex_item_is_parsed(self):
-        pass;
-        # j = JavaModelConverter();
-        # self.assertEqual(
-        #     j.convertToDictionary( "LOCATION\nITEM\n"
-        #                             "item can be used with:another_id\nitem successful use message:some_text\n"
-        #                                 "item use action:action_name:arg1:arg2\n"
-        #                                 "item use action:action_name2:arg21:arg22\n"
-        #                             "item can be used with:another_id2\nitem successful use message:some_text2\n"
-        #                                 "item use action:action_name:arg1:arg2\n"
-        #                             "item examine action is not repeatable:\nitem examine message:some_text\n"
-        #                                 "item on examine action:action_name:arg1:arg2\n"
-        #                                 "item on examine action:action_name2:arg21:arg22\n"
-        #                             "item talk initial phrase:arg1:arg2:arg3\n"
-        #                             "item talk response to:arg1:arg2\n"
-        #                             "item talk follow up phrase to:arg1:arg2:arg3:arg4\n"
-        #                             "item talk initial phrase:arg1:arg2:arg3\n"
-        #                             "item talk response to:arg1:arg2\n"
-        #                             "item talk follow up phrase to:arg1:arg2:arg3:arg4\n" ),
-        #     self.createDict( {"locations":[
-        #         {"items":[
-        #             { "can be used with":[
-        #                 { "id": "another_id", "successful use message":"some_text",
-        #                   "use actions":[
-        #                     {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
-        #                     {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ]},
-        #                 { "id": "another_id2", "successful use message":"some_text2",
-        #                   "use actions":[ {"action name":"action_name", "arguments":[ "arg1", "arg2" ]} ]} ],
-        #             "examine action is not repeatable": "True", "examine message":"some_text", "on examine actions":[
-        #               {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
-        #               {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ],
-        #             "talk phrases":[
-        #               {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
-        #               {"type":"response to", "arguments":["arg1","arg2"]},
-        #               {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]},
-        #               {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
-        #               {"type":"response to", "arguments":["arg1","arg2"]},
-        #               {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]} ]
-        #             }
-        #         ]}
-        #     ]}));
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "LOCATION\nITEM\n"
+                                    "item can be used with:another_id\nitem successful use message:some_text\n"
+                                        "item use action:action_name:arg1:arg2\n"
+                                        "item use action:action_name2:arg21:arg22\n"
+                                    "item can be used with:another_id2\nitem successful use message:some_text2\n"
+                                        "item use action:action_name:arg1:arg2\n"
+                                    "item examine action is not repeatable:\nitem examine message:some_text\n"
+                                        "item on examine action:action_name:arg1:arg2\n"
+                                        "item on examine action:action_name2:arg21:arg22\n"
+                                    "item talk initial phrase:arg1:arg2:arg3\n"
+                                    "item talk response to:arg1:arg2\n"
+                                    "item talk follow up phrase to:arg1:arg2:arg3:arg4\n"
+                                    "item talk initial phrase:arg1:arg2:arg3\n"
+                                    "item talk response to:arg1:arg2\n"
+                                    "item talk follow up phrase to:arg1:arg2:arg3:arg4\n" ),
+            self.createDict( {"locations":[
+                {"items":[
+                    { "can be used with":[
+                        { "id": "another_id", "successful use message":"some_text",
+                          "use actions":[
+                            {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
+                            {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ]},
+                        { "id": "another_id2", "successful use message":"some_text2",
+                          "use actions":[ {"action name":"action_name", "arguments":[ "arg1", "arg2" ]} ]} ],
+                    "examine action is not repeatable": "True", "examine message":"some_text", "on examine actions":[
+                      {"action name":"action_name", "arguments":[ "arg1", "arg2" ]},
+                      {"action name":"action_name2", "arguments":[ "arg21", "arg22" ]} ],
+                    "talk phrases":[
+                      {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
+                      {"type":"response to", "arguments":["arg1","arg2"]},
+                      {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]},
+                      {"type":"initial phrase", "arguments":["arg1","arg2","arg3"]},
+                      {"type":"response to", "arguments":["arg1","arg2"]},
+                      {"type":"follow up phrase to", "arguments":["arg1","arg2","arg3","arg4"]} ]
+                    }
+                ]}
+            ]}));
 
     def test_location_with_basic_item_is_parsed(self):
         j = JavaModelConverter();
@@ -240,8 +237,8 @@ class TestScript(unittest.TestCase):
                                              "ITEM\nitem name:item_name2\nitem description:item_description2\nitem id:item_id2\n" ),
             self.createDict( {"locations":[
                 {"items":[
-                    { "name":"item_name", "description":"item_description", "id":"item_id", "use actions":[] },
-                    { "name":"item_name2", "description":"item_description2", "id":"item_id2", "use actions":[] }
+                    { "name":"item_name", "description":"item_description", "id":"item_id" },
+                    { "name":"item_name2", "description":"item_description2", "id":"item_id2" }
                 ]}]}));
 
     def test_location_with_exit_with_actions_is_parsed(self):
