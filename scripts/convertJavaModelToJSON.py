@@ -69,11 +69,19 @@ class JavaModelConverter():
     def convertToDictionaryFromLineList(self, lines):
         self.sectionHeader = "";
         for line in lines:
-            if self.isSectionHeader(line):
-                self.processSectionHeader( line );
-            else:
+            if self.isKeyValuePair(line):
                 self.processNonHeaderLine( line );
+            elif self.isSectionHeader(line):
+                self.processSectionHeader( line );
+            elif line is not "":
+                self.addToLastSavedKeyValuePair( "\n" + line );
         return self.output;
+
+    def isSectionHeader(self, line):
+        return line in self.sectionHandlingFunctions;
+
+    def addToLastSavedKeyValuePair(self, line):
+        self.lastUsedDictionary[self.lastUsedKey] += line;
 
     def processSectionHeader(self, line):
         self.sectionHeader = line;
@@ -114,14 +122,19 @@ class JavaModelConverter():
     def replaceSpacesWithUnderscores(self, value):
         return value.replace(' ', '_');
 
+    def saveKeyValuePair(self, dictionary, key, value):
+        self.lastUsedDictionary = dictionary;
+        self.lastUsedKey = key;
+        dictionary[key] = value;
+
     def onNewPropertiesValues(self, key, values):
-        self.properties[self.replaceSpacesWithUnderscores(key)] = values;
+        self.saveKeyValuePair(self.properties, self.replaceSpacesWithUnderscores(key), values);
 
     def onNewLocationAreaValues(self, key, values):
-        self.lastOf( self.locationAreas )[self.replaceSpacesWithUnderscores(key)] = values;
+        self.saveKeyValuePair(self.lastOf( self.locationAreas ), self.replaceSpacesWithUnderscores(key), values);
 
     def onNewLocationValues(self, key, values):
-        self.lastOf( self.locations )[self.replaceSpacesWithUnderscores(key)] = values;
+        self.saveKeyValuePair(self.lastOf( self.locations ), self.replaceSpacesWithUnderscores(key), values);
 
     def onNewExitValues(self, key, values):
         currentLocation = self.lastOf( self.locations );
@@ -129,7 +142,7 @@ class JavaModelConverter():
         if key == "on use action":
             self.addActionWithArguments( currentExit, "use_actions", values );
         else:
-            currentExit[self.replaceSpacesWithUnderscores(key)] = values;
+            self.saveKeyValuePair(currentExit, self.replaceSpacesWithUnderscores(key), values);
 
     def onNewItemValues(self, key, values):
         currentLocation = self.lastOf( self.locations );
@@ -144,9 +157,9 @@ class JavaModelConverter():
         if key == "can be used with":
             self.ensureListInDictIsInitialized(itemToPopulate, canBeUsedWithKey);
             itemToPopulate[canBeUsedWithKey].append( {} );
-            self.lastOf( itemToPopulate[canBeUsedWithKey] )["id"] = values;
+            self.saveKeyValuePair(self.lastOf( itemToPopulate[canBeUsedWithKey] ), "id", values);
         elif key == "successful use message":
-            self.lastOf( itemToPopulate[canBeUsedWithKey] )[self.replaceSpacesWithUnderscores(key)] = values;
+            self.saveKeyValuePair(self.lastOf( itemToPopulate[canBeUsedWithKey] ), self.replaceSpacesWithUnderscores(key), values);
         elif key == "use action":
             self.addActionWithArguments( self.lastOf( itemToPopulate[canBeUsedWithKey] ), "use_actions", values );
         elif key == "on examine action":
@@ -158,7 +171,7 @@ class JavaModelConverter():
         elif key == "talk follow up phrase to":
             self.addTalkPhraseWithArguments( itemToPopulate, "follow up phrase to", values );
         else:
-            itemToPopulate[self.replaceSpacesWithUnderscores(key)] = values;
+            self.saveKeyValuePair(itemToPopulate, self.replaceSpacesWithUnderscores(key), values);
 
     def addTalkPhraseWithArguments(self, itemToPopulate, phrase_type, values ):
         talkPhrasesKey = "talk_phrases";
@@ -192,8 +205,8 @@ class JavaModelConverter():
     def removeFirstWord(self, input):
         return input.split(' ',1)[1];
 
-    def isSectionHeader(self, line):
-        return self.seperator not in line;
+    def isKeyValuePair(self, line):
+        return self.seperator in line;
 
 class TestScript(unittest.TestCase):
 
@@ -271,6 +284,22 @@ class TestScript(unittest.TestCase):
             self.createDict( {"locations":[
                     {"exits": [{"label":"some_label", "destinationid":"some_destination_id", "direction_hint":"some_direction_hint",
                                 "id":"some_id", "is_not_visible":"True" }]}
+                ]}));
+
+    def test_location_with_multiline_description_is_parsed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "LOCATION\nlocation description:some text\nmore text\nand more\nEXIT\n" ),
+            self.createDict( {"locations":[
+                    {"description":"some text\nmore text\nand more", "exits":[{}] }
+                ]}));
+
+    def test_location_with_multiline_text_to_show_on_first_entry_is_parsed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "LOCATION\ntext to show on first entry:some text\nmore text\nand more\nEXIT\n" ),
+            self.createDict( {"locations":[
+                    {"text_to_show_on_first_entry":"some text\nmore text\nand more", "exits":[{}] }
                 ]}));
 
     def test_basic_location_is_parsed(self):

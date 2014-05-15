@@ -122,9 +122,6 @@ To run the specs type:
 
 ## Todo
 
-- Python script to convert from 'Android/Java' TTA model to JSON
-  - Are there model_content.txt lines from Java that have values continued _over_ newlines - e.g. location descriptions?
-    - If so then the script will need to cater for this.
 - Do we need a cucumber_bootstrap _and_ an app_bootstrap? Aren't they both just 'main' for the application?
   - How do we put 'model.json' in the right place for the cucumber tests if we combine the app and cuke bootstraps?
 - Shorten cuke failure backtrace
@@ -142,6 +139,7 @@ To run the specs type:
 
 ## DONE
 
+- Python script to convert from 'Android/Java' TTA model to JSON
 - Browserify of cucumber_bootstrap.js failed giving a zero-size bundle file because view.js include jquery which browserify cannot handle. Remove use of jquery in view, use DOM API.
     - http://substack.net/weaning_yourself_off_jquery
 - Mark work in progress cucumber features with @wip tag, to avoid running them with a default 'runJake.sh'. Run them with 'runJake.sh wip'.
