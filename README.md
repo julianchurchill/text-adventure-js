@@ -122,20 +122,35 @@ To run the specs type:
 
 ## Todo
 
-- Do we need a cucumber_bootstrap _and_ an app_bootstrap? Aren't they both just 'main' for the application?
-  - How do we put 'model.json' in the right place for the cucumber tests if we combine the app and cuke bootstraps?
-- Shorten cuke failure backtrace
-- View
-  - Write cuke tests to check items are shown
-  - Should update actions div when receiving an actions changed event
-    - Update labels
-    - Create user selectable links to trigger call back into presenter when selected
-- Presenter
-  - Should append action results to description when sending a description changed event
-  - on action tells model to enact the action
-- Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
-  - See www/spec.html
-  - Can this be done with jasmine-node?
+- [BUG] items are not visible when entering a location, they are described as 'There is a undefined here.'
+  - See items.feature "Scenario: Items are visible when entering a location" and compare against the real webapp
+
+- User Stories/Cukes
+  - Look at my inventory
+  - Examine an item in my inventory
+  - Use an item in my inventory with another item that does nothing
+  - Use an item in my inventory with another item that does something {multiple tests here for actions a, b, c etc...}
+  - Talk to an NPC
+  - Save my game and restore it when I return
+  - Start a new game
+  - See the credits/contact info
+  - See the walkthrough
+  - See the quick hint
+- Technical
+  - Do we need a cucumber_bootstrap _and_ an app_bootstrap? Aren't they both just 'main' for the application?
+    - How do we put 'model.json' in the right place for the cucumber tests if we combine the app and cuke bootstraps?
+  - Shorten cuke failure backtrace
+  - Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
+    - See www/spec.html
+    - Can this be done with jasmine-node?
+  - View
+    - Write cuke tests to check items are shown
+    - Should update actions div when receiving an actions changed event
+      - Update labels
+      - Create user selectable links to trigger call back into presenter when selected
+  - Presenter
+    - Should append action results to description when sending a description changed event
+    - on action tells model to enact the action
 
 ## DONE
 
