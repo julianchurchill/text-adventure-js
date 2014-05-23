@@ -7,7 +7,7 @@
 
     var World = function World(callback) {
         this.browser = new Zombie();
-        this.browser.debug = true;
+        // this.browser.debug = true;
         var fs = require('fs');
         var model_location = 'www/features/support/model.json';
         var model_has_been_set = false;
