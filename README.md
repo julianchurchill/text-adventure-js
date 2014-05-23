@@ -122,8 +122,12 @@ To run the specs type:
 
 ## Todo
 
-- [BUG] items are not visible when entering a location, they are described as 'There is a undefined here.'
-  - See items.feature "Scenario: Items are visible when entering a location" and compare against the real webapp
+- [BUG] items are not visible when entering a location, they are described as 'There is a undefined here.'. See items.feature "Scenario: Items are visible when entering a location" and compare against the real webapp
+  - Make cuke test fail as it should by changing navigationStepDef.js rule "a location has an item labelled" to use the 'name' property instead of the 'label' property
+  - view.js uses 'label' property of item hash - should be 'mid_sentence_cased_name' if available or 'name' converted to lower case otherwise.
+  - view.js uses 'indefinite_article' property of item hash - should be 'countable_noun_prefix' but can store a local var as 'indefinite_article' because that is a more accurate name!
+  - view.js uses 'proper_noun' - should be 'is_proper_noun'
+  - view.js uses 'plural' - should be 'is_plural'
 
 - User Stories/Cukes
   - Look at my inventory
