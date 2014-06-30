@@ -11,6 +11,7 @@
 # generated files
 platforms/android/bin/
 platforms/android/gen/
+platforms/android/assets/
 www/js/app_bootstrap_bundle.js
 www/features/support/cucumber_bootstrap_bundle.js
 www/features/support/model.json
