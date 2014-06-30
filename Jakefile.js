@@ -15,6 +15,15 @@
     task("default", ["all"], function () {
     });
 
+    desc("Build the android app");
+    task("android", ["build_artifacts"], function () {
+        console.log("Building for android with phonegap");
+        var cmds = [ 'phonegap build android' ];
+        jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
+            complete();
+        });
+    });
+
     desc("Lint, build and run the tests");
     task("all", ["lint", "build_artifacts", "unit_tests", "acceptance_tests"], function () {
     });

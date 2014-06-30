@@ -46,6 +46,9 @@ Clone this repository. Then:
 
     ./build/watchAndRun.sh --ignore cucumber_bootstrap_bundle.js 1 "./build/runJake.sh wip" www
 
+### To build the android app
+
+    ./build/runJake.sh android
 
 ## Project Creation and Setup
 
