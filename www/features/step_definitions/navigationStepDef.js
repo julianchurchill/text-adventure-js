@@ -56,10 +56,10 @@
             this.assertDescriptionIs( description, callback );
         });
 
-        this.Given(/^a location has an item labelled '(.*)'$/, function(item_label, callback) {
+        this.Given(/^a location has an item named '(.*)'$/, function(item_name, callback) {
             var test_model = {
                 locations: [
-                    { id: "location1", exits: [], items: [ { id: "item1", label: item_label } ] },
+                    { id: "location1", exits: [], items: [ { id: "item1", name: item_name } ] },
                 ]
             };
             var world = this;

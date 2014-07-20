@@ -109,49 +109,59 @@
             });
 
             it('should end item text with here.', function() {
-                view.onItemsChanged( [ { label: "label" } ] );
+                view.onItemsChanged( [ { name: "name" } ] );
                 expect(items_div.text()).toMatch(/.* here./);
             });
 
+            // it('should use mid sentence cased name in preference to name if specified', function() {
+            //     view.onItemsChanged( [ { name: "apples", mid_sentence_cased_name: "Apples" } ] );
+            //     expect(items_div.text()).toMatch(/.* Apples/);
+            // });
+
+            // it('should use name if mid sentence cased name is not supplied', function() {
+            //     view.onItemsChanged( [ { name: "apples" } ] );
+            //     expect(items_div.text()).toMatch(/.* apples/);
+            // });
+
             it('should use "There is" if first item plurality is not specified', function() {
-                view.onItemsChanged( [ { label: "apples" } ] );
+                view.onItemsChanged( [ { name: "apples" } ] );
                 expect(items_div.text()).toMatch(/There is .*/);
             });
 
             it('should use "There is" if first item is not plural', function() {
-                view.onItemsChanged( [ { label: "apples", plural: false } ] );
+                view.onItemsChanged( [ { name: "apples", plural: false } ] );
                 expect(items_div.text()).toMatch(/There is .*/);
             });
 
             it('should use "There are" if first item is plural', function() {
-                view.onItemsChanged( [ { label: "apples", plural: true } ] );
+                view.onItemsChanged( [ { name: "apples", plural: true } ] );
                 expect(items_div.text()).toMatch(/There are .*/);
             });
 
-            it('should cause item labels to appear in the order they are supplied', function() {
-                view.onItemsChanged( [ { label: "label1" },
-                                       { label: "label2" },
-                                       { label: "label3" } ] );
-                expect(items_div.text()).toMatch(/.* label1.* label2.* label3 .*/);
+            it('should cause item names to appear in the order they are supplied', function() {
+                view.onItemsChanged( [ { name: "name1" },
+                                       { name: "name2" },
+                                       { name: "name3" } ] );
+                expect(items_div.text()).toMatch(/.* name1.* name2.* name3 .*/);
             });
 
             it('should use "a" as the item indefinite article when no other is supplied', function() {
-                view.onItemsChanged( [ { label: "apple" } ] );
+                view.onItemsChanged( [ { name: "apple" } ] );
                 expect(items_div.text()).toMatch(/.* a apple .*/);
             });
 
             it('should cause item indefinite article to be used when supplied', function() {
-                view.onItemsChanged( [ { label: "apple", indefinite_article: "an" } ] );
+                view.onItemsChanged( [ { name: "apple", indefinite_article: "an" } ] );
                 expect(items_div.text()).toMatch(/.* an apple .*/);
             });
 
             it('should override indefinite article with "some" if item is plural', function() {
-                view.onItemsChanged( [ { label: "apples", indefinite_article: "an", plural: true } ] );
+                view.onItemsChanged( [ { name: "apples", indefinite_article: "an", plural: true } ] );
                 expect(items_div.text()).toMatch(/.* some apples .*/);
             });
 
             it('should cause no item indefinite article to be used if item is a proper noun', function() {
-                view.onItemsChanged( [ { label: "Apple", indefinite_article: "an", proper_noun: true } ] );
+                view.onItemsChanged( [ { name: "Apple", indefinite_article: "an", proper_noun: true } ] );
                 expect(items_div.text()).toMatch(/.* Apple .*/);
                 expect(items_div.text()).toNotMatch(/.* an Apple .*/);
             });
