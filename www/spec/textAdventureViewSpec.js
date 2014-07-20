@@ -113,15 +113,15 @@
                 expect(items_div.text()).toMatch(/.* here./);
             });
 
-            // it('should use mid sentence cased name in preference to name if specified', function() {
-            //     view.onItemsChanged( [ { name: "apples", mid_sentence_cased_name: "Apples" } ] );
-            //     expect(items_div.text()).toMatch(/.* Apples/);
-            // });
+            it('should use mid sentence cased name in preference to name if specified', function() {
+                view.onItemsChanged( [ { name: "apples", mid_sentence_cased_name: "Apples" } ] );
+                expect(items_div.text()).toMatch(/.* Apples/);
+            });
 
-            // it('should use name if mid sentence cased name is not supplied', function() {
-            //     view.onItemsChanged( [ { name: "apples" } ] );
-            //     expect(items_div.text()).toMatch(/.* apples/);
-            // });
+            it('should use name if mid sentence cased name is not supplied', function() {
+                view.onItemsChanged( [ { name: "apples" } ] );
+                expect(items_div.text()).toMatch(/.* apples/);
+            });
 
             it('should use "There is" if first item plurality is not specified', function() {
                 view.onItemsChanged( [ { name: "apples" } ] );

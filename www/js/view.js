@@ -129,7 +129,10 @@
     function addTextForEachItem(newItems) {
         for( var i = 0 ; i < newItems.length; i++ ) {
             addIndefiniteArticleForItemText(newItems[i]);
-            addTextToSelector('#items', " " + newItems[i].name);
+            var name = newItems[i].name;
+            if( newItems[i].mid_sentence_cased_name !== undefined && newItems[i].mid_sentence_cased_name !== "" )
+                name = newItems[i].mid_sentence_cased_name;
+            addTextToSelector('#items', " " + name);
             addItemTextSeperator(newItems,i);
         }
     }

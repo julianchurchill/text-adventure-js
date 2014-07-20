@@ -170,6 +170,8 @@ class JavaModelConverter():
             self.addTalkPhraseWithArguments( itemToPopulate, "response to", values );
         elif key == "talk follow up phrase to":
             self.addTalkPhraseWithArguments( itemToPopulate, "follow up phrase to", values );
+        elif key == "countable noun prefix":
+            self.saveKeyValuePair(itemToPopulate, "indefinite_article", values);
         else:
             self.saveKeyValuePair(itemToPopulate, self.replaceSpacesWithUnderscores(key), values);
 
@@ -354,6 +356,12 @@ class TestScript(unittest.TestCase):
                     { "id": "another_id2", "successful_use_message":"some_text2", "use_actions":[ {"action_name":"action_name2", "arguments":[ "arg21", "arg22" ]} ] }
                 ]}]}));
 
+    def test_inventory_item_countable_noun_prefix_is_renamed(self):
+        j = JavaModelConverter();
+        self.assertEqual(
+            j.convertToDictionary( "INVENTORY ITEM\nitem countable noun prefix:some prefix\n" ),
+            self.createDict( {"inventory_items":[ { "indefinite_article":"some prefix" } ]}));
+
     def test_inventory_item_boolean_flags_are_parsed(self):
         j = JavaModelConverter();
         self.assertEqual(
@@ -470,7 +478,7 @@ item id:some_id2
                 {
                     "name":"some_name",
                     "description":"some_description",
-                    "countable_noun_prefix":"a_prefix",
+                    "indefinite_article":"a_prefix",
                     "mid_sentence_cased_name":"some cased name",
                     "is_untakeable":"True",
                     "visibility":"invisible",
