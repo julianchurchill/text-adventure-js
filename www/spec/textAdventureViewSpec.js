@@ -129,12 +129,12 @@
             });
 
             it('should use "There is" if first item is not plural', function() {
-                view.onItemsChanged( [ { name: "apples", plural: false } ] );
+                view.onItemsChanged( [ { name: "apples", is_plural: false } ] );
                 expect(items_div.text()).toMatch(/There is .*/);
             });
 
             it('should use "There are" if first item is plural', function() {
-                view.onItemsChanged( [ { name: "apples", plural: true } ] );
+                view.onItemsChanged( [ { name: "apples", is_plural: true } ] );
                 expect(items_div.text()).toMatch(/There are .*/);
             });
 
@@ -156,12 +156,12 @@
             });
 
             it('should override indefinite article with "some" if item is plural', function() {
-                view.onItemsChanged( [ { name: "apples", indefinite_article: "an", plural: true } ] );
+                view.onItemsChanged( [ { name: "apples", indefinite_article: "an", is_plural: true } ] );
                 expect(items_div.text()).toMatch(/.* some apples .*/);
             });
 
             it('should cause no item indefinite article to be used if item is a proper noun', function() {
-                view.onItemsChanged( [ { name: "Apple", indefinite_article: "an", proper_noun: true } ] );
+                view.onItemsChanged( [ { name: "Apple", indefinite_article: "an", is_proper_noun: true } ] );
                 expect(items_div.text()).toMatch(/.* Apple .*/);
                 expect(items_div.text()).toNotMatch(/.* an Apple .*/);
             });

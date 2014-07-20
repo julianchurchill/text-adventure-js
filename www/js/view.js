@@ -98,7 +98,7 @@
     function addItemsPrecursorText(newItems) {
         if ( newItems.length > 0 ) {
             var precursorText = "There";
-            if( newItems[0].plural !== undefined && newItems[0].plural === true )
+            if( newItems[0].is_plural !== undefined && newItems[0].is_plural === true )
                 precursorText += " are";
             else
                 precursorText += " is";
@@ -110,9 +110,9 @@
         var indefinite_article = " a";
         if( item.indefinite_article !== undefined )
             indefinite_article = " " + item.indefinite_article;
-        if( item.plural !== undefined && item.plural === true )
+        if( item.is_plural !== undefined && item.is_plural === true )
             indefinite_article = " some";
-        if( item.proper_noun !== undefined && item.proper_noun  === true )
+        if( item.is_proper_noun !== undefined && item.is_proper_noun  === true )
             indefinite_article = "";
         addTextToSelector('#items', indefinite_article);
     }
