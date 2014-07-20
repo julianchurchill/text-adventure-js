@@ -38,7 +38,7 @@
             var exits = [ { id: 'exit1', label: 'label1' } ];
             model.setCurrentLocation( new Location( { exits: exits } ) );
 
-            expect( model.currentExits()).toBe( exits );
+            expect( model.currentExits()).toEqual( exits );
         });
 
         it('current items are current location items', function() {
@@ -62,7 +62,7 @@
             var actions = [ { id: 'action1', label: 'label1' } ];
             model.setCurrentLocation( new Location( { actions: actions } ) );
 
-            expect( model.currentActions()).toBe( actions );
+            expect( model.currentActions()).toEqual( actions );
         });
 
         it('triggering an exit changes the current location', function() {
