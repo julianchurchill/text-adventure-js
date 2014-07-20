@@ -25,6 +25,16 @@
         return this.properties.exits;
     };
 
+    function isVisible( item ) {
+        if( item.visibility !== undefined && item.visibility === "invisible" )
+            return false;
+        return true;
+    }
+
+    Location.prototype.visibleItems = function() {
+        return this.items().filter( isVisible );
+    };
+
     Location.prototype.items = function() {
         if( this.properties.items === undefined )
             this.properties.items = [];

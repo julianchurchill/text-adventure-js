@@ -35,6 +35,12 @@
         //     callback();
         // });
 
+        function initializeModel( world, model_content, callback ) {
+            world.setModel( model_content, function () {
+                world.visit('http://localhost:3000/test.html', callback);
+            });
+        }
+
         this.Given(/^a location with an exit labelled '(.*)' that goes to (.*) with a description '(.*)'$/, function(exit_label, destination_id, destination_description, callback) {
             var test_model = {
                 locations: [
@@ -42,10 +48,7 @@
                     { id: destination_id, description: destination_description }
                 ]
             };
-            var world = this;
-            this.setModel( test_model, function () {
-                world.visit('http://localhost:3000/test.html', callback);
-            });
+            initializeModel( this, test_model, callback );
         });
 
         this.When(/^I click the exit '(.*)'$/, function (exit, callback) {
@@ -62,10 +65,16 @@
                     { id: "location1", exits: [], items: [ { id: "item1", name: item_name } ] },
                 ]
             };
-            var world = this;
-            this.setModel( test_model, function () {
-                world.visit('http://localhost:3000/test.html', callback);
-            });
+            initializeModel( this, test_model, callback );
+        });
+
+        this.Given(/^a location has an item named '(.*)' that is invisible$/, function(item_name, callback) {
+            var test_model = {
+                locations: [
+                    { id: "location1", exits: [], items: [ { id: "item1", name: item_name, visibility: "invisible" } ] },
+                ]
+            };
+            initializeModel( this, test_model, callback );
         });
 
         this.When(/^I enter the location$/, function (callback) {
@@ -74,6 +83,10 @@
 
         this.Then(/^the current location item list includes '(.*)'$/, function (item_label, callback) {
             this.assertItemListIncludes( item_label, callback );
+        });
+
+        this.Then(/^the current location item list does not include '(.*)'$/, function (item_label, callback) {
+            this.assertItemListDoesNotInclude( item_label, callback );
         });
     };
 

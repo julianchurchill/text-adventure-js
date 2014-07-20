@@ -126,7 +126,7 @@ To run the specs type:
 ## Todo
 
 - User Stories/Cukes
-  - Invisible items should not be visible in a location
+  - Invisible exits are not shown
   - Look at my inventory
   - Examine an item in my inventory
   - Use an item in my inventory with another item that does nothing
@@ -154,6 +154,9 @@ To run the specs type:
     - on action tells model to enact the action
 
 ## DONE
+
+- User Stories/Cukes
+  - Invisible items should not be visible in a location
 
 - Python script to convert from 'Android/Java' TTA model to JSON
 - Browserify of cucumber_bootstrap.js failed giving a zero-size bundle file because view.js include jquery which browserify cannot handle. Remove use of jquery in view, use DOM API.

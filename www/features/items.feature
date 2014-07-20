@@ -7,3 +7,8 @@ Feature: Items
         Given a location has an item named 'banana'
         When I enter the location
         Then the current location item list includes 'banana'
+
+    Scenario: Invisible items are not visible when entering a location
+        Given a location has an item named 'banana' that is invisible
+        When I enter the location
+        Then the current location item list does not include 'banana'

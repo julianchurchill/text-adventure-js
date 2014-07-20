@@ -54,7 +54,7 @@
     };
 
     Model.prototype.currentItems = function() {
-        return this.currentLocation.items();
+        return this.currentLocation.visibleItems();
     };
 
     Model.prototype.currentActions = function() {

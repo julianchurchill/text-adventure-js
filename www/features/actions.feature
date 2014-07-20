@@ -3,7 +3,7 @@ Feature: Actions
     As a player
     I want to be able to trigger actions by clicking on links or pressing buttons
 
-    @wip
+    @future
     Scenario: Show inventory displays the inventory
         Given an inventory containing an item named 'Pocket knife'
         When I click the action 'Show inventory'

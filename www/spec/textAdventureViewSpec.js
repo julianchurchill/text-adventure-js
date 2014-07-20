@@ -3,6 +3,7 @@
 (function () {
     "use strict";
 
+    // JQuery requires a window with a document so...
     // Create fake 'document' with jsdom
     var jsdom = require('jsdom');
     global.window = jsdom.jsdom().createWindow('<html><body></body></html>');

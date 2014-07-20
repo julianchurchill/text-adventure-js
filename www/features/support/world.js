@@ -11,6 +11,7 @@
         var fs = require('fs');
         var model_location = 'www/features/support/model.json';
         var model_has_been_set = false;
+        var STRING_NOT_FOUND = -1;
 
         this.clearModel = function() {
             if(model_has_been_set)
@@ -63,8 +64,15 @@
         };
 
         this.assertItemListIncludes = function(expected_item, callback) {
-            if( this.browser.text('#items').indexOf( expected_item ) == -1 )
+            if( this.browser.text('#items').indexOf( expected_item ) == STRING_NOT_FOUND )
                 callback.fail(new Error("Expected item '" + expected_item + "' was not found in '" + this.browser.text('#items') + "'"));
+            else
+                callback();
+        };
+
+        this.assertItemListDoesNotInclude = function(unexpected_item, callback) {
+            if( this.browser.text('#items').indexOf( unexpected_item ) != STRING_NOT_FOUND )
+                callback.fail(new Error("Unexpected item '" + unexpected_item + "' was found in '" + this.browser.text('#items') + "'"));
             else
                 callback();
         };

@@ -45,7 +45,17 @@
             var items = [ { id: 'item1', label: 'label1' } ];
             model.setCurrentLocation( new Location( { items: items } ) );
 
-            expect( model.currentItems()).toBe( items );
+            expect( model.currentItems()).toEqual( items );
+        });
+
+        it('current items excludes invisible items from current location', function() {
+            var visible_item = { id: 'item1', label: 'label1', visibility: "visible" };
+            var invisible_item = { id: 'item2', label: 'label2', visibility: "invisible" };
+            var all_items = [ visible_item, invisible_item ];
+
+            model.setCurrentLocation( new Location( { items: all_items } ) );
+
+            expect( model.currentItems()).toEqual( [ visible_item ] );
         });
 
         it('current actions are current location actions', function() {
