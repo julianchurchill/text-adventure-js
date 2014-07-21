@@ -123,6 +123,10 @@ To run the specs type:
 
     sudo npm install browserify
 
+gawk was installed to get an 'awk' that does not buffer output - this allows piping of the output for processing in real time primarily to remove the excessively long backtraces produced by cucumber failures under node. Debian based systems come with 'mawk' which requires extra options to produce unbuffered output. If you want ot use 'mawk' and not install 'gawk' then please modify the script build/filterCrazyLongCukeBacktrace.sh as appropriate. 'gawk' was installed with:
+
+    sudo apt-get install gawk
+
 ## Todo
 
 - User Stories/Cukes
@@ -140,7 +144,6 @@ To run the specs type:
 - Technical
   - Do we need a cucumber_bootstrap _and_ an app_bootstrap? Aren't they both just 'main' for the application?
     - How do we put 'model.json' in the right place for the cucumber tests if we combine the app and cuke bootstraps?
-  - Shorten cuke failure backtrace
   - Consider upgrading to jasmine 2.0.0 so that pending() is available (or empty it() or xit, xdescribe() showing up as disabled in test results).
     - See www/spec.html
     - Can this be done with jasmine-node?
@@ -158,6 +161,7 @@ To run the specs type:
 - User Stories/Cukes
   - Invisible items should not be visible in a location
 
+- Shortened cuke failure backtrace by changing runJake.sh to pipe jake output through a script which uses awk to filter excess backtrace lines.
 - Python script to convert from 'Android/Java' TTA model to JSON
 - Browserify of cucumber_bootstrap.js failed giving a zero-size bundle file because view.js include jquery which browserify cannot handle. Remove use of jquery in view, use DOM API.
     - http://substack.net/weaning_yourself_off_jquery
