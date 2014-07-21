@@ -77,6 +77,13 @@
                 callback();
         };
 
+        this.assertExitListDoesNotInclude = function(unexpected_exit, callback) {
+            if( this.browser.text('#exits').indexOf( unexpected_exit ) != STRING_NOT_FOUND )
+                callback.fail(new Error("Unexpected exit '" + unexpected_exit + "' was found in '" + this.browser.text('#exits') + "'"));
+            else
+                callback();
+        };
+
         // last line to tell cucumber.js the World is ready and use world as this
         callback();
     };
