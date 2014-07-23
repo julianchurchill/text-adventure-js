@@ -8,6 +8,11 @@ Feature: Navigation
         When I click the exit 'Library'
         Then the current location description changes to 'Library description'
 
+    Scenario: Visible exits are shown
+        Given a location with an exit labelled 'Library' that is visible
+        When I enter the location
+        Then the current location exit list includes 'Library'
+
     Scenario: Invisible exits are not shown
         Given a location with an exit labelled 'Library' that is invisible
         When I enter the location

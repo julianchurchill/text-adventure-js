@@ -51,11 +51,19 @@
             initializeModel( this, test_model, callback );
         });
 
+        this.Given(/^a location with an exit labelled '(.*)' that is visible$/, function(exit_label, callback) {
+            var test_model = {
+                locations: [
+                    { id: "first room", exits: [ { id: "exit1", destinationid: "exit1_destination_id", label: exit_label } ] },
+                ]
+            };
+            initializeModel( this, test_model, callback );
+        });
 
         this.Given(/^a location with an exit labelled '(.*)' that is invisible$/, function(exit_label, callback) {
             var test_model = {
                 locations: [
-                    { id: "first room", exits: [ { id: "exit1", destinationid: "exit1_destination_id", label: exit_label, is_not_visible: "True" } ] },
+                    { id: "first room", exits: [ { id: "exit1", destinationid: "exit1_destination_id", label: exit_label, visibility: "invisible" } ] },
                 ]
             };
             initializeModel( this, test_model, callback );
@@ -97,6 +105,10 @@
 
         this.Then(/^the current location item list does not include '(.*)'$/, function (item_label, callback) {
             this.assertItemListDoesNotInclude( item_label, callback );
+        });
+
+        this.Then(/^the current location exit list includes '(.*)'$/, function (exit_label, callback) {
+            this.assertExitListIncludes( exit_label, callback );
         });
 
         this.Then(/^the current location exit list does not include '(.*)'$/, function (exit_label, callback) {

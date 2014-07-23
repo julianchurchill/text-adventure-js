@@ -19,10 +19,14 @@
         return this.properties.description;
     };
 
+    function isVisible( thing ) {
+        if( thing.visibility !== undefined && thing.visibility === "invisible" )
+            return false;
+        return true;
+    }
+
     Location.prototype.visibleExits = function() {
-        return this.exits().filter( function( thing ) {
-            return thing.is_not_visible === undefined || thing.is_not_visible !== "True";
-        });
+        return this.exits().filter( isVisible );
     };
 
     Location.prototype.exits = function() {
@@ -32,9 +36,7 @@
     };
 
     Location.prototype.visibleItems = function() {
-        return this.items().filter( function( item ) {
-            return item.visibility === undefined || item.visibility !== "invisible";
-        } );
+        return this.items().filter( isVisible );
     };
 
     Location.prototype.items = function() {

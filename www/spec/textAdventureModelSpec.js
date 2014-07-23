@@ -42,8 +42,8 @@
         });
 
         it('current exits excludes invisible exits from current location', function() {
-            var visible_exit = { id: 'exit1', label: 'label1', is_not_visible: "False" };
-            var invisible_exit = { id: 'exit2', label: 'label2', is_not_visible: "True" };
+            var visible_exit = { id: 'exit1', label: 'label1', visibility: "visible" };
+            var invisible_exit = { id: 'exit2', label: 'label2', visibility: "invisible" };
             var all_exits = [ visible_exit, invisible_exit ];
 
             model.setCurrentLocation( new Location( { exits: all_exits } ) );

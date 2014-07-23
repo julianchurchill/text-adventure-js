@@ -77,6 +77,13 @@
                 callback();
         };
 
+        this.assertExitListIncludes = function(expected_exit, callback) {
+            if( this.browser.text('#exits').indexOf( expected_exit ) == STRING_NOT_FOUND )
+                callback.fail(new Error("Expected exit '" + expected_exit + "' was not found in '" + this.browser.text('#exits') + "'"));
+            else
+                callback();
+        };
+
         this.assertExitListDoesNotInclude = function(unexpected_exit, callback) {
             if( this.browser.text('#exits').indexOf( unexpected_exit ) != STRING_NOT_FOUND )
                 callback.fail(new Error("Unexpected exit '" + unexpected_exit + "' was found in '" + this.browser.text('#exits') + "'"));

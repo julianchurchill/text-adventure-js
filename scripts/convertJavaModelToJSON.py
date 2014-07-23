@@ -141,6 +141,11 @@ class JavaModelConverter():
         currentExit = self.lastOf( currentLocation[self.exitsKey] );
         if key == "on use action":
             self.addActionWithArguments( currentExit, "use_actions", values );
+        elif key == "is not visible":
+            if values == "True":
+                self.saveKeyValuePair(currentExit, "visibility", "invisible");
+            else:
+                self.saveKeyValuePair(currentExit, "visibility", "visible");
         else:
             self.saveKeyValuePair(currentExit, self.replaceSpacesWithUnderscores(key), values);
 
@@ -285,7 +290,7 @@ class TestScript(unittest.TestCase):
                                     "exit id:some_id\nexit is not visible:\n" ),
             self.createDict( {"locations":[
                     {"exits": [{"label":"some_label", "destinationid":"some_destination_id", "direction_hint":"some_direction_hint",
-                                "id":"some_id", "is_not_visible":"True" }]}
+                                "id":"some_id", "visibility":"invisible" }]}
                 ]}));
 
     def test_location_with_multiline_description_is_parsed(self):
@@ -542,7 +547,7 @@ item id:some_id2
                             "destinationid":"some_destination_id",
                             "direction_hint":"some_direction_hint",
                             "id":"some_exit_id",
-                            "is_not_visible":"True",
+                            "visibility":"invisible",
                             "use_actions":[
                                 {"action_name":"action_name", "arguments":["action_arg1", "action_arg2"]},
                                 {"action_name":"action_name2", "arguments":["action2_arg1", "action2_arg2"]},
