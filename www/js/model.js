@@ -50,7 +50,7 @@
     };
 
     Model.prototype.currentExits = function() {
-        return this.currentLocation.exits();
+        return this.currentLocation.visibleExits();
     };
 
     Model.prototype.currentItems = function() {

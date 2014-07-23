@@ -41,6 +41,17 @@
             expect( model.currentExits()).toEqual( exits );
         });
 
+        it('current exits excludes invisible exits from current location', function() {
+            var visible_exit = { id: 'exit1', label: 'label1', is_not_visible: "False" };
+            var invisible_exit = { id: 'exit2', label: 'label2', is_not_visible: "True" };
+            var all_exits = [ visible_exit, invisible_exit ];
+
+            model.setCurrentLocation( new Location( { exits: all_exits } ) );
+
+            expect( model.currentExits()).toEqual( [ visible_exit ] );
+        });
+
+
         it('current items are current location items', function() {
             var items = [ { id: 'item1', label: 'label1' } ];
             model.setCurrentLocation( new Location( { items: items } ) );

@@ -19,20 +19,22 @@
         return this.properties.description;
     };
 
+    Location.prototype.visibleExits = function() {
+        return this.exits().filter( function( thing ) {
+            return thing.is_not_visible === undefined || thing.is_not_visible !== "True";
+        });
+    };
+
     Location.prototype.exits = function() {
         if( this.properties.exits === undefined )
             this.properties.exits = [];
         return this.properties.exits;
     };
 
-    function isVisible( item ) {
-        if( item.visibility !== undefined && item.visibility === "invisible" )
-            return false;
-        return true;
-    }
-
     Location.prototype.visibleItems = function() {
-        return this.items().filter( isVisible );
+        return this.items().filter( function( item ) {
+            return item.visibility === undefined || item.visibility !== "invisible";
+        } );
     };
 
     Location.prototype.items = function() {
