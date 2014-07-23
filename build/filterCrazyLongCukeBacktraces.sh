@@ -26,10 +26,12 @@ BEGIN {
             print $0;
         }
     } else {
-        if( currentAts > 0 ) {
-            currentAts=0;
+        if( currentAts > maxStackFrames ) {
             print "    ....backtrace truncated, only showing deepest " maxStackFrames " stack frames...."
             print "    ....to see full backtrace rerun with --full-backtrace...."
+        }
+        if( currentAts > 0 ) {
+            currentAts=0;
         }
         print $0;
     }
