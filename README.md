@@ -129,6 +129,9 @@ gawk was installed to get an 'awk' that does not buffer output - this allows pip
 
 ## Todo
 
+- BUG - Jakefile 'file' task for app_bootstrap_bundle does not trigger when files change in the www/js directory, this means model.json can change and the app does not update!
+  - What does trigger it? I've seen app_bootstrap_bundle trigger before, when doing the invisible exits task and the invisible items task!
+
 - User Stories/Cukes
   - Look at my inventory
   - Examine an item in my inventory
