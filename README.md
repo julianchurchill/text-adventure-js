@@ -40,11 +40,11 @@ Clone this repository. Then:
 
 ### Automatically build and run tests when code changes:
 
-    ./build/watchAndRun.sh --ignore cucumber_bootstrap_bundle.js 1 ./build/runJake.sh www
+    ./build/watchAndRun.sh --ignore '*_bootstrap_bundle.js' 1 ./build/runJake.sh www
 
 ### Automatically build and run all tests including work in progress tests when code changes:
 
-    ./build/watchAndRun.sh --ignore cucumber_bootstrap_bundle.js 1 "./build/runJake.sh wip" www
+    ./build/watchAndRun.sh --ignore '*_bootstrap_bundle.js' 1 "./build/runJake.sh wip" www
 
 ### To build the android app
 
@@ -129,9 +129,6 @@ gawk was installed to get an 'awk' that does not buffer output - this allows pip
 
 ## Todo
 
-- BUG - Jakefile 'file' task for app_bootstrap_bundle does not trigger when files change in the www/js directory, this means model.json can change and the app does not update!
-  - What does trigger it? I've seen app_bootstrap_bundle trigger before, when doing the invisible exits task and the invisible items task!
-
 - User Stories/Cukes
   - Look at my inventory
   - Examine an item in my inventory
@@ -164,6 +161,8 @@ gawk was installed to get an 'awk' that does not buffer output - this allows pip
   - Invisible items should not be visible in a location
   - Invisible exits are not shown
 
+- BUG - Jakefile 'file' task for app_bootstrap_bundle does not trigger when files change in the www/js directory, this means model.json can change and the app does not update!
+  - FIX - Jakefile needed to use FileLists to get a list of all files in teh directory - a directory name by itself does not mean the files within it will be prequisites
 - Shortened cuke failure backtrace by changing runJake.sh to pipe jake output through a script which uses awk to filter excess backtrace lines.
 - Python script to convert from 'Android/Java' TTA model to JSON
 - Browserify of cucumber_bootstrap.js failed giving a zero-size bundle file because view.js include jquery which browserify cannot handle. Remove use of jquery in view, use DOM API.

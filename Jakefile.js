@@ -6,9 +6,9 @@
     var jasmine = require('jasmine-node');
     var cucumber_bootstrap = "www/features/support/cucumber_bootstrap.js";
     var cucumber_bootstrap_bundle = "www/features/support/cucumber_bootstrap_bundle.js";
-    var app_bootstrap = "www/js/app_bootstrap.js";
-    var app_bootstrap_bundle = "www/js/app_bootstrap_bundle.js";
     var js_dir = "www/js";
+    var app_bootstrap = js_dir + "/app_bootstrap.js";
+    var app_bootstrap_bundle = js_dir + "/app_bootstrap_bundle.js";
     var browserify_command = "./node_modules/.bin/browserify";
     var cucumber_command = "./node_modules/.bin/cucumber.js";
 
@@ -36,8 +36,13 @@
     task("build_artifacts", [app_bootstrap_bundle], function () {
     });
 
+    var app_bootstrap_bundle_prereqs = new jake.FileList();
+    app_bootstrap_bundle_prereqs.include(js_dir + '/**/*.js');
+    app_bootstrap_bundle_prereqs.include( app_bootstrap );
+    app_bootstrap_bundle_prereqs.exclude( app_bootstrap_bundle );
+
     desc("Browserify app bootstrap");
-    file(app_bootstrap_bundle, [app_bootstrap, js_dir], {async: true}, function () {
+    file(app_bootstrap_bundle, app_bootstrap_bundle_prereqs.toArray(), {async: true}, function () {
         console.log("Regenerating app bootstrap bundle with browserify...");
         var cmds = [ browserify_command + ' ' + app_bootstrap + ' -o ' + app_bootstrap_bundle ];
         jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
@@ -45,8 +50,13 @@
         });
     });
 
+    var cucumber_bootstrap_bundle_prereqs = new jake.FileList();
+    cucumber_bootstrap_bundle_prereqs.include(js_dir + '/**/*.js');
+    cucumber_bootstrap_bundle_prereqs.include( cucumber_bootstrap );
+    cucumber_bootstrap_bundle_prereqs.exclude( cucumber_bootstrap_bundle );
+
     desc("Browserify cucumber bootstrap");
-    file(cucumber_bootstrap_bundle, [cucumber_bootstrap, js_dir], {async: true}, function () {
+    file(cucumber_bootstrap_bundle, cucumber_bootstrap_bundle_prereqs.toArray(), {async: true}, function () {
         console.log("Regenerating cucumber bootstrap bundle with browserify...");
         var cmds = [ browserify_command + ' ' + cucumber_bootstrap + ' -o ' + cucumber_bootstrap_bundle ];
         jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
