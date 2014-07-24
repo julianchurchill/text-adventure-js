@@ -4,7 +4,6 @@
     "use strict";
 
     var jasmine = require('jasmine-node');
-    var cucumber_bootstrap = "www/features/support/cucumber_bootstrap.js";
     var cucumber_bootstrap_bundle = "www/features/support/cucumber_bootstrap_bundle.js";
     var js_dir = "www/js";
     var app_bootstrap = js_dir + "/app_bootstrap.js";
@@ -50,22 +49,8 @@
         });
     });
 
-    var cucumber_bootstrap_bundle_prereqs = new jake.FileList();
-    cucumber_bootstrap_bundle_prereqs.include(js_dir + '/**/*.js');
-    cucumber_bootstrap_bundle_prereqs.include( cucumber_bootstrap );
-    cucumber_bootstrap_bundle_prereqs.exclude( cucumber_bootstrap_bundle );
-
-    desc("Browserify cucumber bootstrap");
-    file(cucumber_bootstrap_bundle, cucumber_bootstrap_bundle_prereqs.toArray(), {async: true}, function () {
-        console.log("Regenerating cucumber bootstrap bundle with browserify...");
-        var cmds = [ browserify_command + ' ' + cucumber_bootstrap + ' -o ' + cucumber_bootstrap_bundle ];
-        jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
-            complete();
-        });
-    });
-
     desc("Production Cucumber feature tests");
-    task("acceptance_tests", [cucumber_bootstrap_bundle], {async: true}, function () {
+    task("acceptance_tests", [], {async: true}, function () {
         console.log("Running cucumber feature tests...");
         var cmds = [ cucumber_command + ' --format pretty --tags ~@wip --tags ~@future www/features -r www/features/step_definitions' ];
         jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
@@ -74,7 +59,7 @@
     });
 
     desc("Work in progress Cucumber feature tests");
-    task("wip_acceptance_tests", [cucumber_bootstrap_bundle], {async: true}, function () {
+    task("wip_acceptance_tests", [], {async: true}, function () {
         console.log("Running work in progress (wip) tagged cucumber feature tests...");
         var cmds = [ cucumber_command + ' --format pretty --tags ~@future www/features -r www/features/step_definitions' ];
         jake.exec(cmds, {breakOnError: true, printStdout: true}, function () {
@@ -83,7 +68,7 @@
     });
 
     desc('Run Jasmine specs');
-    task('unit_tests', [cucumber_bootstrap_bundle], {async: true}, function() {
+    task('unit_tests', [], {async: true}, function() {
         var specDir = './www/spec';
         console.log('Running unit test task, including jasmine tests from', specDir);
         jasmine.executeSpecsInFolder({
@@ -116,7 +101,7 @@
         // Exclude example PhoneGap app tests
         files.exclude("www/spec_phonegap/helper.js");
         files.exclude("www/spec_phonegap/index.js");
-        files.exclude("www/features/support/cucumber_bootstrap_bundle.js");
+        files.exclude( cucumber_bootstrap_bundle );
 
         var options = {
             bitwise: true,
