@@ -31,3 +31,7 @@ proguard/
 *.ipr
 *.iws
 .idea/
+
+
+# cloud9ide
+.c9/
