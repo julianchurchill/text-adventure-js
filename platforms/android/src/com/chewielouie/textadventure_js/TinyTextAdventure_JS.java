@@ -17,12 +17,12 @@
        under the License.
  */
 
-package com.chewielouie.textadventure;
+package com.chewielouie.textadventure_js;
 
 import android.os.Bundle;
 import org.apache.cordova.*;
 
-public class TinyTextAdventure extends CordovaActivity 
+public class TinyTextAdventure_JS extends CordovaActivity
 {
     @Override
     public void onCreate(Bundle savedInstanceState)
