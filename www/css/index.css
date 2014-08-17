@@ -48,14 +48,15 @@ body {
 .maintext {
     -webkit-user-select: text;                  /* prevent copy paste, to allow, change 'none' to 'text' */
     background:url(../img/maintext_background.png) no-repeat center top; /* 852px x 702px */
+    background-size: 100% 100%;
     font-size:18px;
     position:absolute;             /* position in the center of the screen */
-    left:25%;
-    top:5%;
+    left:0%;
+    top:0%;
     height:150px;                /* text area height */
-    width:50%;                   /* text area width */
+    width:60%;                   /* text area width */
     text-align:center;
-    padding:20px 20px 20px 20px;
+    padding:20px 10px 20px 20px;
     margin:0px 0px 0px 0px;
 }
 
