@@ -73,7 +73,7 @@ For DOM manipulation I used JQuery. This is installed in the git repository in n
 
 ## Unit Testing and Build Tools
 
-I installed [jasmine](http://pivotal.github.io/jasmine) for BDD style unit testing. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
+I installed [jasmine](http://jasmine.github.io/) for BDD style unit testing. This is installed in the git repository in node_modules so you do not have to do it again. The command I used was:
 
     sudo npm install jasmine-node
 
